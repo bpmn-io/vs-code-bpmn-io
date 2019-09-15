@@ -1,6 +1,6 @@
 "use strict";
 
-import { BpmnModelerProvider } from './ModelerProvider';
+import { BpmnModelerProvider as BpmnViewerProvider } from './viewerProvider';
 
 import * as vscode from 'vscode';
 import {
@@ -23,7 +23,7 @@ interface BpmnPreviewPanel {
 
 export function activate(context: ExtensionContext) {
   const openedPanels: BpmnPreviewPanel[] = [];
-  const provider = new BpmnModelerProvider(context);
+  const provider = new BpmnViewerProvider(context);
 
   const revealIfAlreadyOpened = (uri: Uri): boolean => {
     const opened = openedPanels.find(panel => panel.resource.fsPath === uri.fsPath);
@@ -80,7 +80,7 @@ export function activate(context: ExtensionContext) {
   context.subscriptions.push(openedEvent, previewCmd);
 }
 
-function createPreview(context: ExtensionContext, uri: Uri, provider: BpmnModelerProvider): BpmnPreviewPanel {
+function createPreview(context: ExtensionContext, uri: Uri, provider: BpmnViewerProvider): BpmnPreviewPanel {
   const panel = vscode.window.createWebviewPanel(
     viewType,
     getPreviewTitle(uri),
