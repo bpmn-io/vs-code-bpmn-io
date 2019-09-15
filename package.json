@@ -24,7 +24,8 @@
 			  "bpmn"
 			],
 			"extensions": [
-			  ".bpmn"
+			  ".bpmn",
+			  "bpmn20.xml"	
 			],
 			"configuration": "./language-configuration.json"
 		  }
