@@ -1,7 +1,7 @@
 {
 	"name": "vs-code-bpmn-js-extension",
 	"displayName": "vs-code-bpmn-js-extension",
-	"description": "BPMN Modeler VS Code Extension",
+	"description": "VS Code Extension for Displaying BPMN 2.0 Files",
 	"version": "0.0.1",
 	"engines": {
 		"vscode": "^1.38.0"
@@ -10,16 +10,40 @@
 		"Other"
 	],
 	"activationEvents": [
-		"onCommand:extension.helloWorld"
+		"onLanguage:bpmn",
+		"onCommand:extension.bpmn-preview",
+		"onWebviewPanel:bpmn.preview"
 	],
 	"main": "./out/extension.js",
 	"contributes": {
+		"languages": [
+		  {
+			"id": "bpmn",
+			"aliases": [
+			  "BPMN File",
+			  "bpmn"
+			],
+			"extensions": [
+			  ".bpmn"
+			],
+			"configuration": "./language-configuration.json"
+		  }
+		],
 		"commands": [
 			{
-				"command": "extension.helloWorld",
-				"title": "Hello World"
+			  "command": "extension.bpmn-preview",
+			  "title": "View BPMN"
 			}
-		]
+		],
+		"menus": {
+			"explorer/context": [
+			  {
+				"when": "resourceLangId == bpmn",
+				"command": "extension.bpmn-preview",
+				"group": "navigation"
+			  }
+			]
+		}
 	},
 	"scripts": {
 		"vscode:prepublish": "npm run compile",

@@ -81,11 +81,10 @@ export function activate(context: ExtensionContext) {
 }
 
 function createPreview(context: ExtensionContext, uri: Uri, provider: BpmnModelerProvider): BpmnPreviewPanel {
-  const column = getViewColumn();
   const panel = vscode.window.createWebviewPanel(
     viewType,
     getPreviewTitle(uri),
-    column,
+    ViewColumn.Active,
     getWebviewOptions(context, uri)
   );
   panel.webview.html = provider.provideTextDocumentContent(uri, { resource: uri });
@@ -119,11 +118,6 @@ function getLocalResourceRoots(
   }
 
   return baseRoots;
-}
-
-function getViewColumn(): ViewColumn {
-    const active = window.activeTextEditor;
-    return active ? active.viewColumn : ViewColumn.One;
 }
 
 export function deactivate() {

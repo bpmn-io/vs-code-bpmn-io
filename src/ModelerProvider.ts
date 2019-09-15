@@ -3,12 +3,22 @@
 import * as vscode from "vscode";
 import * as path from "path";
 
+const fs = require("fs");
+
 export class BpmnModelerProvider implements vscode.TextDocumentContentProvider {
 
   public constructor(private _context: vscode.ExtensionContext) { }
 
+  private removeNewLines(contents: string): string {
+    return contents.replace(/(\r\n|\n|\r)/gm," ");
+  }
+
   public provideTextDocumentContent(uri: vscode.Uri, state: any): string {
     const docPath = uri.with({ scheme: 'vscode-resource' });
+
+    let contents = fs.readFileSync(docPath.path, { encoding: 'utf8' });
+    contents = this.removeNewLines(contents);
+    
     const head =
       `<!DOCTYPE html>
       <html>
@@ -59,8 +69,6 @@ export class BpmnModelerProvider implements vscode.TextDocumentContentProvider {
 
   <script>
 
-    var diagramUrl = 'https://cdn.staticaly.com/gh/bpmn-io/bpmn-js-examples/dfceecba/starter/diagram.bpmn';
-
     // viewer instance
     var bpmnViewer = new BpmnJS({
       container: '#canvas'
@@ -104,8 +112,8 @@ export class BpmnModelerProvider implements vscode.TextDocumentContentProvider {
     }
 
 
-    // load external diagram file via AJAX and open it
-    $.get(diagramUrl, openDiagram, 'text');
+    // open diagram
+    openDiagram('${contents}');
   </script>
   <!--
     Thanks for trying out our BPMN toolkit!
