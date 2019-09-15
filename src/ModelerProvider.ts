@@ -1,7 +1,6 @@
 /* tslint:disable:quotemark */
 "use strict";
 import * as vscode from "vscode";
-import * as path from "path";
 
 const fs = require("fs");
 
@@ -44,22 +43,6 @@ export class BpmnModelerProvider implements vscode.TextDocumentContentProvider {
               padding: 0;
               margin: 0;
             }
-      
-            .diagram-note {
-              background-color: rgba(66, 180, 21, 0.7);
-              color: White;
-              border-radius: 5px;
-              font-family: Arial;
-              font-size: 12px;
-              padding: 5px;
-              min-height: 16px;
-              width: 50px;
-              text-align: center;
-            }
-      
-            .needs-discussion:not(.djs-connection) .djs-visual > :nth-child(1) {
-              stroke: rgba(66, 180, 21, 0.7) !important; /* color elements as red */
-            }
           </style>
         </head>`;
 
@@ -88,26 +71,6 @@ export class BpmnModelerProvider implements vscode.TextDocumentContentProvider {
         if (err) {
           return console.error('could not import BPMN 2.0 diagram', err);
         }
-
-        // access viewer components
-        var canvas = bpmnViewer.get('canvas');
-        var overlays = bpmnViewer.get('overlays');
-
-
-        // zoom to fit full viewport
-        canvas.zoom('fit-viewport');
-
-        // attach an overlay to a node
-        overlays.add('SCAN_OK', 'note', {
-          position: {
-            bottom: 0,
-            right: 0
-          },
-          html: '<div class="diagram-note">Mixed up the labels?</div>'
-        });
-
-        // add marker
-        canvas.addMarker('SCAN_OK', 'needs-discussion');
       });
     }
 
