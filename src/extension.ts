@@ -8,8 +8,7 @@ import {
   TextDocument,
   Uri,
   WebviewPanel,
-  ViewColumn,
-  window
+  ViewColumn
 } from 'vscode';
 
 import * as path from "path";
