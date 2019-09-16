@@ -4,6 +4,7 @@
 	"description": "BPMN 2.0 Viewer, http://BPMN.io",
 	"version": "0.1.0",
 	"publisher": "salaboy",
+	"repository": "https://github.com/pinussilvestrus/vs-code-bpmn-js-plugin/",
 	"engines": {
 		"vscode": "^1.38.0"
 	},
