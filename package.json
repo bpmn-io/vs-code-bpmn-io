@@ -1,8 +1,9 @@
 {
 	"name": "vs-code-bpmn-js-extension",
 	"displayName": "vs-code-bpmn-js-extension",
-	"description": "VS Code Extension for Displaying BPMN 2.0 Files",
-	"version": "0.0.1",
+	"description": "BPMN 2.0 Viewer, http://BPMN.io",
+	"version": "0.1.0",
+	"publisher": "salaboy",
 	"engines": {
 		"vscode": "^1.38.0"
 	},
