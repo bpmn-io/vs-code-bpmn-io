@@ -23,7 +23,7 @@ export class BpmnModelerProvider implements vscode.TextDocumentContentProvider {
       <html>
         <head>
           <meta charset="UTF-8" />
-          <title>Hello World</title>
+          <title>BPMN Preview</title>
       
           <!-- viewer distro (without pan and zoom) -->
           <!--

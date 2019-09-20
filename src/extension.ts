@@ -40,18 +40,14 @@ export function activate(context: ExtensionContext) {
     openedPanels.push(preview);
   };
 
-  const previewAndCloseSrcDoc = async (document: TextDocument): Promise<void> => {
+  const previewDoc = async (document: TextDocument): Promise<void> => {
     if (document.languageId === "bpmn") {
-      await vscode.commands.executeCommand("workbench.action.closeActiveEditor");
+
       if (!revealIfAlreadyOpened(document.uri)) {
         registerPanel(createPreview(context, document.uri, provider));
       }
     }
   };
-
-  const openedEvent = vscode.workspace.onDidOpenTextDocument((document: TextDocument) => {
-    previewAndCloseSrcDoc(document);
-  });
 
   const previewCmd = vscode.commands.registerCommand("extension.bpmn-preview", (uri: Uri) => {
     if(!revealIfAlreadyOpened(uri)) {
@@ -73,10 +69,9 @@ export function activate(context: ExtensionContext) {
 
   // If bpmn file is already opened when load workspace.
   if (vscode.window.activeTextEditor) {
-    previewAndCloseSrcDoc(vscode.window.activeTextEditor.document);
+    previewDoc(vscode.window.activeTextEditor.document);
   }
 
-  context.subscriptions.push(openedEvent, previewCmd);
 }
 
 function createPreview(context: ExtensionContext, uri: Uri, provider: BpmnViewerProvider): BpmnPreviewPanel {
@@ -91,7 +86,7 @@ function createPreview(context: ExtensionContext, uri: Uri, provider: BpmnViewer
 }
 
 function getPreviewTitle(uri: Uri): string {
-  return path.basename(uri.fsPath);
+  return `Preview: ${path.basename(uri.fsPath)}`;
 }
 
 function getWebviewOptions(context: ExtensionContext, uri: Uri) {
