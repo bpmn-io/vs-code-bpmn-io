@@ -35,7 +35,11 @@
 		"commands": [
 			{
 				"command": "extension.bpmn-preview",
-				"title": "View BPMN"
+				"title": "Preview BPMN",
+				"icon": {
+					"light": "./resources/logo_light.png",
+					"dark": "./resources/logo_dark.png"
+				}
 			}
 		],
 		"menus": {
@@ -44,6 +48,21 @@
 					"when": "resourceLangId == bpmn",
 					"command": "extension.bpmn-preview",
 					"group": "navigation"
+				}
+			],
+			"editor/context": [
+				{
+					"when": "resourceLangId == bpmn",
+					"command": "extension.bpmn-preview",
+					"group": "navigation"
+				}
+			],
+			"editor/title": [
+				{
+				  "when": "resourceLangId == bpmn",
+				  "command": "extension.bpmn-preview",
+				  "alt": "markdown.showPreviewToSide",
+				  "group": "navigation"
 				}
 			]
 		}
