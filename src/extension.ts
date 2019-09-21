@@ -67,11 +67,6 @@ export function activate(context: ExtensionContext) {
     });
   }
 
-  // If bpmn file is already opened when load workspace.
-  if (vscode.window.activeTextEditor) {
-    previewDoc(vscode.window.activeTextEditor.document);
-  }
-
 }
 
 function createPreview(context: ExtensionContext, uri: Uri, provider: BpmnViewerProvider): BpmnPreviewPanel {
