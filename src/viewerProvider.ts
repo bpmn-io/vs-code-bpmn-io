@@ -71,6 +71,13 @@ export class BpmnModelerProvider implements vscode.TextDocumentContentProvider {
         if (err) {
           return console.error('could not import BPMN 2.0 diagram', err);
         }
+
+        // access viewer components
+        var canvas = bpmnViewer.get('canvas');
+
+        // zoom to fit full viewport
+        canvas.zoom('fit-viewport');
+
       });
     }
 
