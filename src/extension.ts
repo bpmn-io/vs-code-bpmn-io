@@ -49,9 +49,9 @@ export function activate(context: ExtensionContext) {
     }
   };
 
-  const previewCmd = vscode.commands.registerCommand("extension.bpmn-preview", (uri: Uri) => {
+  vscode.commands.registerCommand("extension.bpmn-preview", (uri: Uri) => {
     if(!revealIfAlreadyOpened(uri)) {
-      registerPanel(createPreview(context ,uri, provider));
+      registerPanel(createPreview(context, uri, provider));
     }
   });
 
