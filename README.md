@@ -1,6 +1,6 @@
 > :warning: __This project is still Work In Progress__
 
-# vs-code-bpmn-js-extension
+# vs-code-bpmn-io
 
 VS Code Extension for Displaying BPMN 2.0 Files based on [bpmn.io](https://bpmn.io/).
 
@@ -15,8 +15,8 @@ VS Code Extension for Displaying BPMN 2.0 Files based on [bpmn.io](https://bpmn.
 First step, clone this project to your local machine.
 
 ```sh
-$ git clone https://github.com/pinussilvestrus/vs-code-bpmn-js-plugin.git
-$ cd ./vs-code-bpmn-js-plugin
+$ git clone https://github.com/pinussilvestrus/vs-code-bpmn-io.git
+$ cd ./vs-code-bpmn-io
 $ npm install
 $ code .
 ```

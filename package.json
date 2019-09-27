@@ -1,10 +1,10 @@
 {
-	"name": "vs-code-bpmn-js-extension",
-	"displayName": "vs-code-bpmn-js-extension",
+	"name": "vs-code-bpmn-io",
+	"displayName": "vs-code-bpmn-io",
 	"description": "BPMN 2.0 Viewer, http://BPMN.io",
 	"version": "0.2.0",
 	"publisher": "salaboy",
-	"repository": "https://github.com/pinussilvestrus/vs-code-bpmn-js-plugin/",
+	"repository": "https://github.com/pinussilvestrus/vs-code-bpmn-io/",
 	"engines": {
 		"vscode": "^1.38.0"
 	},
@@ -59,10 +59,10 @@
 			],
 			"editor/title": [
 				{
-				  "when": "resourceLangId == bpmn",
-				  "command": "extension.bpmn-preview",
-				  "alt": "markdown.showPreviewToSide",
-				  "group": "navigation"
+					"when": "resourceLangId == bpmn",
+					"command": "extension.bpmn-preview",
+					"alt": "markdown.showPreviewToSide",
+					"group": "navigation"
 				}
 			]
 		}
