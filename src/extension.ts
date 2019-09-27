@@ -5,7 +5,6 @@ import { BpmnModelerProvider as BpmnViewerProvider } from './viewerProvider';
 import * as vscode from 'vscode';
 import {
   ExtensionContext,
-  TextDocument,
   Uri,
   WebviewPanel,
   ViewColumn
@@ -34,19 +33,18 @@ export function activate(context: ExtensionContext) {
   };
 
   const registerPanel = (preview: BpmnPreviewPanel): void => {
+
+    // on closed
     preview.panel.onDidDispose(() => {
       openedPanels.splice(openedPanels.indexOf(preview), 1);
     });
+
+    // on changed
+    preview.panel.onDidChangeViewState(() => {
+      refresh(preview, provider);
+    });
+
     openedPanels.push(preview);
-  };
-
-  const previewDoc = async (document: TextDocument): Promise<void> => {
-    if (document.languageId === "bpmn") {
-
-      if (!revealIfAlreadyOpened(document.uri)) {
-        registerPanel(createPreview(context, document.uri, provider));
-      }
-    }
   };
 
   vscode.commands.registerCommand("extension.bpmn-preview", (uri: Uri) => {
@@ -90,6 +88,17 @@ function getWebviewOptions(context: ExtensionContext, uri: Uri) {
     retainContextWhenHidden: true,
     localResourceRoots: getLocalResourceRoots(context, uri)
   };
+}
+
+
+function refresh(preview: BpmnPreviewPanel, provider: BpmnViewerProvider) {
+
+  const {
+    resource,
+    panel
+  } = preview;
+
+  panel.webview.html = provider.provideTextDocumentContent(resource, { resource });
 }
 
 function getLocalResourceRoots(
