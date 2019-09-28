@@ -1,5 +1,3 @@
-> :warning: __This project is still Work In Progress__
-
 # vs-code-bpmn-io
 
 VS Code Extension for Displaying BPMN 2.0 Files based on [bpmn.io](https://bpmn.io/).
