@@ -27,4 +27,8 @@ $ code .
 
 Press `F5` to load and debug the extension in a new VS Code instance.
 
+## License
 
+MIT
+
+Contains parts ([bpmn-js](https://github.com/bpmn-io/bpmn-js)) released under the [bpmn.io license](http://bpmn.io/license).
