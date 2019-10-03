@@ -77,13 +77,13 @@
 	},
 	"devDependencies": {
 		"@types/glob": "^7.1.1",
-		"@types/mocha": "^5.2.6",
-		"@types/node": "^12.7.8",
+		"@types/mocha": "^5.2.7",
+		"@types/node": "^12.7.9",
 		"@types/vscode": "^1.38.0",
 		"glob": "^7.1.4",
-		"mocha": "^6.1.4",
-		"typescript": "^3.3.1",
-		"tslint": "^5.12.1",
+		"mocha": "^6.2.1",
+		"typescript": "^3.6.3",
+		"tslint": "^5.20.0",
 		"vscode-test": "^1.2.0"
 	}
 }
