@@ -8,6 +8,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - /
 
+## 0.4.0
+
+- `CHORE`: dependency updates
+
 ## 0.3.0
 
 - `FEAT`: Show Preview as action ([`1e5e6c`](https://github.com/pinussilvestrus/vs-code-bpmn-io/commit/1e5e6c37eba38745c6f01c2b7428e56078e865b5))
