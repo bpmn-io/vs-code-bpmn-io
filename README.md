@@ -1,5 +1,7 @@
 # vs-code-bpmn-io
 
+![GitHub package.json version](https://img.shields.io/github/package-json/v/pinussilvestrus/vs-code-bpmn-io?style=flat-square)
+
 VS Code Extension for Displaying BPMN 2.0 Files based on [bpmn.io](https://bpmn.io/).
 
 ## Features
