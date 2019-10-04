@@ -8,6 +8,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - /
 
+## 0.4.1
+
+- `FIX`: set background-color to white ([#3](https://github.com/pinussilvestrus/vs-code-bpmn-io/issues/3))
+
 ## 0.4.0
 
 - `CHORE`: dependency updates
