@@ -1,12 +1,18 @@
 /* tslint:disable:quotemark */
 "use strict";
 import * as vscode from "vscode";
+import * as path from "path";
 
 const fs = require("fs");
 
 export class BpmnModelerProvider implements vscode.TextDocumentContentProvider {
 
   public constructor(private _context: vscode.ExtensionContext) { }
+
+  private getUri(...p: string[]): vscode.Uri {
+    return vscode.Uri.file(path.join(this._context.extensionPath, ...p))
+      .with({ scheme: 'vscode-resource' });
+  }
 
   private removeNewLines(contents: string): string {
     return contents.replace(/(\r\n|\n|\r)/gm," ");
@@ -24,14 +30,9 @@ export class BpmnModelerProvider implements vscode.TextDocumentContentProvider {
         <head>
           <meta charset="UTF-8" />
           <title>BPMN Preview</title>
-      
-          <!-- viewer distro (without pan and zoom) -->
-          <!--
-          <script src="https://unpkg.com/bpmn-js@5.0.4/dist/bpmn-viewer.development.js"></script>
-          -->
           
           <!-- viewer distro (with pan and zoom) -->
-          <script src="https://unpkg.com/bpmn-js@5.0.4/dist/bpmn-navigated-viewer.development.js"></script>
+          <script src="${this.getUri('node_modules', 'bpmn-js', 'dist', 'bpmn-navigated-viewer.development.js')}"></script>
       
           <!-- example styles -->
           <style>
