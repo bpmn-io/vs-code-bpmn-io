@@ -3,6 +3,7 @@
 import { BpmnModelerProvider as BpmnViewerProvider } from './viewerProvider';
 
 import * as vscode from 'vscode';
+
 import {
   ExtensionContext,
   Uri,
