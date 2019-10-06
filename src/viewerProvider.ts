@@ -33,9 +33,6 @@ export class BpmnModelerProvider implements vscode.TextDocumentContentProvider {
           <!-- viewer distro (with pan and zoom) -->
           <script src="https://unpkg.com/bpmn-js@5.0.4/dist/bpmn-navigated-viewer.development.js"></script>
       
-          <!-- needed for this example only -->
-          <script src="https://unpkg.com/jquery@3.3.1/dist/jquery.js"></script>
-      
           <!-- example styles -->
           <style>
             html, body, #canvas {
