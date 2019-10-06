@@ -69,13 +69,19 @@ export function activate(context: ExtensionContext) {
 }
 
 function createPreview(context: ExtensionContext, uri: Uri, provider: BpmnViewerProvider): BpmnPreviewPanel {
+  const column = (vscode.window.activeTextEditor && vscode.window.activeTextEditor.viewColumn) || vscode.ViewColumn.One;
+
+  const previewColumn = column + 1;
+
   const panel = vscode.window.createWebviewPanel(
     viewType,
     getPreviewTitle(uri),
-    ViewColumn.Active,
+    previewColumn,
     getWebviewOptions(context, uri)
   );
+
   panel.webview.html = provider.provideTextDocumentContent(uri, { resource: uri });
+
   return { panel, resource: uri };
 }
 
