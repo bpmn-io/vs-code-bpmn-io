@@ -8,6 +8,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - /
 
+## 0.5.0
+
+- `CHORE`: remove jquery from preview panel ([`819422`](https://github.com/pinussilvestrus/vs-code-bpmn-io/commit/819422bf16cd4bfc42e06c4245205b996217af1a))
+- `FEAT`: use local bpmn-js dependency ([#13](https://github.com/pinussilvestrus/vs-code-bpmn-io/issues/13))
+- `FEAT`: open preview panel to next column ([#6](https://github.com/pinussilvestrus/vs-code-bpmn-io/issues/6))
+
 ## 0.4.1
 
 - `FIX`: set background-color to white ([#3](https://github.com/pinussilvestrus/vs-code-bpmn-io/issues/3))
