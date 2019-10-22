@@ -80,7 +80,7 @@
 		"@types/mocha": "^5.2.7",
 		"@types/node": "^12.11.2",
 		"@types/vscode": "^1.39.0",
-		"glob": "^7.1.4",
+		"glob": "^7.1.5",
 		"mocha": "^6.2.1",
 		"typescript": "^3.6.4",
 		"tslint": "^5.20.0",
