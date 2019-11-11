@@ -84,7 +84,7 @@
 		"mocha": "^6.2.2",
 		"typescript": "^3.7.2",
 		"tslint": "^5.20.1",
-		"vscode-test": "^1.2.2"
+		"vscode-test": "^1.2.3"
 	},
 	"dependencies": {
 		"bpmn-js": "^5.1.2"
