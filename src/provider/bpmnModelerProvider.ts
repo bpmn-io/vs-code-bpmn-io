@@ -16,9 +16,9 @@ export class BpmnModelerProvider implements vscode.TextDocumentContentProvider {
   }
 
   public provideTextDocumentContent(uri: vscode.Uri): string {
-    const docPath = uri.with({ scheme: 'vscode-resource' });
+    const { fsPath: docPath } = uri.with({ scheme: 'vscode-resource' });
 
-    const contents = fs.readFileSync(docPath.path, { encoding: 'utf8' });
+    const contents = fs.readFileSync(docPath, { encoding: 'utf8' });
 
     const modelerDistroUri = this.getUri('node_modules', 'bpmn-js', 'dist', 'bpmn-modeler.development.js');
 
