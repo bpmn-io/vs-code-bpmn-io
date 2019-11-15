@@ -1,92 +1,92 @@
 {
-	"name": "vs-code-bpmn-io",
-	"displayName": "vs-code-bpmn-io",
-	"description": "BPMN 2.0 Viewer, http://BPMN.io",
-	"license": "MIT",
-	"version": "0.5.0",
-	"publisher": "salaboy",
-	"repository": "https://github.com/pinussilvestrus/vs-code-bpmn-io/",
-	"engines": {
-		"vscode": "^1.38.0"
-	},
-	"categories": [
-		"Other"
-	],
-	"activationEvents": [
-		"onLanguage:bpmn",
-		"onCommand:extension.bpmn-preview",
-		"onWebviewPanel:bpmn.preview"
-	],
-	"main": "./out/extension.js",
-	"contributes": {
-		"languages": [
-			{
-				"id": "bpmn",
-				"aliases": [
-					"BPMN File",
-					"bpmn"
-				],
-				"extensions": [
-					".bpmn",
-					".bpmn20.xml"
-				],
-				"configuration": "./language-configuration.json"
-			}
-		],
-		"commands": [
-			{
-				"command": "extension.bpmn-preview",
-				"title": "Preview BPMN",
-				"icon": {
-					"light": "./resources/logo_light.png",
-					"dark": "./resources/logo_dark.png"
-				}
-			}
-		],
-		"menus": {
-			"explorer/context": [
-				{
-					"when": "resourceLangId == bpmn",
-					"command": "extension.bpmn-preview",
-					"group": "navigation"
-				}
-			],
-			"editor/context": [
-				{
-					"when": "resourceLangId == bpmn",
-					"command": "extension.bpmn-preview",
-					"group": "navigation"
-				}
-			],
-			"editor/title": [
-				{
-					"when": "resourceLangId == bpmn",
-					"command": "extension.bpmn-preview",
-					"alt": "markdown.showPreviewToSide",
-					"group": "navigation"
-				}
-			]
-		}
-	},
-	"scripts": {
-		"vscode:prepublish": "npm run compile",
-		"compile": "tsc -p ./",
-		"watch": "tsc -watch -p ./",
-		"pretest": "npm run compile",
-		"test": "node ./out/test/runTest.js"
-	},
-	"devDependencies": {
-		"@types/glob": "^7.1.1",
-		"@types/mocha": "^5.2.7",
-		"@types/node": "^12.12.7",
-		"@types/vscode": "^1.40.0",
-		"glob": "^7.1.6",
-		"mocha": "^6.2.2",
-		"typescript": "^3.7.2",
-		"tslint": "^5.20.1",
-		"vscode-test": "^1.2.3"
-	},
-	"dependencies": {
-		"bpmn-js": "^5.1.2"
-	}
+  "name": "vs-code-bpmn-io",
+  "displayName": "vs-code-bpmn-io",
+  "description": "BPMN 2.0 Viewer, http://BPMN.io",
+  "license": "MIT",
+  "version": "0.5.0",
+  "publisher": "salaboy",
+  "repository": "https://github.com/pinussilvestrus/vs-code-bpmn-io/",
+  "engines": {
+    "vscode": "^1.38.0"
+  },
+  "categories": [
+    "Other"
+  ],
+  "activationEvents": [
+    "onLanguage:bpmn",
+    "onCommand:extension.bpmn-preview",
+    "onWebviewPanel:bpmn.preview"
+  ],
+  "main": "./out/extension.js",
+  "contributes": {
+    "languages": [
+      {
+        "id": "bpmn",
+        "aliases": [
+          "BPMN File",
+          "bpmn"
+        ],
+        "extensions": [
+          ".bpmn",
+          ".bpmn20.xml"
+        ],
+        "configuration": "./language-configuration.json"
+      }
+    ],
+    "commands": [
+      {
+        "command": "extension.bpmn-preview",
+        "title": "Preview BPMN",
+        "icon": {
+          "light": "./resources/logo_light.png",
+          "dark": "./resources/logo_dark.png"
+        }
+      }
+    ],
+    "menus": {
+      "explorer/context": [
+        {
+          "when": "resourceLangId == bpmn",
+          "command": "extension.bpmn-preview",
+          "group": "navigation"
+        }
+      ],
+      "editor/context": [
+        {
+          "when": "resourceLangId == bpmn",
+          "command": "extension.bpmn-preview",
+          "group": "navigation"
+        }
+      ],
+      "editor/title": [
+        {
+          "when": "resourceLangId == bpmn",
+          "command": "extension.bpmn-preview",
+          "alt": "markdown.showPreviewToSide",
+          "group": "navigation"
+        }
+      ]
+    }
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "tsc -p ./",
+    "watch": "tsc -watch -p ./",
+    "pretest": "npm run compile",
+    "test": "node ./out/test/runTest.js"
+  },
+  "devDependencies": {
+    "@types/glob": "^7.1.1",
+    "@types/mocha": "^5.2.7",
+    "@types/node": "^12.12.7",
+    "@types/vscode": "^1.40.0",
+    "glob": "^7.1.6",
+    "mocha": "^6.2.2",
+    "tslint": "^5.20.1",
+    "typescript": "^3.7.2",
+    "vscode-test": "^1.2.3"
+  },
+  "dependencies": {
+    "bpmn-js": "^5.1.2"
+  }
 }
