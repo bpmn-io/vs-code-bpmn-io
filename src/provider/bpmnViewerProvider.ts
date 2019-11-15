@@ -2,7 +2,7 @@
 import * as vscode from "vscode";
 import * as path from "path";
 
-import { BpmnViewerBuilder } from '../builder/bpmnViewerBuilder';
+import { BpmnViewerBuilder } from '../builder';
 
 const fs = require("fs");
 
