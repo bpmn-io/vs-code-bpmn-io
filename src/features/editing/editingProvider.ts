@@ -20,14 +20,12 @@ export class EditingProvider implements vscode.TextDocumentContentProvider {
 
     const contents = fs.readFileSync(docPath, { encoding: 'utf8' });
 
-    const modelerDistroUri = this.getUri('node_modules', 'bpmn-js', 'dist', 'bpmn-modeler.development.js');
-
-    const cssFilesUris = [
-      this.getUri('node_modules', 'bpmn-js', 'dist', 'assets', 'diagram-js.css'),
-      this.getUri('node_modules', 'bpmn-js', 'dist', 'assets', 'bpmn-font', 'css', 'bpmn.css')
-    ];
-
-    const builder = new BpmnModelerBuilder(contents, modelerDistroUri, cssFilesUris);
+    const builder = new BpmnModelerBuilder(contents, {
+      modelerDistro: this.getUri('node_modules', 'bpmn-js', 'dist', 'bpmn-modeler.development.js'), 
+      diagramStyles: this.getUri('node_modules', 'bpmn-js', 'dist', 'assets', 'diagram-js.css'),
+      bpmnFont: this.getUri('node_modules', 'bpmn-js', 'dist', 'assets', 'bpmn-font', 'css', 'bpmn.css'),
+      resourceUri: uri
+    });
     
     return builder.buildModelerView();
   }

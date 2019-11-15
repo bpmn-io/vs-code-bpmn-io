@@ -3,13 +3,11 @@ import * as vscode from "vscode";
 
 export class BpmnModelerBuilder {
   contents: string;
-  modelerDistro: vscode.Uri;
-  cssFiles: vscode.Uri[];
+  resources: any;
 
-  public constructor(contents: string, modelerDistro: vscode.Uri, cssFiles: vscode.Uri[]) {
+  public constructor(contents: string, resources: any) {
     this.contents = contents;
-    this.modelerDistro = modelerDistro;
-    this.cssFiles = cssFiles;
+    this.resources = resources;
   }
 
   private removeNewLines(contents: string): string {
@@ -26,11 +24,11 @@ export class BpmnModelerBuilder {
           <title>BPMN Preview</title>
           
           <!-- viewer distro (with pan and zoom) -->
-          <script src="${this.modelerDistro}"></script>
+          <script src="${this.resources.modelerDistro}"></script>
       
           <!-- required modeler styles -->
-          <link rel="stylesheet" href="${this.cssFiles[0]}">
-          <link rel="stylesheet" href="${this.cssFiles[1]}">
+          <link rel="stylesheet" href="${this.resources.diagramStyles}">
+          <link rel="stylesheet" href="${this.resources.bpmnFont}">
 
           <style>
             * {
@@ -99,6 +97,9 @@ export class BpmnModelerBuilder {
             <script>
 
               var vscode = acquireVsCodeApi();
+
+              // persisting
+              vscode.setState({ resourcePath: '${this.resources.resourceUri}'});
 
               // modeler instance
               var bpmnModeler = new BpmnJS({

@@ -71,7 +71,7 @@ function getPreviewTitle(
 
   const type = provider.constructor.name;
 
-  const prefix = type === 'BpmnModelerProvider' ? 'Edit' : 'Preview';
+  const prefix = type === 'EditingProvider' ? 'Edit' : 'Preview';
 
   return `${prefix}: ${path.basename(uri.fsPath)}`;
 }
@@ -141,20 +141,20 @@ export function activate(context: ExtensionContext) {
   };
 
   const _registerPanel = (
-    preview: BpmnPreviewPanel
+    previewPanel: BpmnPreviewPanel
   ): void => {
 
     // on closed
-    preview.panel.onDidDispose(() => {
-      openedPanels.splice(openedPanels.indexOf(preview), 1);
+    previewPanel.panel.onDidDispose(() => {
+      openedPanels.splice(openedPanels.indexOf(previewPanel), 1);
     });
 
     // on changed
-    preview.panel.onDidChangeViewState(() => {
-      refresh(preview);
+    previewPanel.panel.onDidChangeViewState(() => {
+      refresh(previewPanel);
     });
 
-    openedPanels.push(preview);
+    openedPanels.push(previewPanel);
   };
 
   const _registerCommands = (): void => {
@@ -180,7 +180,11 @@ export function activate(context: ExtensionContext) {
       vscode.window.registerWebviewPanelSerializer(viewType, {
         async deserializeWebviewPanel(panel: WebviewPanel, state: any) {
 
-          const resource = Uri.parse(state.resource.fsPath);
+          if(!state || !state.resourcePath) {
+            return;
+          }
+
+          const resource = Uri.parse(state.resourcePath);
 
           panel.title = panel.title || getPreviewTitle(resource, provider);
           panel.webview.options = getWebviewOptions(context, resource);

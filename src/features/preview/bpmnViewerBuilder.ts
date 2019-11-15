@@ -3,11 +3,11 @@ import * as vscode from "vscode";
 
 export class BpmnViewerBuilder {
   contents: string;
-  viewerDistro: vscode.Uri;
+  resources: any;
 
-  public constructor(contents: string, viewerDistro: vscode.Uri) {
+  public constructor(contents: string, resources: any) {
     this.contents = contents;
-    this.viewerDistro = viewerDistro;
+    this.resources = resources;
   }
 
   private removeNewLines(contents: string): string {
@@ -24,7 +24,7 @@ export class BpmnViewerBuilder {
           <title>BPMN Preview</title>
           
           <!-- viewer distro (with pan and zoom) -->
-          <script src="${this.viewerDistro}"></script>
+          <script src="${this.resources.viewerDistro}"></script>
 
           <style>
             html, body, #canvas {
@@ -40,6 +40,11 @@ export class BpmnViewerBuilder {
             <div id="canvas"></div>
 
             <script>
+
+              var vscode = acquireVsCodeApi();
+
+              // persisting
+              vscode.setState({ resourcePath: '${this.resources.resourceUri}'});
 
               // modeler instance
               var bpmnViewer = new BpmnJS({

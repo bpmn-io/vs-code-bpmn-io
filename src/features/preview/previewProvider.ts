@@ -20,9 +20,10 @@ export class PreviewProvider implements vscode.TextDocumentContentProvider {
 
     const contents = fs.readFileSync(docPath, { encoding: 'utf8' });
 
-    const viewerDistroUri = this.getUri('node_modules', 'bpmn-js', 'dist', 'bpmn-navigated-viewer.development.js');
-
-    const builder = new BpmnViewerBuilder(contents, viewerDistroUri);
+    const builder = new BpmnViewerBuilder(contents, {
+      viewerDistro: this.getUri('node_modules', 'bpmn-js', 'dist', 'bpmn-navigated-viewer.development.js'),
+      resourceUri: uri
+    });
     
     return builder.buildViewerView();
   }
