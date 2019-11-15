@@ -16,8 +16,8 @@
     "onLanguage:bpmn",
     "onCommand:extension.bpmn-preview-viewer",
     "onCommand:extension.bpmn-preview-modeler",
-    "onWebviewPanel:bpmn.preview.viewer",
-    "onWebviewPanel:bpmn.preview.modeler"
+    "onWebviewPanel:bpmn-io.preview",
+    "onWebviewPanel:bpmn-io.edit"
   ],
   "main": "./out/extension.js",
   "contributes": {
@@ -37,7 +37,7 @@
     ],
     "commands": [
       {
-        "command": "extension.bpmn-preview-viewer",
+        "command": "extension.bpmn-io.preview",
         "title": "Open BPMN Preview",
         "icon": {
           "light": "./resources/logo_light.png",
@@ -45,7 +45,7 @@
         }
       },
       {
-        "command": "extension.bpmn-preview-modeler",
+        "command": "extension.bpmn-io.edit",
         "title": "Open BPMN Modeler",
         "icon": {
           "light": "./resources/logo_light_modeler.png",
@@ -57,36 +57,36 @@
       "explorer/context": [
         {
           "when": "resourceLangId == bpmn",
-          "command": "extension.bpmn-preview-viewer",
+          "command": "extension.bpmn-io.preview",
           "group": "navigation"
         },
         {
           "when": "resourceLangId == bpmn",
-          "command": "extension.bpmn-preview-modeler",
+          "command": "extension.bpmn-io.edit",
           "group": "navigation"
         }
       ],
       "editor/context": [
         {
           "when": "resourceLangId == bpmn",
-          "command": "extension.bpmn-preview-viewer",
+          "command": "extension.bpmn-io.preview",
           "group": "navigation"
         },
         {
           "when": "resourceLangId == bpmn",
-          "command": "extension.bpmn-preview-modeler",
+          "command": "extension.bpmn-io.edit",
           "group": "navigation"
         }
       ],
       "editor/title": [
         {
           "when": "resourceLangId == bpmn",
-          "command": "extension.bpmn-preview-viewer",
+          "command": "extension.bpmn-io.preview",
           "group": "navigation"
         },
         {
           "when": "resourceLangId == bpmn",
-          "command": "extension.bpmn-preview-modeler",
+          "command": "extension.bpmn-io.edit",
           "group": "navigation"
         }
       ]
