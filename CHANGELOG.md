@@ -8,6 +8,12 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - /
 
+## 0.6.0
+
+- `CHORE`: improve icons
+- `FEAT`: add `editing` capabilities ([#2](https://github.com/pinussilvestrus/vs-code-bpmn-io/issues/2))
+- `FIX`: add support for Windows ([#44](https://github.com/pinussilvestrus/vs-code-bpmn-io/issues/44))
+
 ## 0.5.0
 
 - `CHORE`: remove jquery from preview panel ([`819422`](https://github.com/pinussilvestrus/vs-code-bpmn-io/commit/819422bf16cd4bfc42e06c4245205b996217af1a))
