@@ -1,6 +1,6 @@
 "use strict";
 
-import { BpmnModelerProvider as BpmnViewerProvider } from "./viewerProvider";
+import { BpmnModelerProvider } from "./provider/bpmnModelerProvider";
 
 import * as vscode from "vscode";
 
@@ -17,7 +17,7 @@ interface BpmnPreviewPanel {
 
 export function activate(context: ExtensionContext) {
   const openedPanels: BpmnPreviewPanel[] = [];
-  const provider = new BpmnViewerProvider(context);
+  const provider = new BpmnModelerProvider(context);
 
   const revealIfAlreadyOpened = (uri: Uri): boolean => {
     const opened = openedPanels.find(
@@ -60,8 +60,7 @@ export function activate(context: ExtensionContext) {
         panel.title = panel.title || getPreviewTitle(resource);
         panel.webview.options = getWebviewOptions(context, resource);
         panel.webview.html = provider.provideTextDocumentContent(
-          resource,
-          state
+          resource
         );
         registerPanel({ panel, resource });
       }
@@ -72,7 +71,7 @@ export function activate(context: ExtensionContext) {
 function createPreview(
   context: ExtensionContext,
   uri: Uri,
-  provider: BpmnViewerProvider
+  provider: BpmnModelerProvider
 ): BpmnPreviewPanel {
   const column =
     (vscode.window.activeTextEditor &&
@@ -88,9 +87,7 @@ function createPreview(
     getWebviewOptions(context, uri)
   );
 
-  panel.webview.html = provider.provideTextDocumentContent(uri, {
-    resource: uri
-  });
+  panel.webview.html = provider.provideTextDocumentContent(uri);
 
   return { panel, resource: uri };
 }
@@ -107,19 +104,17 @@ function getWebviewOptions(context: ExtensionContext, uri: Uri) {
   };
 }
 
-function refresh(preview: BpmnPreviewPanel, provider: BpmnViewerProvider) {
+function refresh(preview: BpmnPreviewPanel, provider: BpmnModelerProvider) {
   const { resource, panel } = preview;
 
-  panel.webview.html = provider.provideTextDocumentContent(resource, {
-    resource
-  });
+  panel.webview.html = provider.provideTextDocumentContent(resource);
 }
 
 function getLocalResourceRoots(
   context: ExtensionContext,
   resource: vscode.Uri
 ): vscode.Uri[] {
-  
+
   const baseRoots = [vscode.Uri.file(context.extensionPath)];
   const folder = vscode.workspace.getWorkspaceFolder(resource);
 
