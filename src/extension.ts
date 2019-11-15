@@ -58,9 +58,9 @@ function createPreview(
 }
 
 function saveFile(uri: vscode.Uri, content: String) {
-  const docPath = uri.with({ scheme: 'vscode-resource' });
+  const { fsPath: docPath } = uri.with({ scheme: 'vscode-resource' });
 
-  fs.writeFileSync(docPath.path, content, { encoding: 'utf8' });
+  fs.writeFileSync(docPath, content, { encoding: 'utf8' });
 }
 
 function getPreviewTitle(
