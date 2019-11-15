@@ -33,19 +33,71 @@ export class BpmnModelerBuilder {
           <link rel="stylesheet" href="${this.cssFiles[1]}">
 
           <style>
-            html, body, #canvas {
+            * {
+              box-sizing: border-box;
+            }
+            
+            body, html {
+              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+            
+              font-size: 12px;
+            
               height: 100%;
               padding: 0;
               margin: 0;
-              background-color: white;
+            }
+
+            .content,
+            .content > #canvas {
+              width: 100%;
+              height: 100%;
+              overflow: hidden;
+            }
+
+            .buttons {
+              position: fixed;
+              bottom: 20px;
+              left: 20px;
+
+              padding: 0;
+              margin: 0;
+              list-style: none;
+            }
+
+            .buttons > .button {
+              display: inline-block;
+              margin-right: 10px;
+            }
+
+            .buttons > .button {
+              background: #DDD;
+              color: #000;
+              border: solid 1px #666;
+              display: inline-block;
+              padding: 5px;
+            }
+
+            .buttons > .button:hover {
+              opacity: 0.3;
+              cursor: pointer;
             }
           </style>
         </head>`;
 
     const body = `<body>
-            <div id="canvas"></div>
+            <div class="content">
+              <div id="canvas"></div>
+            </div>
+
+            <div class="buttons">
+              <div class="button" title="Save BPMN changes" onclick="saveChanges()">
+                  Save changes
+              </div>
+            </div>
 
             <script>
+
+              var vscode = acquireVsCodeApi();
 
               // modeler instance
               var bpmnModeler = new BpmnJS({
@@ -69,6 +121,18 @@ export class BpmnModelerBuilder {
                   });
               }
 
+              function saveChanges() {
+                bpmnModeler.saveXML({ format: true }, function(err, result) {
+                  if (err) {
+                    return console.error('could not save BPMN 2.0 diagram', err);
+                  }
+
+                  vscode.postMessage({
+                    command: 'saveContent',
+                    content: result
+                  });
+                });
+              }
 
               // open diagram
               openDiagram('${this.contents}');
