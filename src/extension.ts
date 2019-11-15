@@ -31,7 +31,7 @@ function createPreview(
       vscode.window.activeTextEditor.viewColumn) ||
     vscode.ViewColumn.One;
 
-  const previewColumn = column + 1;
+  const previewColumn = isEditingProvider (provider) ? column : column + 1;
 
   const panel = vscode.window.createWebviewPanel(
     viewTypeModeler,
@@ -64,51 +64,12 @@ function saveFile(uri: vscode.Uri, content: String) {
   fs.writeFileSync(docPath, content, { encoding: 'utf8' });
 }
 
-function getPreviewTitle(
-  uri: Uri, 
-  provider: EditingProvider | PreviewProvider
-): string {
-
-  const type = provider.constructor.name;
-
-  const prefix = type === 'EditingProvider' ? 'Edit' : 'Preview';
-
-  return `${prefix}: ${path.basename(uri.fsPath)}`;
-}
-
-function getWebviewOptions(context: ExtensionContext, uri: Uri) {
-  return {
-    enableScripts: true,
-    retainContextWhenHidden: true,
-    localResourceRoots: getLocalResourceRoots(context, uri)
-  };
-}
-
 function refresh(
   preview: BpmnPreviewPanel
 ) {
   const { resource, panel, provider } = preview;
 
   panel.webview.html = provider.provideTextDocumentContent(resource);
-}
-
-function getLocalResourceRoots(
-  context: ExtensionContext,
-  resource: vscode.Uri
-): vscode.Uri[] {
-
-  const baseRoots = [vscode.Uri.file(context.extensionPath)];
-  const folder = vscode.workspace.getWorkspaceFolder(resource);
-
-  if (folder) {
-    return baseRoots.concat(folder.uri);
-  }
-
-  if (!resource.scheme || resource.scheme === "file") {
-    return baseRoots.concat(vscode.Uri.file(path.dirname(resource.fsPath)));
-  }
-
-  return baseRoots;
 }
 
 export function activate(context: ExtensionContext) {
@@ -202,3 +163,45 @@ export function activate(context: ExtensionContext) {
 }
 
 export function deactivate() {}
+
+// helper ///////
+function isEditingProvider(provider: any) {
+  return provider.constructor.name === 'EditingProvider';
+}
+
+function getPreviewTitle(
+  uri: Uri, 
+  provider: EditingProvider | PreviewProvider
+): string {
+
+  const prefix = isEditingProvider(provider) ? 'Edit' : 'Preview';
+
+  return `${prefix}: ${path.basename(uri.fsPath)}`;
+}
+
+function getWebviewOptions(context: ExtensionContext, uri: Uri) {
+  return {
+    enableScripts: true,
+    retainContextWhenHidden: true,
+    localResourceRoots: getLocalResourceRoots(context, uri)
+  };
+}
+
+function getLocalResourceRoots(
+  context: ExtensionContext,
+  resource: vscode.Uri
+): vscode.Uri[] {
+
+  const baseRoots = [vscode.Uri.file(context.extensionPath)];
+  const folder = vscode.workspace.getWorkspaceFolder(resource);
+
+  if (folder) {
+    return baseRoots.concat(folder.uri);
+  }
+
+  if (!resource.scheme || resource.scheme === "file") {
+    return baseRoots.concat(vscode.Uri.file(path.dirname(resource.fsPath)));
+  }
+
+  return baseRoots;
+}
