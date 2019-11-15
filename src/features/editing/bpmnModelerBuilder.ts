@@ -30,57 +30,7 @@ export class BpmnModelerBuilder {
           <link rel="stylesheet" href="${this.resources.diagramStyles}">
           <link rel="stylesheet" href="${this.resources.bpmnFont}">
 
-          <style>
-            * {
-              box-sizing: border-box;
-            }
-            
-            body, html {
-              font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-            
-              font-size: 12px;
-            
-              height: 100%;
-              padding: 0;
-              margin: 0;
-            }
-
-            .content,
-            .content > #canvas {
-              width: 100%;
-              height: 100%;
-              overflow: hidden;
-              background-color: white;
-            }
-
-            .buttons {
-              position: fixed;
-              bottom: 20px;
-              left: 20px;
-
-              padding: 0;
-              margin: 0;
-              list-style: none;
-            }
-
-            .buttons > .button {
-              display: inline-block;
-              margin-right: 10px;
-            }
-
-            .buttons > .button {
-              background: #DDD;
-              color: #000;
-              border: solid 1px #666;
-              display: inline-block;
-              padding: 5px;
-            }
-
-            .buttons > .button:hover {
-              opacity: 0.3;
-              cursor: pointer;
-            }
-          </style>
+          <link rel="stylesheet" href="${this.resources.modelerStyles}">
         </head>`;
 
     const body = `<body>
@@ -92,6 +42,8 @@ export class BpmnModelerBuilder {
               <div class="button" title="Save BPMN changes" onclick="saveChanges()">
                   Save changes
               </div>
+
+              <div class="spinner"></div>
             </div>
 
             <script>
@@ -124,6 +76,10 @@ export class BpmnModelerBuilder {
               }
 
               function saveChanges() {
+
+                var spinner = document.getElementsByClassName("spinner")[0];
+                spinner.classList.add("active");
+
                 bpmnModeler.saveXML({ format: true }, function(err, result) {
                   if (err) {
                     return console.error('could not save BPMN 2.0 diagram', err);
@@ -133,6 +89,11 @@ export class BpmnModelerBuilder {
                     command: 'saveContent',
                     content: result
                   });
+
+                  setTimeout(function() {
+                    spinner.classList.remove("active");
+                  }, 1000);
+
                 });
               }
 
