@@ -8,6 +8,10 @@ Check [Keep a Changelog](http://keepachangelog.com/) for recommendations on how 
 
 - /
 
+## 0.6.1
+
+- `FIX`: bundle css files ([`2f85fc`](https://github.com/pinussilvestrus/vs-code-bpmn-io/commit/2f85fc939a7fba3c356755436faadecaf9611934))
+
 ## 0.6.0
 
 - `CHORE`: improve icons
