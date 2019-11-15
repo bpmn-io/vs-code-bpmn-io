@@ -11,8 +11,8 @@ const fs = require("fs");
 import { EditingProvider } from "./features/editing";
 import { PreviewProvider} from "./features/preview";
 
-const viewTypeModeler = "bpmn.preview.modeler";
-const viewTypeViewer = "bpmn.preview.viewer";
+const editingType = "bpmn.editing";
+const previewType = "bpmn.preview";
 
 interface BpmnPreviewPanel {
   panel: WebviewPanel;
@@ -20,7 +20,7 @@ interface BpmnPreviewPanel {
   provider: PreviewProvider | EditingProvider;
 }
 
-function createPreview(
+function createPanel(
   context: ExtensionContext,
   uri: Uri,
   provider: PreviewProvider | EditingProvider
@@ -34,13 +34,24 @@ function createPreview(
   const previewColumn = isEditingProvider (provider) ? column : column + 1;
 
   const panel = vscode.window.createWebviewPanel(
-    viewTypeModeler,
-    getPreviewTitle(uri, provider),
+    getViewType(provider),
+    getPanelTitle(uri, provider),
     previewColumn,
     getWebviewOptions(context, uri)
   );
 
+  // set content
   panel.webview.html = provider.provideTextDocumentContent(uri);
+
+  // set panel icons
+  const {
+    extensionPath
+  } = context;
+
+  panel.iconPath = {
+    light: getUri(extensionPath, 'resources', 'logo_light_panel.png'),
+    dark: getUri(extensionPath, 'resources', 'logo_dark_panel.png')
+  };
 
   // handling messages from the webview content
   panel.webview.onDidReceiveMessage(
@@ -121,21 +132,22 @@ export function activate(context: ExtensionContext) {
   const _registerCommands = (): void => {
     vscode.commands.registerCommand("extension.bpmn-preview-viewer", (uri: Uri) => {
       if (!_revealIfAlreadyOpened(uri, previewProvider)) {
-        _registerPanel(createPreview(context, uri, previewProvider));
+        _registerPanel(createPanel(context, uri, previewProvider));
       }
     });
 
     vscode.commands.registerCommand("extension.bpmn-preview-modeler", (uri: Uri) => {
       if (!_revealIfAlreadyOpened(uri, editingProvider)) {
-        _registerPanel(createPreview(context, uri, editingProvider));
+        _registerPanel(createPanel(context, uri, editingProvider));
       }
     });
   };
 
   const _serializePanel = (
-    provider:  EditingProvider | PreviewProvider,
-    viewType: string
+    provider:  EditingProvider | PreviewProvider
   ): void => {
+
+    const viewType = getViewType(provider);
 
     if (vscode.window.registerWebviewPanelSerializer) {
       vscode.window.registerWebviewPanelSerializer(viewType, {
@@ -147,7 +159,7 @@ export function activate(context: ExtensionContext) {
 
           const resource = Uri.parse(state.resourcePath);
 
-          panel.title = panel.title || getPreviewTitle(resource, provider);
+          panel.title = panel.title || getPanelTitle(resource, provider);
           panel.webview.options = getWebviewOptions(context, resource);
           panel.webview.html = provider.provideTextDocumentContent(resource);
 
@@ -158,18 +170,20 @@ export function activate(context: ExtensionContext) {
   };
 
   _registerCommands();
-  _serializePanel(editingProvider, viewTypeModeler);
-  _serializePanel(previewProvider, viewTypeViewer);
+  _serializePanel(editingProvider);
+  _serializePanel(previewProvider);
 }
 
 export function deactivate() {}
 
+
 // helper ///////
+
 function isEditingProvider(provider: any) {
   return provider.constructor.name === 'EditingProvider';
 }
 
-function getPreviewTitle(
+function getPanelTitle(
   uri: Uri, 
   provider: EditingProvider | PreviewProvider
 ): string {
@@ -204,4 +218,12 @@ function getLocalResourceRoots(
   }
 
   return baseRoots;
+}
+
+function getViewType(provider: any) {
+  return isEditingProvider(provider) ? editingType : previewType;
+}
+
+function getUri(...p: string[]): vscode.Uri {
+  return vscode.Uri.file(path.join(...p));
 }
