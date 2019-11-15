@@ -8,6 +8,8 @@ import { ExtensionContext, Uri, WebviewPanel } from "vscode";
 
 import * as path from "path";
 
+const fs = require("fs");
+
 const viewTypeModeler = "bpmn.preview.modeler";
 const viewTypeViewer = "bpmn.preview.viewer";
 
@@ -39,7 +41,26 @@ function createPreview(
 
   panel.webview.html = provider.provideTextDocumentContent(uri);
 
+  // handling messages from the webview content
+  panel.webview.onDidReceiveMessage(
+    message => {
+      switch (message.command) {
+        case 'saveContent':
+          saveFile(uri, message.content);
+          return;
+      }
+    },
+    undefined,
+    context.subscriptions
+  );
+
   return { panel, resource: uri, provider };
+}
+
+function saveFile(uri: vscode.Uri, content: String) {
+  const docPath = uri.with({ scheme: 'vscode-resource' });
+
+  fs.writeFileSync(docPath.path, content, { encoding: 'utf8' });
 }
 
 function getPreviewTitle(
@@ -121,6 +142,7 @@ export function activate(context: ExtensionContext) {
   const _registerPanel = (
     preview: BpmnPreviewPanel
   ): void => {
+
     // on closed
     preview.panel.onDidDispose(() => {
       openedPanels.splice(openedPanels.indexOf(preview), 1);
