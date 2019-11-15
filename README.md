@@ -6,8 +6,9 @@ VS Code Extension for Displaying BPMN 2.0 Files based on [bpmn.io](https://bpmn.
 
 ## Features
 
-* [x] View BPMN 2.0 files in VS Code
-* [x] Synchronization: Make changes in BPMN 2.0 files and directly display them in the preview 
+* [x] Preview BPMN 2.0 files in VS Code
+* [x] Open BPMN 2.0 in a Modeler to make changes to your diagrams
+* [x] Save changes to your local file
 
 ![alt](./resources/screencast_preview.gif)
 
