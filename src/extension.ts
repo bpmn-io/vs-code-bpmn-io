@@ -1,19 +1,14 @@
 "use strict";
 
-import { BpmnModelerProvider as BpmnViewerProvider } from './viewerProvider';
+import { BpmnModelerProvider as BpmnViewerProvider } from "./viewerProvider";
 
-import * as vscode from 'vscode';
+import * as vscode from "vscode";
 
-import {
-  ExtensionContext,
-  Uri,
-  WebviewPanel,
-  ViewColumn
-} from 'vscode';
+import { ExtensionContext, Uri, WebviewPanel, ViewColumn } from "vscode";
 
 import * as path from "path";
 
-const viewType = 'bpmn.preview';
+const viewType = "bpmn.preview";
 
 interface BpmnPreviewPanel {
   panel: WebviewPanel;
@@ -25,16 +20,20 @@ export function activate(context: ExtensionContext) {
   const provider = new BpmnViewerProvider(context);
 
   const revealIfAlreadyOpened = (uri: Uri): boolean => {
-    const opened = openedPanels.find(panel => panel.resource.fsPath === uri.fsPath);
+    const opened = openedPanels.find(
+      panel => panel.resource.fsPath === uri.fsPath
+    );
+
     if (!opened) {
-		return false;
-	}
+      return false;
+    }
+
     opened.panel.reveal(opened.panel.viewColumn);
+
     return true;
   };
 
   const registerPanel = (preview: BpmnPreviewPanel): void => {
-
     // on closed
     preview.panel.onDidDispose(() => {
       openedPanels.splice(openedPanels.indexOf(preview), 1);
@@ -49,7 +48,7 @@ export function activate(context: ExtensionContext) {
   };
 
   vscode.commands.registerCommand("extension.bpmn-preview", (uri: Uri) => {
-    if(!revealIfAlreadyOpened(uri)) {
+    if (!revealIfAlreadyOpened(uri)) {
       registerPanel(createPreview(context, uri, provider));
     }
   });
@@ -60,16 +59,25 @@ export function activate(context: ExtensionContext) {
         const resource = Uri.parse(state.resource.fsPath);
         panel.title = panel.title || getPreviewTitle(resource);
         panel.webview.options = getWebviewOptions(context, resource);
-        panel.webview.html = provider.provideTextDocumentContent(resource, state);
+        panel.webview.html = provider.provideTextDocumentContent(
+          resource,
+          state
+        );
         registerPanel({ panel, resource });
       }
     });
   }
-
 }
 
-function createPreview(context: ExtensionContext, uri: Uri, provider: BpmnViewerProvider): BpmnPreviewPanel {
-  const column = (vscode.window.activeTextEditor && vscode.window.activeTextEditor.viewColumn) || vscode.ViewColumn.One;
+function createPreview(
+  context: ExtensionContext,
+  uri: Uri,
+  provider: BpmnViewerProvider
+): BpmnPreviewPanel {
+  const column =
+    (vscode.window.activeTextEditor &&
+      vscode.window.activeTextEditor.viewColumn) ||
+    vscode.ViewColumn.One;
 
   const previewColumn = column + 1;
 
@@ -80,7 +88,9 @@ function createPreview(context: ExtensionContext, uri: Uri, provider: BpmnViewer
     getWebviewOptions(context, uri)
   );
 
-  panel.webview.html = provider.provideTextDocumentContent(uri, { resource: uri });
+  panel.webview.html = provider.provideTextDocumentContent(uri, {
+    resource: uri
+  });
 
   return { panel, resource: uri };
 }
@@ -97,33 +107,31 @@ function getWebviewOptions(context: ExtensionContext, uri: Uri) {
   };
 }
 
-
 function refresh(preview: BpmnPreviewPanel, provider: BpmnViewerProvider) {
+  const { resource, panel } = preview;
 
-  const {
-    resource,
-    panel
-  } = preview;
-
-  panel.webview.html = provider.provideTextDocumentContent(resource, { resource });
+  panel.webview.html = provider.provideTextDocumentContent(resource, {
+    resource
+  });
 }
 
 function getLocalResourceRoots(
   context: ExtensionContext,
   resource: vscode.Uri
 ): vscode.Uri[] {
+  
   const baseRoots = [vscode.Uri.file(context.extensionPath)];
   const folder = vscode.workspace.getWorkspaceFolder(resource);
+
   if (folder) {
     return baseRoots.concat(folder.uri);
   }
 
-  if (!resource.scheme || resource.scheme === 'file') {
+  if (!resource.scheme || resource.scheme === "file") {
     return baseRoots.concat(vscode.Uri.file(path.dirname(resource.fsPath)));
   }
 
   return baseRoots;
 }
 
-export function deactivate() {
-}
+export function deactivate() {}
