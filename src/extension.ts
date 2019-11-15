@@ -1,7 +1,5 @@
 "use strict";
 
-import { BpmnModelerProvider, BpmnViewerProvider } from "./provider";
-
 import * as vscode from "vscode";
 
 import { ExtensionContext, Uri, WebviewPanel } from "vscode";
@@ -10,19 +8,22 @@ import * as path from "path";
 
 const fs = require("fs");
 
+import { EditingProvider } from "./features/editing";
+import { PreviewProvider} from "./features/preview";
+
 const viewTypeModeler = "bpmn.preview.modeler";
 const viewTypeViewer = "bpmn.preview.viewer";
 
 interface BpmnPreviewPanel {
   panel: WebviewPanel;
   resource: Uri;
-  provider: BpmnViewerProvider | BpmnModelerProvider;
+  provider: PreviewProvider | EditingProvider;
 }
 
 function createPreview(
   context: ExtensionContext,
   uri: Uri,
-  provider: BpmnModelerProvider | BpmnViewerProvider
+  provider: PreviewProvider | EditingProvider
 ): BpmnPreviewPanel {
   
   const column =
@@ -65,7 +66,7 @@ function saveFile(uri: vscode.Uri, content: String) {
 
 function getPreviewTitle(
   uri: Uri, 
-  provider: BpmnModelerProvider | BpmnViewerProvider
+  provider: EditingProvider | PreviewProvider
 ): string {
 
   const type = provider.constructor.name;
@@ -113,12 +114,12 @@ function getLocalResourceRoots(
 export function activate(context: ExtensionContext) {
 
   const openedPanels: BpmnPreviewPanel[] = [];
-  const modelerProvider = new BpmnModelerProvider(context);
-  const viewerProvider = new BpmnViewerProvider(context);
+  const editingProvider = new EditingProvider(context);
+  const previewProvider = new PreviewProvider(context);
 
   const _revealIfAlreadyOpened = (
     uri: Uri, 
-    provider: BpmnModelerProvider | BpmnViewerProvider
+    provider: EditingProvider | PreviewProvider
   ): boolean => {
 
     const opened = openedPanels.find(panel => {
@@ -158,20 +159,20 @@ export function activate(context: ExtensionContext) {
 
   const _registerCommands = (): void => {
     vscode.commands.registerCommand("extension.bpmn-preview-viewer", (uri: Uri) => {
-      if (!_revealIfAlreadyOpened(uri, viewerProvider)) {
-        _registerPanel(createPreview(context, uri, viewerProvider));
+      if (!_revealIfAlreadyOpened(uri, previewProvider)) {
+        _registerPanel(createPreview(context, uri, previewProvider));
       }
     });
 
     vscode.commands.registerCommand("extension.bpmn-preview-modeler", (uri: Uri) => {
-      if (!_revealIfAlreadyOpened(uri, modelerProvider)) {
-        _registerPanel(createPreview(context, uri, modelerProvider));
+      if (!_revealIfAlreadyOpened(uri, editingProvider)) {
+        _registerPanel(createPreview(context, uri, editingProvider));
       }
     });
   };
 
   const _serializePanel = (
-    provider: BpmnViewerProvider | BpmnModelerProvider,
+    provider:  EditingProvider | PreviewProvider,
     viewType: string
   ): void => {
 
@@ -192,8 +193,8 @@ export function activate(context: ExtensionContext) {
   };
 
   _registerCommands();
-  _serializePanel(modelerProvider, viewTypeModeler);
-  _serializePanel(viewerProvider, viewTypeViewer);
+  _serializePanel(editingProvider, viewTypeModeler);
+  _serializePanel(previewProvider, viewTypeViewer);
 }
 
 export function deactivate() {}

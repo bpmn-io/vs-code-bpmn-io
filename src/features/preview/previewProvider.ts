@@ -2,11 +2,11 @@
 import * as vscode from "vscode";
 import * as path from "path";
 
-import { BpmnViewerBuilder } from '../builder';
+import { BpmnViewerBuilder } from './bpmnViewerBuilder';
 
 const fs = require("fs");
 
-export class BpmnViewerProvider implements vscode.TextDocumentContentProvider {
+export class PreviewProvider implements vscode.TextDocumentContentProvider {
 
   public constructor(private _context: vscode.ExtensionContext) { }
 
