@@ -14,6 +14,11 @@ import { PreviewProvider} from "./features/preview";
 const editingType = "bpmn-io.editing";
 const previewType = "bpmn-io.preview";
 
+const COMMANDS = {
+  PREVIEW_CMD: "extension.bpmn-io.preview",
+  EDIT_CMD: "extension.bpmn-io.edit"
+};
+
 interface BpmnPreviewPanel {
   panel: WebviewPanel;
   resource: Uri;
@@ -130,13 +135,18 @@ export function activate(context: ExtensionContext) {
   };
 
   const _registerCommands = (): void => {
-    vscode.commands.registerCommand("extension.bpmn-io.preview", (uri: Uri) => {
+    const {
+      PREVIEW_CMD,
+      EDIT_CMD
+    } = COMMANDS;
+
+    vscode.commands.registerCommand(PREVIEW_CMD, (uri: Uri) => {
       if (!_revealIfAlreadyOpened(uri, previewProvider)) {
         _registerPanel(createPanel(context, uri, previewProvider));
       }
     });
 
-    vscode.commands.registerCommand("extension.bpmn-io.edit", (uri: Uri) => {
+    vscode.commands.registerCommand(EDIT_CMD, (uri: Uri) => {
       if (!_revealIfAlreadyOpened(uri, editingProvider)) {
         _registerPanel(createPanel(context, uri, editingProvider));
       }

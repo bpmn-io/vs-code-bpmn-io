@@ -14,8 +14,8 @@
   ],
   "activationEvents": [
     "onLanguage:bpmn",
-    "onCommand:extension.bpmn-preview-viewer",
-    "onCommand:extension.bpmn-preview-modeler",
+    "onCommand:extension.bpmn-io.preview",
+    "onCommand:extension.bpmn-io.edit",
     "onWebviewPanel:bpmn-io.preview",
     "onWebviewPanel:bpmn-io.edit"
   ],
