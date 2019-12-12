@@ -55,7 +55,8 @@ export class BpmnModelerBuilder {
 
               // modeler instance
               var bpmnModeler = new BpmnJS({
-                container: '#canvas'
+                container: '#canvas',
+                keyboard: { bindTo: document }
               });
 
               /**
