@@ -1,7 +1,7 @@
 {
   "name": "vs-code-bpmn-io",
   "displayName": "vs-code-bpmn-io",
-  "description": "BPMN 2.0 Viewer, http://BPMN.io",
+  "description": "BPMN 2.0 Viewer and Modeler for VS Code, http://BPMN.io",
   "license": "MIT",
   "version": "0.6.1",
   "publisher": "salaboy",
