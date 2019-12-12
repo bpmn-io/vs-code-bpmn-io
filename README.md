@@ -1,6 +1,6 @@
 # vs-code-bpmn-io
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/pinussilvestrus/vs-code-bpmn-io?style=flat-square) ![vs-code-support](https://img.shields.io/badge/Visual%20Studio%20Code-1.38.0+-blue.svg?style=flat-square)[![Build Status](https://img.shields.io/travis/pinussilvestrus/vs-code-bpmn-io.svg?style=flat-square
+![GitHub package.json version](https://img.shields.io/github/package-json/v/pinussilvestrus/vs-code-bpmn-io?style=flat-square) ![vs-code-support](https://img.shields.io/badge/Visual%20Studio%20Code-1.38.0+-blue.svg?style=flat-square) [![Build Status](https://img.shields.io/travis/pinussilvestrus/vs-code-bpmn-io.svg?style=flat-square
 )](https://travis-ci.org/pinussilvestrus/vs-code-bpmn-io)
 
 VS Code Extension for Displaying and Editing BPMN 2.0 Files, based on [bpmn.io](https://bpmn.io/).
