@@ -1,5 +1,5 @@
 import { expect } from 'chai';
-import { before } from 'mocha';
+import { before, describe, it } from 'mocha';
 import * as path from 'path';
 
 import * as vscode from 'vscode';
@@ -25,31 +25,39 @@ suite('Extension Test Suite', () => {
     expect(editor).not.to.be.empty;
   });
 
+  describe('<preview>', () => {
 
-  test('should open preview', async () => {
+    it('should open preview', async () => {
 
-    // given
-    const { document } = await openFile(TEST_FILE);
+      // given
+      const { document } = await openFile(TEST_FILE);
 
-    const { uri } = document;
+      const { uri } = document;
 
-    // then
-    await vscode.commands.executeCommand(COMMANDS.PREVIEW_CMD, uri);
-    await sleep(500);
+      // then
+      await vscode.commands.executeCommand(COMMANDS.PREVIEW_CMD, uri);
+      await sleep(500);
+    });
+
   });
 
 
-  test('should open edit', async () => {
+  describe('<edit>', () => {
 
-    // given
-    const { document } = await openFile(TEST_FILE);
+    it('should open edit', async () => {
 
-    const { uri } = document;
+      // given
+      const { document } = await openFile(TEST_FILE);
 
-    // then
-    await vscode.commands.executeCommand(COMMANDS.EDIT_CMD, uri);
-    await sleep(500);
+      const { uri } = document;
+
+      // then
+      await vscode.commands.executeCommand(COMMANDS.EDIT_CMD, uri);
+      await sleep(500);
+    });
+
   });
+
 });
 
 
