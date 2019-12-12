@@ -31,6 +31,14 @@ $ code .
 
 Press `F5` to load and debug the extension in a new VS Code instance.
 
+To execute the test suite simply use
+
+```bash
+npm run test
+```
+
+The extension integration tests can also be executed from VS Code itself, simple choose the *Extension Tests* in the Debug mode.
+
 ## Go further
 
 * Get a [Quickstart](./docs/DEVELOPMENT_QUICKSTART.md) on how to develop VS Code extensions
