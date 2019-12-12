@@ -5,7 +5,7 @@ import * as vscode from 'vscode';
 
 const COMMAND = 'extension.bpmn-io.preview';
 
-const TEST_FILE = path.join(__dirname, '../../', 'fixtures', 'simple.bpmn');
+const TEST_FILE = path.join(__dirname, '../../..', 'fixtures', 'simple.bpmn');
 
 suite('<preview>', () => {
 

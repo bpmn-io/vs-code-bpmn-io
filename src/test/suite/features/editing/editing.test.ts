@@ -5,9 +5,9 @@ import * as vscode from 'vscode';
 
 const COMMAND = 'extension.bpmn-io.edit';
 
-const TEST_FILE = path.join(__dirname, '../..', 'fixtures', 'simple.bpmn');
+const TEST_FILE = path.join(__dirname, '../../..', 'fixtures', 'simple.bpmn');
 
-suite('<edit>', () => {
+suite('<editing>', () => {
 
     it('should open edit', async () => {
 
