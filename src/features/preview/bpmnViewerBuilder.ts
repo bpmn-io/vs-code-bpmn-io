@@ -1,5 +1,5 @@
-"use strict";
-import * as vscode from "vscode";
+'use strict';
+import * as vscode from 'vscode';
 
 export class BpmnViewerBuilder {
   contents: string;
@@ -11,7 +11,7 @@ export class BpmnViewerBuilder {
   }
 
   private removeNewLines(contents: string): string {
-    return contents.replace(/(\r\n|\n|\r)/gm, " ");
+    return contents.replace(/(\r\n|\n|\r)/gm, ' ');
   }
 
   public buildViewerView(): string {
@@ -22,7 +22,7 @@ export class BpmnViewerBuilder {
         <head>
           <meta charset="UTF-8" />
           <title>BPMN Preview</title>
-          
+
           <!-- viewer distro (with pan and zoom) -->
           <script src="${this.resources.viewerDistro}"></script>
 
@@ -97,7 +97,7 @@ export class BpmnViewerBuilder {
           -->
         </body>`;
 
-    const tail = ["</html>"].join("\n");
+    const tail = ['</html>'].join('\n');
 
     return head + body + tail;
   }

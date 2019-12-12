@@ -1,10 +1,10 @@
-"use strict";
-import * as vscode from "vscode";
-import * as path from "path";
+'use strict';
+import * as vscode from 'vscode';
+import * as path from 'path';
 
 import { BpmnViewerBuilder } from './bpmnViewerBuilder';
 
-const fs = require("fs");
+const fs = require('fs');
 
 export class PreviewProvider implements vscode.TextDocumentContentProvider {
 
@@ -24,7 +24,7 @@ export class PreviewProvider implements vscode.TextDocumentContentProvider {
       viewerDistro: this.getUri('node_modules', 'bpmn-js', 'dist', 'bpmn-navigated-viewer.development.js'),
       resourceUri: uri
     });
-    
+
     return builder.buildViewerView();
   }
 }

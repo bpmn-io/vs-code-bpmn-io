@@ -1,5 +1,5 @@
-"use strict";
-import * as vscode from "vscode";
+'use strict';
+import * as vscode from 'vscode';
 
 export class BpmnModelerBuilder {
   contents: string;
@@ -11,7 +11,7 @@ export class BpmnModelerBuilder {
   }
 
   private removeNewLines(contents: string): string {
-    return contents.replace(/(\r\n|\n|\r)/gm, " ");
+    return contents.replace(/(\r\n|\n|\r)/gm, ' ');
   }
 
   public buildModelerView(): string {
@@ -22,10 +22,10 @@ export class BpmnModelerBuilder {
         <head>
           <meta charset="UTF-8" />
           <title>BPMN Preview</title>
-          
+
           <!-- viewer distro (with pan and zoom) -->
           <script src="${this.resources.modelerDistro}"></script>
-      
+
           <!-- required modeler styles -->
           <link rel="stylesheet" href="${this.resources.diagramStyles}">
           <link rel="stylesheet" href="${this.resources.bpmnFont}">
@@ -120,7 +120,7 @@ export class BpmnModelerBuilder {
           -->
         </body>`;
 
-    const tail = ["</html>"].join("\n");
+    const tail = ['</html>'].join('\n');
 
     return head + body + tail;
   }

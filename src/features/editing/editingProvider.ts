@@ -1,10 +1,10 @@
-"use strict";
-import * as vscode from "vscode";
-import * as path from "path";
+'use strict';
+import * as vscode from 'vscode';
+import * as path from 'path';
 
 import { BpmnModelerBuilder } from './bpmnModelerBuilder';
 
-const fs = require("fs");
+const fs = require('fs');
 
 export class EditingProvider implements vscode.TextDocumentContentProvider {
 
@@ -21,13 +21,13 @@ export class EditingProvider implements vscode.TextDocumentContentProvider {
     const contents = fs.readFileSync(docPath, { encoding: 'utf8' });
 
     const builder = new BpmnModelerBuilder(contents, {
-      modelerDistro: this.getUri('node_modules', 'bpmn-js', 'dist', 'bpmn-modeler.development.js'), 
+      modelerDistro: this.getUri('node_modules', 'bpmn-js', 'dist', 'bpmn-modeler.development.js'),
       diagramStyles: this.getUri('node_modules', 'bpmn-js', 'dist', 'assets', 'diagram-js.css'),
       bpmnFont: this.getUri('node_modules', 'bpmn-js', 'dist', 'assets', 'bpmn-font', 'css', 'bpmn.css'),
       modelerStyles: this.getUri('out', 'assets', 'modeler.css'),
       resourceUri: uri
     });
-    
+
     return builder.buildModelerView();
   }
 }
