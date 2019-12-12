@@ -17,7 +17,6 @@ async function main() {
     // Download VS Code, unzip it and run the integration test
     await runTests({ extensionDevelopmentPath, extensionTestsPath });
   } catch (err) {
-    console.error('Failed to run tests');
     process.exit(1);
   }
 }
@@ -27,9 +26,7 @@ function copyTestFiles() {
 
   const dest = path.resolve(__dirname, 'fixtures');
 
-  console.log('Copy test bpmn files ...');
-  
-  cp("-R", src, dest);
+  cp('-R', src, dest);
 }
 
 copyTestFiles();

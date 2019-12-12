@@ -1,4 +1,7 @@
 {
+  "extends": [
+    "tslint-eslint-rules"
+  ],
   "rules": {
     "no-string-throw": true,
     "no-unused-expression": true,
@@ -8,7 +11,16 @@
     "semicolon": [ true, "always" ],
     "triple-equals": true,
     "no-unused-expression-chai": true,
-    "indent": [true, "spaces", 2]
+    "indent": [ true, "spaces", 2 ],
+    "no-bitwise": true,
+    "no-console": true,
+    "no-multi-spaces": true,
+    "no-unused-vars": [ true, {  "ignore-pattern": "^_" } ],
+    "no-trailing-whitespace": true,
+    "object-curly-spacing": [ true, "always" ],
+    "space-in-parens": [ true, "never" ],
+    "comment-format": [ true, "always" ],
+    "quotemark": [true, "single", "avoid-escape"]
   },
   "defaultSeverity": "warning",
   "rulesDirectory": [

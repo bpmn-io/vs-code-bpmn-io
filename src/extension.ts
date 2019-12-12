@@ -1,22 +1,22 @@
-"use strict";
+'use strict';
 
-import * as vscode from "vscode";
+import * as vscode from 'vscode';
 
-import { ExtensionContext, Uri, WebviewPanel } from "vscode";
+import { ExtensionContext, Uri, WebviewPanel } from 'vscode';
 
-import * as path from "path";
+import * as path from 'path';
 
-const fs = require("fs");
+const fs = require('fs');
 
-import { EditingProvider } from "./features/editing";
-import { PreviewProvider} from "./features/preview";
+import { EditingProvider } from './features/editing';
+import { PreviewProvider } from './features/preview';
 
-const editingType = "bpmn-io.editing";
-const previewType = "bpmn-io.preview";
+const editingType = 'bpmn-io.editing';
+const previewType = 'bpmn-io.preview';
 
 const COMMANDS = {
-  PREVIEW_CMD: "extension.bpmn-io.preview",
-  EDIT_CMD: "extension.bpmn-io.edit"
+  PREVIEW_CMD: 'extension.bpmn-io.preview',
+  EDIT_CMD: 'extension.bpmn-io.edit'
 };
 
 interface BpmnPreviewPanel {
@@ -30,7 +30,7 @@ function createPanel(
   uri: Uri,
   provider: PreviewProvider | EditingProvider
 ): BpmnPreviewPanel {
-  
+
   const column =
     (vscode.window.activeTextEditor &&
       vscode.window.activeTextEditor.viewColumn) ||
@@ -95,7 +95,7 @@ export function activate(context: ExtensionContext) {
   const previewProvider = new PreviewProvider(context);
 
   const _revealIfAlreadyOpened = (
-    uri: Uri, 
+    uri: Uri,
     provider: EditingProvider | PreviewProvider
   ): boolean => {
 
@@ -104,7 +104,7 @@ export function activate(context: ExtensionContext) {
         resource,
         provider: panelProvider
       } = panel;
-        
+
       return resource.fsPath === uri.fsPath && panelProvider === provider;
     });
 
@@ -154,7 +154,7 @@ export function activate(context: ExtensionContext) {
   };
 
   const _serializePanel = (
-    provider:  EditingProvider | PreviewProvider
+    provider: EditingProvider | PreviewProvider
   ): void => {
 
     const viewType = getViewType(provider);
@@ -194,7 +194,7 @@ function isEditingProvider(provider: any) {
 }
 
 function getPanelTitle(
-  uri: Uri, 
+  uri: Uri,
   provider: EditingProvider | PreviewProvider
 ): string {
 
@@ -223,7 +223,7 @@ function getLocalResourceRoots(
     return baseRoots.concat(folder.uri);
   }
 
-  if (!resource.scheme || resource.scheme === "file") {
+  if (!resource.scheme || resource.scheme === 'file') {
     return baseRoots.concat(vscode.Uri.file(path.dirname(resource.fsPath)));
   }
 

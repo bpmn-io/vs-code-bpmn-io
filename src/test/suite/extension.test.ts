@@ -5,8 +5,8 @@ import * as path from 'path';
 import * as vscode from 'vscode';
 
 const COMMANDS = {
-  PREVIEW_CMD: "extension.bpmn-io.preview",
-  EDIT_CMD: "extension.bpmn-io.edit"
+  PREVIEW_CMD: 'extension.bpmn-io.preview',
+  EDIT_CMD: 'extension.bpmn-io.edit'
 };
 
 const TEST_FILE = path.join(__dirname, '..', 'fixtures', 'simple.bpmn');
