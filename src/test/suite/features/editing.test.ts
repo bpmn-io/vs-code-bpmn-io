@@ -1,24 +1,25 @@
-import { expect } from 'chai';
-import { before } from 'mocha';
+import { it } from 'mocha';
 import * as path from 'path';
 
 import * as vscode from 'vscode';
 
-const TEST_FILE = path.join(__dirname, '..', 'fixtures', 'simple.bpmn');
+const COMMAND = 'extension.bpmn-io.edit';
 
-suite('Extension Test Suite', () => {
-  before(() => {
-    vscode.window.showInformationMessage('Start all tests.');
-  });
+const TEST_FILE = path.join(__dirname, '../..', 'fixtures', 'simple.bpmn');
 
-  test('should start without error', async () => {
+suite('<edit>', () => {
 
-    // when
-    const editor = await openFile(TEST_FILE);
+    it('should open edit', async () => {
 
-    // given
-    expect(editor).not.to.be.empty;
-  });
+      // given
+      const { document } = await openFile(TEST_FILE);
+
+      const { uri } = document;
+
+      // then
+      await vscode.commands.executeCommand(COMMAND, uri);
+      await sleep(500);
+    });
 
 });
 

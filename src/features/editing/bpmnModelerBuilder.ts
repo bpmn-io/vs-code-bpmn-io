@@ -59,6 +59,8 @@ export class BpmnModelerBuilder {
                 keyboard: { bindTo: document }
               });
 
+              keyboardBindings();
+
               /**
                * Open diagram in our modeler instance.
                *
@@ -76,11 +78,7 @@ export class BpmnModelerBuilder {
                   });
               }
 
-              function saveChanges() {
-
-                var spinner = document.getElementsByClassName("spinner")[0];
-                spinner.classList.add("active");
-
+              function saveDiagramChanges(cb) {
                 bpmnModeler.saveXML({ format: true }, function(err, result) {
                   if (err) {
                     return console.error('could not save BPMN 2.0 diagram', err);
@@ -91,10 +89,34 @@ export class BpmnModelerBuilder {
                     content: result
                   });
 
+                  if (typeof cb === 'function') {
+                    cb();
+                  }
+                });
+              }
+
+              function saveChanges() {
+                var spinner = document.getElementsByClassName("spinner")[0];
+                spinner.classList.add("active");
+
+                saveDiagramChanges(function() {
                   setTimeout(function() {
                     spinner.classList.remove("active");
                   }, 1000);
+                });
+              }
 
+              function keyboardBindings() {
+                var keyboard = bpmnModeler.get('keyboard');
+
+                keyboard.addListener(function(context) {
+
+                  var event = context.keyEvent;
+
+                  if (keyboard.isKey(['s', 'S'], event) && keyboard.isCmd(event)) {
+                    saveChanges();
+                    return true;
+                  }
                 });
               }
 
