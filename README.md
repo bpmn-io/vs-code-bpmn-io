@@ -2,7 +2,7 @@
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/pinussilvestrus/vs-code-bpmn-io?style=flat-square) ![vs-code-support](https://img.shields.io/badge/Visual%20Studio%20Code-1.38.0+-blue.svg?style=flat-square)
 
-VS Code Extension for Displaying BPMN 2.0 Files based on [bpmn.io](https://bpmn.io/).
+VS Code Extension for Displaying and Editing BPMN 2.0 Files, based on [bpmn.io](https://bpmn.io/).
 
 ## Features
 
@@ -29,6 +29,11 @@ $ code .
 ```
 
 Press `F5` to load and debug the extension in a new VS Code instance.
+
+## Go further
+
+* Get a [Quickstart](./docs/DEVELOPMENT_QUICKSTART.md) on how to develop VS Code extensions
+* Learn how to [release a new version](./docs/RELEASING.md)
 
 ## License
 
