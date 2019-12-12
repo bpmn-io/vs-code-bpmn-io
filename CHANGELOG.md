@@ -4,7 +4,7 @@ All notable changes to the bpmn-io vs-code extension will be documented in this 
 
 ## Unreleased Changes
 
-- /
+- `FEAT(editing)`: save diagram changes on CTRL+S ([`#46`](https://github.com/pinussilvestrus/vs-code-bpmn-io/issues/46))
 
 ## 0.6.1
 
