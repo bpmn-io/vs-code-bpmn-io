@@ -5,31 +5,31 @@ import { cp } from 'shelljs';
 import { runTests } from 'vscode-test';
 
 async function main() {
-	try {
-		// The folder containing the Extension Manifest package.json
-		// Passed to `--extensionDevelopmentPath`
-		const extensionDevelopmentPath = path.resolve(__dirname, '../../');
+  try {
+    // The folder containing the Extension Manifest package.json
+    // Passed to `--extensionDevelopmentPath`
+    const extensionDevelopmentPath = path.resolve(__dirname, '../../');
 
-		// The path to test runner
-		// Passed to --extensionTestsPath
-		const extensionTestsPath = path.resolve(__dirname, './suite/index');
+    // The path to test runner
+    // Passed to --extensionTestsPath
+    const extensionTestsPath = path.resolve(__dirname, './suite/index');
 
-		// Download VS Code, unzip it and run the integration test
-		await runTests({ extensionDevelopmentPath, extensionTestsPath });
-	} catch (err) {
-		console.error('Failed to run tests');
-		process.exit(1);
-	}
+    // Download VS Code, unzip it and run the integration test
+    await runTests({ extensionDevelopmentPath, extensionTestsPath });
+  } catch (err) {
+    console.error('Failed to run tests');
+    process.exit(1);
+  }
 }
 
 function copyTestFiles() {
-	const src = path.resolve(__dirname, '../..', 'src', 'test', 'fixtures');
+  const src = path.resolve(__dirname, '../..', 'src', 'test', 'fixtures');
 
-	const dest = path.resolve(__dirname, 'fixtures');
+  const dest = path.resolve(__dirname, 'fixtures');
 
-	console.log('Copy test bpmn files ...');
-	
-	cp("-R", src, dest);
+  console.log('Copy test bpmn files ...');
+  
+  cp("-R", src, dest);
 }
 
 copyTestFiles();
