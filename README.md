@@ -1,7 +1,7 @@
 # vs-code-bpmn-io
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/pinussilvestrus/vs-code-bpmn-io?style=flat-square) ![vs-code-support](https://img.shields.io/badge/Visual%20Studio%20Code-1.38.0+-blue.svg?style=flat-square) [![Build Status](https://img.shields.io/travis/pinussilvestrus/vs-code-bpmn-io.svg?style=flat-square
-)](https://travis-ci.org/pinussilvestrus/vs-code-bpmn-io)
+![GitHub package.json version](https://img.shields.io/github/package-json/v/bpmn-io/vs-code-bpmn-io?style=flat-square) ![vs-code-support](https://img.shields.io/badge/Visual%20Studio%20Code-1.38.0+-blue.svg?style=flat-square) [![Build Status](https://img.shields.io/travis/bpmn-io/vs-code-bpmn-io.svg?style=flat-square
+)](https://travis-ci.org/bpmn-io/vs-code-bpmn-io)
 
 VS Code Extension for Displaying and Editing BPMN 2.0 Files, based on [bpmn.io](https://bpmn.io/).
 
@@ -15,7 +15,7 @@ VS Code Extension for Displaying and Editing BPMN 2.0 Files, based on [bpmn.io](
 
 ## How to get it
 
-Type `vs-code-bpmn-io` in the Extensions section and directly install it. You can also download it in the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=salaboy.vs-code-bpmn-io) or [setup it locally](#development-setup).
+Type `vs-code-bpmn-io` in the Extensions section and directly install it. You can also download it in the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=bpmn-io.vs-code-bpmn-io) or [setup it locally](#development-setup).
 
 
 ## Development Setup
@@ -23,7 +23,7 @@ Type `vs-code-bpmn-io` in the Extensions section and directly install it. You ca
 First step, clone this project to your local machine.
 
 ```sh
-$ git clone https://github.com/pinussilvestrus/vs-code-bpmn-io.git
+$ git clone https://github.com/bpmn-io/vs-code-bpmn-io.git
 $ cd ./vs-code-bpmn-io
 $ npm install
 $ code .
