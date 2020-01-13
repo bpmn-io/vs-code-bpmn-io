@@ -4,8 +4,8 @@
   "description": "VS Code Extension for Displaying and Editing BPMN 2.0 Files, based on bpmn.io",
   "license": "MIT",
   "version": "0.6.1",
-  "publisher": "salaboy",
-  "repository": "https://github.com/pinussilvestrus/vs-code-bpmn-io/",
+  "publisher": "bpmn-io",
+  "repository": "https://github.com/bpmn-ios/vs-code-bpmn-io/",
   "engines": {
     "vscode": "^1.38.0"
   },
