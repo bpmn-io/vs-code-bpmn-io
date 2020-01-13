@@ -9,6 +9,7 @@
   "engines": {
     "vscode": "^1.38.0"
   },
+  "icon": "resources/logo_marketplace.png",
   "categories": [
     "Other"
   ],
