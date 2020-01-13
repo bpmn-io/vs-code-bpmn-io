@@ -4,6 +4,9 @@ All notable changes to the bpmn-io vs-code extension will be documented in this 
 
 ## Unreleased Changes
 
+## 0.6.3
+
+- `CHORE`: add marketplace logo to package metadata
 
 ## 0.6.2
 
