@@ -2,7 +2,7 @@
 
 ![GitHub package.json version](https://img.shields.io/github/package-json/v/bpmn-io/vs-code-bpmn-io) ![vs-code-support](https://img.shields.io/badge/Visual%20Studio%20Code-1.38.0+-blue.svg) [![Build Status](https://travis-ci.com/bpmn-io/vs-code-bpmn-io.svg?branch=master)](https://travis-ci.com/bpmn-io/vs-code-bpmn-io)
 
-VS Code Extension for Displaying and Editing BPMN 2.0 Files, based on [bpmn.io](https://bpmn.io/).
+Display and edit BPMN diagrams in VS Code using [bpmn.io](https://bpmn.io/) tools.
 
 ## Features
 
