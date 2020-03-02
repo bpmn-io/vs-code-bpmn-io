@@ -31,6 +31,16 @@ export class BpmnModelerBuilder {
           <link rel="stylesheet" href="${this.resources.bpmnFont}">
 
           <link rel="stylesheet" href="${this.resources.modelerStyles}">
+
+          <style>
+            /*
+             * Will be otherwise overridden by VSCode default styles
+             */
+            .djs-context-pad,
+            .djs-popup {
+              color: black;
+            }
+          </style>
         </head>`;
 
     const body = `
