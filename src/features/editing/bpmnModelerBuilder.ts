@@ -40,10 +40,6 @@ export class BpmnModelerBuilder {
         </div>
 
         <div class="buttons">
-          <div class="button" title="Save BPMN changes" onclick="saveChanges()">
-            Save changes
-          </div>
-
           <div class="spinner"></div>
         </div>
 
