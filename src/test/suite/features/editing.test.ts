@@ -3,24 +3,26 @@ import * as path from 'path';
 
 import * as vscode from 'vscode';
 
-const COMMAND = 'extension.bpmn-io.preview';
+const COMMAND = 'extension.bpmn-io.edit';
 
-const TEST_FILE = path.join(__dirname, '../../..', 'fixtures', 'simple.bpmn');
+const TEST_FILE = path.join(__dirname, '../..', 'fixtures', 'simple.bpmn');
 
-suite('<preview>', () => {
+suite('<editing>', () => {
 
-  it('should open preview', async () => {
-    // given
-    const { document } = await openFile(TEST_FILE);
+    it('should open edit', async () => {
 
-    const { uri } = document;
+      // given
+      const { document } = await openFile(TEST_FILE);
 
-    // then
-    await vscode.commands.executeCommand(COMMAND, uri);
-    await sleep(500);
-  });
+      const { uri } = document;
+
+      // then
+      await vscode.commands.executeCommand(COMMAND, uri);
+      await sleep(500);
+    });
 
 });
+
 
 // helpers //////
 

@@ -15,9 +15,7 @@
   ],
   "activationEvents": [
     "onLanguage:bpmn",
-    "onCommand:extension.bpmn-io.preview",
     "onCommand:extension.bpmn-io.edit",
-    "onWebviewPanel:bpmn-io.preview",
     "onWebviewPanel:bpmn-io.edit"
   ],
   "main": "./out/extension.js",
@@ -26,7 +24,7 @@
       {
         "id": "bpmn",
         "aliases": [
-          "BPMN File",
+          "BPMN",
           "bpmn"
         ],
         "extensions": [
@@ -37,14 +35,6 @@
       }
     ],
     "commands": [
-      {
-        "command": "extension.bpmn-io.preview",
-        "title": "Open BPMN Preview",
-        "icon": {
-          "light": "./resources/logo_light.png",
-          "dark": "./resources/logo_dark.png"
-        }
-      },
       {
         "command": "extension.bpmn-io.edit",
         "title": "Open BPMN Modeler",
@@ -58,11 +48,6 @@
       "explorer/context": [
         {
           "when": "resourceLangId == bpmn",
-          "command": "extension.bpmn-io.preview",
-          "group": "navigation"
-        },
-        {
-          "when": "resourceLangId == bpmn",
           "command": "extension.bpmn-io.edit",
           "group": "navigation"
         }
@@ -70,21 +55,11 @@
       "editor/context": [
         {
           "when": "resourceLangId == bpmn",
-          "command": "extension.bpmn-io.preview",
-          "group": "navigation"
-        },
-        {
-          "when": "resourceLangId == bpmn",
           "command": "extension.bpmn-io.edit",
           "group": "navigation"
         }
       ],
       "editor/title": [
-        {
-          "when": "resourceLangId == bpmn",
-          "command": "extension.bpmn-io.preview",
-          "group": "navigation"
-        },
         {
           "when": "resourceLangId == bpmn",
           "command": "extension.bpmn-io.edit",

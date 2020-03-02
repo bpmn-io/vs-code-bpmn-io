@@ -9,39 +9,36 @@ import * as path from 'path';
 const fs = require('fs');
 
 import { EditingProvider } from './features/editing';
-import { PreviewProvider } from './features/preview';
 
 const editingType = 'bpmn-io.editing';
-const previewType = 'bpmn-io.preview';
 
 const COMMANDS = {
-  PREVIEW_CMD: 'extension.bpmn-io.preview',
   EDIT_CMD: 'extension.bpmn-io.edit'
 };
 
-interface BpmnPreviewPanel {
+interface BpmnEditorPanel {
   panel: WebviewPanel;
   resource: Uri;
-  provider: PreviewProvider | EditingProvider;
+  provider: EditingProvider;
 }
 
 function createPanel(
   context: ExtensionContext,
   uri: Uri,
-  provider: PreviewProvider | EditingProvider
-): BpmnPreviewPanel {
+  provider: EditingProvider
+): BpmnEditorPanel {
 
   const column =
     (vscode.window.activeTextEditor &&
       vscode.window.activeTextEditor.viewColumn) ||
     vscode.ViewColumn.One;
 
-  const previewColumn = isEditingProvider (provider) ? column : column + 1;
+  const editorColumn = column + 1;
 
   const panel = vscode.window.createWebviewPanel(
-    getViewType(provider),
+    editingType,
     getPanelTitle(uri, provider),
-    previewColumn,
+    editorColumn,
     getWebviewOptions(context, uri)
   );
 
@@ -81,22 +78,21 @@ function saveFile(uri: vscode.Uri, content: String) {
 }
 
 function refresh(
-  preview: BpmnPreviewPanel
+  editor: BpmnEditorPanel
 ) {
-  const { resource, panel, provider } = preview;
+  const { resource, panel, provider } = editor;
 
   panel.webview.html = provider.provideTextDocumentContent(resource);
 }
 
 export function activate(context: ExtensionContext) {
 
-  const openedPanels: BpmnPreviewPanel[] = [];
+  const openedPanels: BpmnEditorPanel[] = [];
   const editingProvider = new EditingProvider(context);
-  const previewProvider = new PreviewProvider(context);
 
   const _revealIfAlreadyOpened = (
     uri: Uri,
-    provider: EditingProvider | PreviewProvider
+    provider: EditingProvider
   ): boolean => {
 
     const opened = openedPanels.find(panel => {
@@ -118,33 +114,26 @@ export function activate(context: ExtensionContext) {
   };
 
   const _registerPanel = (
-    previewPanel: BpmnPreviewPanel
+    editorPanel: BpmnEditorPanel
   ): void => {
 
     // on closed
-    previewPanel.panel.onDidDispose(() => {
-      openedPanels.splice(openedPanels.indexOf(previewPanel), 1);
+    editorPanel.panel.onDidDispose(() => {
+      openedPanels.splice(openedPanels.indexOf(editorPanel), 1);
     });
 
     // on changed
-    previewPanel.panel.onDidChangeViewState(() => {
-      refresh(previewPanel);
+    editorPanel.panel.onDidChangeViewState(() => {
+      refresh(editorPanel);
     });
 
-    openedPanels.push(previewPanel);
+    openedPanels.push(editorPanel);
   };
 
   const _registerCommands = (): void => {
     const {
-      PREVIEW_CMD,
       EDIT_CMD
     } = COMMANDS;
-
-    vscode.commands.registerCommand(PREVIEW_CMD, (uri: Uri) => {
-      if (!_revealIfAlreadyOpened(uri, previewProvider)) {
-        _registerPanel(createPanel(context, uri, previewProvider));
-      }
-    });
 
     vscode.commands.registerCommand(EDIT_CMD, (uri: Uri) => {
       if (!_revealIfAlreadyOpened(uri, editingProvider)) {
@@ -154,10 +143,10 @@ export function activate(context: ExtensionContext) {
   };
 
   const _serializePanel = (
-    provider: EditingProvider | PreviewProvider
+    provider: EditingProvider
   ): void => {
 
-    const viewType = getViewType(provider);
+    const viewType = editingType;
 
     if (vscode.window.registerWebviewPanelSerializer) {
       vscode.window.registerWebviewPanelSerializer(viewType, {
@@ -181,7 +170,6 @@ export function activate(context: ExtensionContext) {
 
   _registerCommands();
   _serializePanel(editingProvider);
-  _serializePanel(previewProvider);
 }
 
 export function deactivate() {}
@@ -189,16 +177,12 @@ export function deactivate() {}
 
 // helper ///////
 
-function isEditingProvider(provider: any) {
-  return provider.constructor.name === 'EditingProvider';
-}
-
 function getPanelTitle(
   uri: Uri,
-  provider: EditingProvider | PreviewProvider
+  provider: EditingProvider
 ): string {
 
-  const prefix = isEditingProvider(provider) ? 'Edit' : 'Preview';
+  const prefix ='Edit';
 
   return `${prefix}: ${path.basename(uri.fsPath)}`;
 }
@@ -228,10 +212,6 @@ function getLocalResourceRoots(
   }
 
   return baseRoots;
-}
-
-function getViewType(provider: any) {
-  return isEditingProvider(provider) ? editingType : previewType;
 }
 
 function getUri(...p: string[]): vscode.Uri {
