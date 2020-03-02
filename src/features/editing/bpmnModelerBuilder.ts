@@ -33,115 +33,99 @@ export class BpmnModelerBuilder {
           <link rel="stylesheet" href="${this.resources.modelerStyles}">
         </head>`;
 
-    const body = `<body>
-            <div class="content">
-              <div id="canvas"></div>
-            </div>
+    const body = `
+      <body>
+        <div class="content">
+          <div id="canvas"></div>
+        </div>
 
-            <div class="buttons">
-              <div class="button" title="Save BPMN changes" onclick="saveChanges()">
-                  Save changes
-              </div>
+        <div class="buttons">
+          <div class="button" title="Save BPMN changes" onclick="saveChanges()">
+            Save changes
+          </div>
 
-              <div class="spinner"></div>
-            </div>
+          <div class="spinner"></div>
+        </div>
 
-            <script>
+        <script>
 
-              var vscode = acquireVsCodeApi();
+          var vscode = acquireVsCodeApi();
 
-              // persisting
-              vscode.setState({ resourcePath: '${this.resources.resourceUri}'});
+          // persisting
+          vscode.setState({ resourcePath: '${this.resources.resourceUri}'});
 
-              // modeler instance
-              var bpmnModeler = new BpmnJS({
-                container: '#canvas',
-                keyboard: { bindTo: document }
+          // modeler instance
+          var bpmnModeler = new BpmnJS({
+            container: '#canvas',
+            keyboard: { bindTo: document }
+          });
+
+          keyboardBindings();
+
+          /**
+           * Open diagram in our modeler instance.
+           *
+           * @param {String} bpmnXML diagram to display
+           */
+          function openDiagram(bpmnXML) {
+
+            // import diagram
+            bpmnModeler.importXML(bpmnXML, function(err) {
+
+              if (err) {
+                return console.error('could not import BPMN 2.0 diagram', err);
+              }
+
+            });
+          }
+
+          function saveDiagramChanges(cb) {
+            bpmnModeler.saveXML({ format: true }, function(err, result) {
+              if (err) {
+                return console.error('could not save BPMN 2.0 diagram', err);
+              }
+
+              vscode.postMessage({
+                command: 'saveContent',
+                content: result
               });
 
-              keyboardBindings();
-
-              /**
-               * Open diagram in our modeler instance.
-               *
-               * @param {String} bpmnXML diagram to display
-               */
-              function openDiagram(bpmnXML) {
-
-                // import diagram
-                bpmnModeler.importXML(bpmnXML, function(err) {
-
-                    if (err) {
-                      return console.error('could not import BPMN 2.0 diagram', err);
-                    }
-
-                  });
+              if (typeof cb === 'function') {
+                cb();
               }
+            });
+          }
 
-              function saveDiagramChanges(cb) {
-                bpmnModeler.saveXML({ format: true }, function(err, result) {
-                  if (err) {
-                    return console.error('could not save BPMN 2.0 diagram', err);
-                  }
+          function saveChanges() {
+            var spinner = document.getElementsByClassName("spinner")[0];
+            spinner.classList.add("active");
 
-                  vscode.postMessage({
-                    command: 'saveContent',
-                    content: result
-                  });
+            saveDiagramChanges(function() {
+              setTimeout(function() {
+                spinner.classList.remove("active");
+              }, 1000);
+            });
+          }
 
-                  if (typeof cb === 'function') {
-                    cb();
-                  }
-                });
+          function keyboardBindings() {
+            var keyboard = bpmnModeler.get('keyboard');
+
+            keyboard.addListener(function(context) {
+
+              var event = context.keyEvent;
+
+              if (keyboard.isKey(['s', 'S'], event) && keyboard.isCmd(event)) {
+                saveChanges();
+                return true;
               }
+            });
+          }
 
-              function saveChanges() {
-                var spinner = document.getElementsByClassName("spinner")[0];
-                spinner.classList.add("active");
-
-                saveDiagramChanges(function() {
-                  setTimeout(function() {
-                    spinner.classList.remove("active");
-                  }, 1000);
-                });
-              }
-
-              function keyboardBindings() {
-                var keyboard = bpmnModeler.get('keyboard');
-
-                keyboard.addListener(function(context) {
-
-                  var event = context.keyEvent;
-
-                  if (keyboard.isKey(['s', 'S'], event) && keyboard.isCmd(event)) {
-                    saveChanges();
-                    return true;
-                  }
-                });
-              }
-
-              // open diagram
-              openDiagram('${this.contents}');
-            </script>
-
-          <!--
-          Thanks for trying out our BPMN toolkit!
-
-          If you'd like to learn more about what our library,
-          continue with some more basic examples:
-          * https://github.com/bpmn-io/bpmn-js-examples/overlays
-          * https://github.com/bpmn-io/bpmn-js-examples/interaction
-          * https://github.com/bpmn-io/bpmn-js-examples/colors
-          * https://github.com/bpmn-io/bpmn-js-examples/commenting
-
-          To get a bit broader overview over how bpmn-js works,
-          follow our walkthrough:
-          * https://bpmn.io/toolkit/bpmn-js/walkthrough/
-
-          Related starters:
-          * https://raw.githubusercontent.com/bpmn-io/bpmn-js-examples/starter/modeler.html
-          -->
-        </body>`;
+          // open diagram
+          openDiagram('${this.contents}');
+        </script>
+      </body>
+    `;
 
     const tail = ['</html>'].join('\n');
 
