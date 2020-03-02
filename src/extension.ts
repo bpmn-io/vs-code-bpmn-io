@@ -28,12 +28,10 @@ function createPanel(
   provider: EditingProvider
 ): BpmnEditorPanel {
 
-  const column =
+  const editorColumn =
     (vscode.window.activeTextEditor &&
       vscode.window.activeTextEditor.viewColumn) ||
     vscode.ViewColumn.One;
-
-  const editorColumn = column + 1;
 
   const panel = vscode.window.createWebviewPanel(
     editingType,
