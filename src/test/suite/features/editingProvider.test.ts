@@ -5,11 +5,11 @@ import * as path from 'path';
 
 import * as vscode from 'vscode';
 
-import { EditingProvider } from './../../../../features/editing/editingProvider';
+import { EditingProvider } from '../../../features/editing/editingProvider';
 
-import { ExtensionContext } from '../../../mocks';
+import { ExtensionContext } from '../../mocks';
 
-const TEST_FILE = path.join(__dirname, '../../..', 'fixtures', 'simple.bpmn');
+const TEST_FILE = path.join(__dirname, '../../', 'fixtures', 'simple.bpmn');
 
 suite('<editing.provider>', () => {
 
