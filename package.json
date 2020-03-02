@@ -38,8 +38,8 @@
         "command": "extension.bpmn-io.edit",
         "title": "Open BPMN Modeler",
         "icon": {
-          "light": "./resources/logo_light_modeler.png",
-          "dark": "./resources/logo_dark_modeler.png"
+          "light": "./resources/icon_light.svg",
+          "dark": "./resources/icon_dark.svg"
         }
       }
     ],
