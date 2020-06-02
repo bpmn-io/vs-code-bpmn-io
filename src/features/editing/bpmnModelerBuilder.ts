@@ -23,7 +23,7 @@ export class BpmnModelerBuilder {
           <meta charset="UTF-8" />
           <title>BPMN Preview</title>
 
-          <!-- viewer distro (with pan and zoom) -->
+          <!-- modeler distro -->
           <script src="${this.resources.modelerDistro}"></script>
 
           <!-- required modeler styles -->
@@ -55,13 +55,13 @@ export class BpmnModelerBuilder {
 
         <script>
 
-          var vscode = acquireVsCodeApi();
+          const vscode = acquireVsCodeApi();
 
           // persisting
           vscode.setState({ resourcePath: '${this.resources.resourceUri}'});
 
           // modeler instance
-          var bpmnModeler = new BpmnJS({
+          const bpmnModeler = new BpmnJS({
             container: '#canvas',
             keyboard: { bindTo: document }
           });
@@ -73,52 +73,52 @@ export class BpmnModelerBuilder {
            *
            * @param {String} bpmnXML diagram to display
            */
-          function openDiagram(bpmnXML) {
+          async function openDiagram(bpmnXML) {
 
             // import diagram
-            bpmnModeler.importXML(bpmnXML, function(err) {
+            try {
+              await bpmnModeler.importXML(bpmnXML);
+            } catch (err) {
+              const {
+                warnings
+              } = err;
 
-              if (err) {
-                return console.error('could not import BPMN 2.0 diagram', err);
-              }
-
-            });
+              return console.error('could not import BPMN 2.0 diagram', err, warning);
+            }
           }
 
-          function saveDiagramChanges(cb) {
-            bpmnModeler.saveXML({ format: true }, function(err, result) {
-              if (err) {
-                return console.error('could not save BPMN 2.0 diagram', err);
-              }
+          async function saveDiagramChanges() {
+            try {
+              const {
+                xml
+              } = await bpmnModeler.saveXML({ format: true });
 
-              vscode.postMessage({
+              return vscode.postMessage({
                 command: 'saveContent',
-                content: result
+                content: xml
               });
-
-              if (typeof cb === 'function') {
-                cb();
-              }
-            });
+            } catch (err) {
+              return console.error('could not save BPMN 2.0 diagram', err);
+            }
           }
 
-          function saveChanges() {
-            var spinner = document.getElementsByClassName("spinner")[0];
+          async function saveChanges() {
+            const spinner = document.getElementsByClassName("spinner")[0];
             spinner.classList.add("active");
 
-            saveDiagramChanges(function() {
-              setTimeout(function() {
-                spinner.classList.remove("active");
-              }, 1000);
-            });
+            await saveDiagramChanges()
+
+            setTimeout(function() {
+              spinner.classList.remove("active");
+            }, 1000);
           }
 
           function keyboardBindings() {
-            var keyboard = bpmnModeler.get('keyboard');
+            const keyboard = bpmnModeler.get('keyboard');
 
             keyboard.addListener(function(context) {
 
-              var event = context.keyEvent;
+              const event = context.keyEvent;
 
               if (keyboard.isKey(['s', 'S'], event) && keyboard.isCmd(event)) {
                 saveChanges();

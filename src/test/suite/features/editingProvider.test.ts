@@ -29,7 +29,7 @@ suite('<editing.provider>', () => {
 
       // then
       expect(content).to.exist;
-      expect(content).to.include('var bpmnModeler = new BpmnJS');
+      expect(content).to.include('const bpmnModeler = new BpmnJS');
     });
 
 });
