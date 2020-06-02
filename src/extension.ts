@@ -2,7 +2,7 @@
 
 import * as vscode from 'vscode';
 
-import { ExtensionContext, Uri, WebviewPanel } from 'vscode';
+import { ExtensionContext, Uri, WebviewPanel, Webview } from 'vscode';
 
 import * as path from 'path';
 
@@ -15,12 +15,6 @@ const editingType = 'bpmn-io.editing';
 const COMMANDS = {
   EDIT_CMD: 'extension.bpmn-io.edit'
 };
-
-interface BpmnEditorPanel {
-  panel: WebviewPanel;
-  resource: Uri;
-  provider: EditingProvider;
-}
 
 function createPanel(
   context: ExtensionContext,
@@ -58,8 +52,7 @@ function createPanel(
     message => {
       switch (message.command) {
         case 'saveContent':
-          saveFile(uri, message.content);
-          return;
+          return saveFile(uri, message.content);
       }
     },
     undefined,
@@ -75,12 +68,35 @@ function saveFile(uri: vscode.Uri, content: String) {
   fs.writeFileSync(docPath, content, { encoding: 'utf8' });
 }
 
-function refresh(
-  editor: BpmnEditorPanel
-) {
+function refresh(editor: BpmnEditorPanel) {
   const { resource, panel, provider } = editor;
 
   panel.webview.html = provider.provideTextDocumentContent(resource);
+}
+
+function autoSaveIfConfigured(editorPanel: BpmnEditorPanel, expectedStates: string[]) {
+  const config = vscode.workspace.getConfiguration();
+
+  const autoSaveConfiguration: any = config.get('files.autoSave');
+
+  // do not save changes if autosave option does not satisfy
+  if(
+    autoSaveConfiguration === 'off' ||
+    expectedStates.indexOf(autoSaveConfiguration) < 0
+  ) {
+    return;
+  }
+
+  sendMessage('saveFile', editorPanel.panel.webview);
+}
+
+
+// Extension API //////////
+
+export interface BpmnEditorPanel {
+  panel: WebviewPanel;
+  resource: Uri;
+  provider: EditingProvider;
 }
 
 export function activate(context: ExtensionContext) {
@@ -115,14 +131,24 @@ export function activate(context: ExtensionContext) {
     editorPanel: BpmnEditorPanel
   ): void => {
 
-    // on closed
+    // on editor closed
     editorPanel.panel.onDidDispose(() => {
       openedPanels.splice(openedPanels.indexOf(editorPanel), 1);
+
+      /**
+       * Note @pinussilvestrus
+       *
+       * We currently can't retrieve when a webview panel will be closed to save changes
+       * before, cf. https://github.com/bpmn-io/vs-code-bpmn-io/issues/71#issuecomment-637543431
+       */
+      // autosaveIfConfigured(editorPanel, ['onFocusChange', 'onWindowChange', 'afterDelay']);
     });
 
-    // on changed
+    // on editor visibility changed
     editorPanel.panel.onDidChangeViewState(() => {
       refresh(editorPanel);
+
+      autoSaveIfConfigured(editorPanel, ['onFocusChange', 'onWindowChange']);
     });
 
     openedPanels.push(editorPanel);
@@ -135,7 +161,11 @@ export function activate(context: ExtensionContext) {
 
     vscode.commands.registerCommand(EDIT_CMD, (uri: Uri) => {
       if (!_revealIfAlreadyOpened(uri, editingProvider)) {
-        _registerPanel(createPanel(context, uri, editingProvider));
+        const panel = createPanel(context, uri, editingProvider);
+
+        _registerPanel(panel);
+
+        return panel;
       }
     });
   };
@@ -171,7 +201,6 @@ export function activate(context: ExtensionContext) {
 }
 
 export function deactivate() {}
-
 
 // helper ///////
 
@@ -214,4 +243,8 @@ function getLocalResourceRoots(
 
 function getUri(...p: string[]): vscode.Uri {
   return vscode.Uri.file(path.join(...p));
+}
+
+function sendMessage(message: String, webview: Webview) {
+  webview.postMessage(message);
 }
