@@ -112,7 +112,6 @@ export class BpmnModelerBuilder {
           }
 
           async function saveChanges() {
-            console.log('here');
             const spinner = document.getElementsByClassName("spinner")[0];
             spinner.classList.add("active");
 
