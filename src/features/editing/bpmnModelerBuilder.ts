@@ -57,10 +57,19 @@ export class BpmnModelerBuilder {
 
           const vscode = acquireVsCodeApi();
 
-          // persisting
+          // (1) persist web view state
           vscode.setState({ resourcePath: '${this.resources.resourceUri}'});
 
-          // modeler instance
+          // (2) react on messages from outside
+          window.addEventListener('message', (event) => {
+            const message = event.data;
+
+            switch(message) {
+              case 'saveFile': saveChanges(); break;
+            }
+          })
+
+          // (3) bootstrap modeler instance
           const bpmnModeler = new BpmnJS({
             container: '#canvas',
             keyboard: { bindTo: document }
