@@ -1,6 +1,4 @@
 'use strict';
-import * as vscode from 'vscode';
-
 export class BpmnModelerBuilder {
   contents: string;
   resources: any;
@@ -21,7 +19,8 @@ export class BpmnModelerBuilder {
       <html>
         <head>
           <meta charset="UTF-8" />
-          <title>BPMN Preview</title>
+
+          <title>BPMN Modeler</title>
 
           <!-- modeler distro -->
           <script src="${this.resources.modelerDistro}"></script>
