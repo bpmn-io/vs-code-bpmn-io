@@ -7,16 +7,21 @@ import * as vscode from 'vscode';
 
 import { EditingProvider } from '../../../features/editing/editingProvider';
 
-import { ExtensionContext } from '../../mocks';
+import { ExtensionContext, Webview } from '../../mocks';
 
 const TEST_FILE = path.join(__dirname, '../../', 'fixtures', 'simple.bpmn');
 
 suite('<editing.provider>', () => {
 
-    let provider:EditingProvider;
+    let provider: EditingProvider;
+    let webview: Webview;
 
     beforeEach(function() {
         const context = new ExtensionContext();
+
+        webview = new Webview({
+          resourcePath: TEST_FILE
+        });
 
          // @ts-ignore
         provider = new EditingProvider(context);
@@ -25,7 +30,8 @@ suite('<editing.provider>', () => {
     it('should provide content', async () => {
 
       // when
-      const content = provider.provideTextDocumentContent(vscode.Uri.file(TEST_FILE));
+      const content =
+        provider.provideTextDocumentContent(vscode.Uri.file(TEST_FILE), webview);
 
       // then
       expect(content).to.exist;

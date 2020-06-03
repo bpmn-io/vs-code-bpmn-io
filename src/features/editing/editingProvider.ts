@@ -6,26 +6,30 @@ import { BpmnModelerBuilder } from './bpmnModelerBuilder';
 
 const fs = require('fs');
 
-export class EditingProvider implements vscode.TextDocumentContentProvider {
+export class EditingProvider {
 
   public constructor(private _context: vscode.ExtensionContext) { }
 
-  private getUri(...p: string[]): vscode.Uri {
-    return vscode.Uri.file(path.join(this._context.extensionPath, ...p))
-      .with({ scheme: 'vscode-resource' });
+  private getUri(webview: vscode.Webview, ...p: string[]): vscode.Uri {
+    const fileUri = vscode.Uri.file(path.join(this._context.extensionPath, ...p));
+
+    return webview.asWebviewUri(fileUri);
   }
 
-  public provideTextDocumentContent(uri: vscode.Uri): string {
-    const { fsPath: docPath } = uri.with({ scheme: 'vscode-resource' });
+  public provideTextDocumentContent(localResource: vscode.Uri, webview: vscode.Webview): string {
+
+    const webViewUri = webview.asWebviewUri(localResource);
+
+    const docPath = webViewUri.fsPath;
 
     const contents = fs.readFileSync(docPath, { encoding: 'utf8' });
 
     const builder = new BpmnModelerBuilder(contents, {
-      modelerDistro: this.getUri('node_modules', 'bpmn-js', 'dist', 'bpmn-modeler.development.js'),
-      diagramStyles: this.getUri('node_modules', 'bpmn-js', 'dist', 'assets', 'diagram-js.css'),
-      bpmnFont: this.getUri('node_modules', 'bpmn-js', 'dist', 'assets', 'bpmn-font', 'css', 'bpmn.css'),
-      modelerStyles: this.getUri('out', 'assets', 'modeler.css'),
-      resourceUri: uri
+      modelerDistro: this.getUri(webview, 'node_modules', 'bpmn-js', 'dist', 'bpmn-modeler.development.js'),
+      diagramStyles: this.getUri(webview, 'node_modules', 'bpmn-js', 'dist', 'assets', 'diagram-js.css'),
+      bpmnFont: this.getUri(webview, 'node_modules', 'bpmn-js', 'dist', 'assets', 'bpmn-font', 'css', 'bpmn.css'),
+      modelerStyles: this.getUri(webview, 'out', 'assets', 'modeler.css'),
+      resourceUri: localResource
     });
 
     return builder.buildModelerView();

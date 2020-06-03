@@ -35,7 +35,7 @@ function createPanel(
   );
 
   // set content
-  panel.webview.html = provider.provideTextDocumentContent(uri);
+  panel.webview.html = provider.provideTextDocumentContent(uri, panel.webview);
 
   // set panel icons
   const {
@@ -68,10 +68,17 @@ function saveFile(uri: vscode.Uri, content: String) {
   fs.writeFileSync(docPath, content, { encoding: 'utf8' });
 }
 
-function refresh(editor: BpmnEditorPanel) {
-  const { resource, panel, provider } = editor;
+function refresh(
+  editor: BpmnEditorPanel
+) {
+  const {
+    resource,
+    panel,
+    provider
+  } = editor;
 
-  panel.webview.html = provider.provideTextDocumentContent(resource);
+  panel.webview.html =
+    provider.provideTextDocumentContent(resource, panel.webview);
 }
 
 function autoSaveIfConfigured(editorPanel: BpmnEditorPanel, expectedStates: string[]) {
@@ -188,7 +195,8 @@ export function activate(context: ExtensionContext) {
 
           panel.title = panel.title || getPanelTitle(resource, provider);
           panel.webview.options = getWebviewOptions(context, resource);
-          panel.webview.html = provider.provideTextDocumentContent(resource);
+          panel.webview.html =
+            provider.provideTextDocumentContent(resource, panel.webview);
 
           _registerPanel({ panel, resource, provider });
         }
