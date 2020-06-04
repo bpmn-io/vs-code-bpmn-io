@@ -4,6 +4,13 @@ All notable changes to the bpmn-io vs-code extension will be documented in this 
 
 ## Unreleased Changes
 
+## 0.8.0
+
+* `FEAT`: adapt autosave capabilities on focus and window change ([`0c3fd1`](https://github.com/bpmn-io/vs-code-bpmn-io/commit/0c3fd1cbe200773d3454b98f22fe9183bce2927e))
+* `FEAT`: use webview related uri for resource generation  ([#70](https://github.com/bpmn-io/vs-code-bpmn-io/issues/70))
+* `CHORE`: upgrade to bpmn-js@7
+* `CHORE`: update bpmn-io logo ([#72](https://github.com/bpmn-io/vs-code-bpmn-io/issues/72))
+
 ## 0.7.0
 
 * `FIX`: correct copy, paste and replace
