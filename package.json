@@ -44,6 +44,12 @@
       }
     ],
     "menus": {
+      "commandPalette": [
+        {
+          "when": "resourceLangId == bpmn",
+          "command": "extension.bpmn-io.edit"
+        }
+      ],
       "explorer/context": [
         {
           "when": "resourceLangId == bpmn",
