@@ -167,8 +167,10 @@ export function activate(context: ExtensionContext) {
     } = COMMANDS;
 
     vscode.commands.registerCommand(EDIT_CMD, (uri: Uri) => {
-      if (!_revealIfAlreadyOpened(uri, editingProvider)) {
-        const panel = createPanel(context, uri, editingProvider);
+      const documentUri = getDocumentUri(uri);
+
+      if (documentUri && !_revealIfAlreadyOpened(documentUri, editingProvider)) {
+        const panel = createPanel(context, documentUri, editingProvider);
 
         _registerPanel(panel);
 
@@ -255,4 +257,10 @@ function getUri(...p: string[]): vscode.Uri {
 
 function sendMessage(message: String, webview: Webview) {
   webview.postMessage(message);
+}
+
+function getDocumentUri(uri?: Uri) {
+  const activeEditor = vscode.window.activeTextEditor;
+
+  return uri || activeEditor?.document.uri;
 }
