@@ -6,7 +6,10 @@ Display and edit BPMN diagrams in VS Code using [bpmn.io](https://bpmn.io/) tool
 
 ## Features
 
-* Open BPMN 2.0 in a Modeler to make changes to your diagrams
+* Open BPMN 2.0 (`.bpmn`) in a Modeler to make changes to your diagrams
+  * From the editor toolbar
+  * Via the command palette ("Open BPMN Modeler")
+  * Via keyboard shortcut (`CTRL/CMD + SHIFT + V`)
 * Save changes to your local file
 
 ![alt](./resources/screencast_preview.gif?raw=true)
