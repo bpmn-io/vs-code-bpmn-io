@@ -13,7 +13,13 @@ Display and edit BPMN diagrams in VS Code using [bpmn.io](https://bpmn.io/) tool
 
 ## How to get it
 
-Type `vs-code-bpmn-io` in the Extensions section and directly install it. You can also download it in the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=bpmn-io.vs-code-bpmn-io) or [setup it locally](#development-setup).
+Type `vs-code-bpmn-io` in the Extensions section and directly install it. You can also download it in the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=bpmn-io.vs-code-bpmn-io) or [setup it locally](#development-setup). 
+
+Besides that, several release versions are available from the [releases page](https://github.com/bpmn-io/vs-code-bpmn-io/releases). To install such `.vsix` packages, simply use following command.
+
+```sh
+$ code --install-extension ./vs-code-bpmn-io-[VERSION].vsix
+```
 
 
 ## Development Setup
