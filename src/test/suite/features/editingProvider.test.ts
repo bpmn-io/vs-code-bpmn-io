@@ -1,5 +1,10 @@
-import { expect } from 'chai';
+import * as chai from 'chai';
+
 import { it, beforeEach } from 'mocha';
+
+import * as sinonChai from 'sinon-chai';
+
+import { stub } from 'sinon';
 
 import * as path from 'path';
 
@@ -8,6 +13,12 @@ import * as vscode from 'vscode';
 import { EditingProvider } from '../../../features/editing/editingProvider';
 
 import { ExtensionContext, Webview } from '../../mocks';
+
+const fs = require('fs');
+
+chai.use(sinonChai);
+
+const expect = chai.expect;
 
 const TEST_FILE = path.join(__dirname, '../../', 'fixtures', 'simple.bpmn');
 
@@ -36,6 +47,20 @@ suite('<editing.provider>', () => {
       // then
       expect(content).to.exist;
       expect(content).to.include('const bpmnModeler = new BpmnJS');
+    });
+
+
+    it('should use local file path for fetching content', async () => {
+
+      // given
+      const fsSpy = stub(fs, 'readFileSync').returns('foo');
+
+      // when
+      provider.provideTextDocumentContent(vscode.Uri.file(TEST_FILE), webview);
+
+      // then
+      // assure no path modification has been made for webview optimization
+      expect(fsSpy).to.have.been.calledWith(TEST_FILE);
     });
 
 });
