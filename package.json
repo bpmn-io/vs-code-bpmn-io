@@ -85,8 +85,8 @@
     "vscode:prepublish": "npm run compile",
     "compile": "run-s compile:clean compile:ts compile:assets",
     "compile:ts": "tsc -p ./",
-    "compile:clean": "rm -rf out",
-    "compile:assets": "cp -r src/assets out",
+    "compile:clean": "shx rm -rf out",
+    "compile:assets": "shx cp -r src/assets out",
     "watch": "tsc -watch -p ./",
     "pretest": "npm run compile",
     "test": "node ./out/test/runTest.js"
@@ -105,6 +105,7 @@
     "mocha": "^7.1.2",
     "npm-run-all": "^4.1.5",
     "shelljs": "^0.8.3",
+    "shx": "^0.3.2",
     "sinon": "^9.0.2",
     "sinon-chai": "^3.5.0",
     "tslint": "^5.20.1",
