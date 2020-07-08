@@ -18,11 +18,9 @@ export class EditingProvider {
 
   public provideTextDocumentContent(localResource: vscode.Uri, webview: vscode.Webview): string {
 
-    const webViewUri = webview.asWebviewUri(localResource);
+    const localDocumentPath = localResource.fsPath;
 
-    const docPath = webViewUri.fsPath;
-
-    const contents = fs.readFileSync(docPath, { encoding: 'utf8' });
+    const contents = fs.readFileSync(localDocumentPath, { encoding: 'utf8' });
 
     const builder = new BpmnModelerBuilder(contents, {
       modelerDistro: this.getUri(webview, 'node_modules', 'bpmn-js', 'dist', 'bpmn-modeler.development.js'),
