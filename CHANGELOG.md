@@ -4,6 +4,13 @@ All notable changes to the bpmn-io vs-code extension will be documented in this 
 
 ## Unreleased Changes
 
+## 0.9.0
+
+* `FEAT`: add action keybindings ([#61](https://github.com/bpmn-io/vs-code-bpmn-io/issues/61))
+* `FIX`: use active editor if not opened directly ([#76](https://github.com/bpmn-io/vs-code-bpmn-io/issues/76))
+* `FIX`: use local document path for file contents ([#82](https://github.com/bpmn-io/vs-code-bpmn-io/issues/82))
+* `CHORE`: ensure build tools are working on all platforms ([`3f5fa066`](https://github.com/bpmn-io/vs-code-bpmn-io/commit/3f5fa0666e0cdfe400c4cd9746ea03be11bb7458))
+
 ## 0.8.0
 
 * `FEAT`: adapt autosave capabilities on focus and window change ([`0c3fd1`](https://github.com/bpmn-io/vs-code-bpmn-io/commit/0c3fd1cbe200773d3454b98f22fe9183bce2927e))
