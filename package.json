@@ -28,6 +28,7 @@
           "bpmn"
         ],
         "extensions": [
+          ".bpmn2",
           ".bpmn",
           ".bpmn20.xml"
         ]
