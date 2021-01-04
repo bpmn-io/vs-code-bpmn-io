@@ -4,6 +4,10 @@ All notable changes to the bpmn-io vs-code extension will be documented in this 
 
 ## Unreleased Changes
 
+## 0.10.0
+
+* `FEAT`: add support for .bpmn2 files ([#78](https://github.com/bpmn-io/vs-code-bpmn-io/issues/78))
+* `CHORE`: upgrade to bpmn-js@8
 ## 0.9.0
 
 * `FEAT`: add action keybindings ([#61](https://github.com/bpmn-io/vs-code-bpmn-io/issues/61))
