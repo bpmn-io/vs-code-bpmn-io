@@ -116,6 +116,6 @@
     "vscode-test": "^1.4.1"
   },
   "dependencies": {
-    "bpmn-js": "^7.0.0"
+    "bpmn-js": "^8.0.0"
   }
 }
