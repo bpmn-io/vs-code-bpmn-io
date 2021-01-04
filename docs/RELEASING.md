@@ -17,7 +17,7 @@ or use it directly
 $ npx vsce --version
 ```
 
-As a second step before publishing new versions, you need to get a *personal access token* for our publisher. Refer the [official docs](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#get-a-personal-access-token) to eventually create a new token.
+As a second step before publishing new versions, you need to get a *personal access token* for our `bpmn-io` marketplace publisher. Refer the [official docs](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#get-a-personal-access-token) to eventually create a new token.
 
 In case you want to do a *dry run* before publishing, simply do
 
