@@ -100,7 +100,7 @@
     "@types/shelljs": "^0.8.8",
     "@types/sinon": "^10.0.0",
     "@types/sinon-chai": "^3.2.5",
-    "@types/vscode": "^1.38.0",
+    "@types/vscode": "1.38.0",
     "chai": "^4.3.4",
     "glob": "^7.1.6",
     "mocha": "^8.3.2",
