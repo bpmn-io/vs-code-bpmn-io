@@ -1,7 +1,7 @@
 {
   "name": "vs-code-bpmn-io",
-  "displayName": "vs-code-bpmn-io",
-  "description": "VS Code Extension for Displaying and Editing BPMN 2.0 Files, based on bpmn.io",
+  "displayName": "BPMN.io Editor",
+  "description": "Edit BPMN 2.0 files. Based on bpmn.io tools.",
   "license": "MIT",
   "version": "0.11.0",
   "publisher": "bpmn-io",
