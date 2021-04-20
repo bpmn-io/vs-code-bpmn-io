@@ -4,6 +4,10 @@ All notable changes to the bpmn-io vs-code extension will be documented in this 
 
 ## Unreleased Changes
 
+## 0.12.0
+
+* `CHORE`: update display name + description ([#95](https://github.com/bpmn-io/vs-code-bpmn-io/pull/95))
+
 ## 0.11.0
 
 * `CHORE`: bump to bpmn-js@8.3.0
