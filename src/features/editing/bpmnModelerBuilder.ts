@@ -31,6 +31,9 @@ export class BpmnModelerBuilder {
 
           <link rel="stylesheet" href="${this.resources.modelerStyles}">
 
+          <!-- vscode icons -->
+          <link rel="stylesheet" href="${this.resources.codiconsFont}">
+
           <style>
             /*
              * Will be otherwise overridden by VSCode default styles
@@ -49,6 +52,7 @@ export class BpmnModelerBuilder {
         </div>
 
         <div class="buttons">
+          <div class="icon codicon codicon-save" onclick="saveChanges()"></div>
           <div class="spinner"></div>
         </div>
 
@@ -114,10 +118,14 @@ export class BpmnModelerBuilder {
             const spinner = document.getElementsByClassName("spinner")[0];
             spinner.classList.add("active");
 
+            const saveIcon = document.getElementsByClassName("codicon-save")[0];
+            saveIcon.classList.add("hidden");
+
             await saveDiagramChanges()
 
             setTimeout(function() {
               spinner.classList.remove("active");
+              saveIcon.classList.remove("hidden");
             }, 1000);
           }
 
