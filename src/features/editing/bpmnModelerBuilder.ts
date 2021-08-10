@@ -144,7 +144,7 @@ export class BpmnModelerBuilder {
           }
 
           // open diagram
-          openDiagram('${this.contents}');
+          openDiagram(atob('${Buffer.from(this.contents).toString("base64")}'));
         </script>
       </body>
     `;
