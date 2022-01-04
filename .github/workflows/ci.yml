@@ -31,8 +31,8 @@ jobs:
     - name: Install dependencies
       run: npm install
     - name: Execute tests (Linux)
-      run: xvfb-run -a npm test
+      run: xvfb-run -a npm run all
       if: runner.os == 'Linux'
     - name: Execute tests (MacOS, Windows)
-      run: npm test
+      run: npm run all
       if: runner.os != 'Linux'
