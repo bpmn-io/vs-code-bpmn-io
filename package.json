@@ -83,13 +83,14 @@
     }
   },
   "scripts": {
+    "all": "run-s test",
     "vscode:prepublish": "npm run compile",
     "compile": "run-s compile:clean compile:ts compile:assets",
     "compile:ts": "tsc -p ./",
     "compile:clean": "shx rm -rf out",
     "compile:assets": "shx cp -r src/assets out",
     "watch": "tsc -watch -p ./",
-    "pretest": "npm run compile",
+    "pretest": "run-s compile",
     "test": "node ./out/test/runTest.js"
   },
   "devDependencies": {
