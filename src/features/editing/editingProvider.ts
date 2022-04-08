@@ -25,6 +25,7 @@ export class EditingProvider {
     const builder = new BpmnModelerBuilder(contents, {
       modelerDistro: this.getUri(webview, 'node_modules', 'bpmn-js', 'dist', 'bpmn-modeler.development.js'),
       diagramStyles: this.getUri(webview, 'node_modules', 'bpmn-js', 'dist', 'assets', 'diagram-js.css'),
+      bpmnStyles: this.getUri(webview, 'node_modules', 'bpmn-js', 'dist', 'assets', 'bpmn-js.css'),
       bpmnFont: this.getUri(webview, 'node_modules', 'bpmn-js', 'dist', 'assets', 'bpmn-font', 'css', 'bpmn.css'),
       modelerStyles: this.getUri(webview, 'out', 'assets', 'modeler.css'),
       codiconsFont: this.getUri(webview, 'node_modules', 'vscode-codicons', 'dist', 'codicon.css'),

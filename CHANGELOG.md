@@ -4,6 +4,12 @@ All notable changes to the bpmn-io vs-code extension will be documented in this 
 
 ## Unreleased Changes
 
+## 0.13.0
+
+* `FEAT`: display save button in editor ([#97](https://github.com/bpmn-io/vs-code-bpmn-io/pull/97))
+* `FEAT`: support collapsed sub processes
+* `DEPS`: bump to bpmn-js@9.0.3
+
 ## 0.12.0
 
 * `CHORE`: update display name + description ([#95](https://github.com/bpmn-io/vs-code-bpmn-io/pull/95))

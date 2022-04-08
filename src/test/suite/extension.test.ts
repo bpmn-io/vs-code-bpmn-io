@@ -15,6 +15,9 @@ const expect = chai.expect;
 const COMMAND = 'extension.bpmn-io.edit';
 
 const TEST_FILE = path.join(__dirname, '..', 'fixtures', 'simple.bpmn');
+const TEST_FILE_COLLAPSED_SUBPROCESS = path.join(__dirname, '..', 'fixtures', 'collapsedSubprocess.bpmn');
+const TEST_FILE_COMPLEX = path.join(__dirname, '..', 'fixtures', 'complex.bpmn');
+
 
 suite('Extension Test Suite', () => {
   before(() => {
@@ -25,6 +28,26 @@ suite('Extension Test Suite', () => {
 
     // when
     const editor = await openFile(TEST_FILE);
+
+    // given
+    expect(editor).not.to.be.empty;
+  });
+
+
+  it('should start without error - collapsed sub process', async () => {
+
+    // when
+    const editor = await openFile(TEST_FILE_COLLAPSED_SUBPROCESS);
+
+    // given
+    expect(editor).not.to.be.empty;
+  });
+
+
+  it('should start without error - complex', async () => {
+
+    // when
+    const editor = await openFile(TEST_FILE_COMPLEX);
 
     // given
     expect(editor).not.to.be.empty;
