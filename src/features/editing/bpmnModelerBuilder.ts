@@ -27,6 +27,7 @@ export class BpmnModelerBuilder {
 
           <!-- required modeler styles -->
           <link rel="stylesheet" href="${this.resources.diagramStyles}">
+          <link rel="stylesheet" href="${this.resources.bpmnStyles}">
           <link rel="stylesheet" href="${this.resources.bpmnFont}">
 
           <link rel="stylesheet" href="${this.resources.modelerStyles}">
