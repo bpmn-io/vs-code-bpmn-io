@@ -43,8 +43,8 @@ function createPanel(
   } = context;
 
   panel.iconPath = {
-    light: getUri(extensionPath, 'resources', 'logo_light_panel.png'),
-    dark: getUri(extensionPath, 'resources', 'logo_dark_panel.png')
+    light: getUri(extensionPath, 'resources', 'icon_light.svg'),
+    dark: getUri(extensionPath, 'resources', 'icon_dark.svg')
   };
 
   // handling messages from the webview content
