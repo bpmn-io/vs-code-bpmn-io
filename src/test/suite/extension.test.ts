@@ -2,7 +2,7 @@ import * as chai from 'chai';
 import { before, it } from 'mocha';
 import * as sinonChai from 'sinon-chai';
 
-import { spy, stub } from 'sinon';
+import { spy } from 'sinon';
 
 import * as path from 'path';
 
@@ -19,7 +19,10 @@ const TEST_FILE_COLLAPSED_SUBPROCESS = path.join(__dirname, '..', 'fixtures', 'c
 const TEST_FILE_COMPLEX = path.join(__dirname, '..', 'fixtures', 'complex.bpmn');
 
 
-suite('Extension Test Suite', () => {
+
+suite('Extension Test Suite', function() {
+  this.timeout(5000);
+
   before(() => {
     vscode.window.showInformationMessage('Start all tests.');
   });
