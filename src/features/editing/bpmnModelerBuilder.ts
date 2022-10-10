@@ -12,8 +12,12 @@ export class BpmnModelerBuilder {
     return contents.replace(/(\r\n|\n|\r)/gm, ' ');
   }
 
+  private replaceSingleQuotes(contents: string): string {
+    return contents.replace(/'/gm, "&#39;");
+  }
+
   public buildModelerView(): string {
-    this.contents = this.removeNewLines(this.contents);
+    this.contents = this.removeNewLines(this.replaceSingleQuotes(this.contents));
 
     const head = `<!DOCTYPE html>
       <html>

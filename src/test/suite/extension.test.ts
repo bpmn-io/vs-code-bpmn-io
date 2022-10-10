@@ -17,6 +17,7 @@ const COMMAND = 'extension.bpmn-io.edit';
 const TEST_FILE = path.join(__dirname, '..', 'fixtures', 'simple.bpmn');
 const TEST_FILE_COLLAPSED_SUBPROCESS = path.join(__dirname, '..', 'fixtures', 'collapsedSubprocess.bpmn');
 const TEST_FILE_COMPLEX = path.join(__dirname, '..', 'fixtures', 'complex.bpmn');
+const TEST_FILE_SPECIAL_CHARS = path.join(__dirname, '..', 'fixtures', 'specialChars.bpmn');
 
 
 
@@ -51,6 +52,16 @@ suite('Extension Test Suite', function() {
 
     // when
     const editor = await openFile(TEST_FILE_COMPLEX);
+
+    // given
+    expect(editor).not.to.be.empty;
+  });
+
+
+  it('should start without error - special characters', async () => {
+
+    // when
+    const editor = await openFile(TEST_FILE_SPECIAL_CHARS);
 
     // given
     expect(editor).not.to.be.empty;
