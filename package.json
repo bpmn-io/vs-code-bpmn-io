@@ -124,7 +124,7 @@
     "vscode-test": "^1.6.1"
   },
   "dependencies": {
-    "bpmn-js": "^9.0.3",
+    "bpmn-js": "^10.2.0",
     "vscode-codicons": "^0.0.17"
   }
 }
