@@ -4,6 +4,12 @@ All notable changes to the bpmn-io vs-code extension will be documented in this 
 
 ## Unreleased Changes
 
+## 0.14.0
+
+* `FIX`: escape single quotes before import ([#108](https://github.com/bpmn-io/vs-code-bpmn-io/issues/108))
+* `FIX`: properly log import errors ([`be7ec4`](https://github.com/bpmn-io/vs-code-bpmn-io/commit/be7ec4b0717adb03314a50a70c847e04d71170b8))
+* `DEPS`: bump to bpmn-js@10.2.0
+
 ## 0.13.0
 
 * `FEAT`: display save button in editor ([#97](https://github.com/bpmn-io/vs-code-bpmn-io/pull/97))
