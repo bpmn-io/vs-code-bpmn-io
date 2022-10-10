@@ -2,5 +2,11 @@
   "$schema": "https://docs.renovatebot.com/renovate-schema.json",
   "extends": [
     "github>bpmn-io/renovate-config:recommended"
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": ["@types/vscode"],
+      "enabled": false
+    }
   ]
 }
