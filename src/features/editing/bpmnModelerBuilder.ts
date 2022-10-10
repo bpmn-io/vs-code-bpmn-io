@@ -96,7 +96,7 @@ export class BpmnModelerBuilder {
                 warnings
               } = err;
 
-              return console.error('could not import BPMN 2.0 diagram', err, warning);
+              return console.error('could not import BPMN 2.0 diagram', err, warnings);
             }
           }
 
