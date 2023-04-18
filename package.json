@@ -125,6 +125,7 @@
   },
   "dependencies": {
     "bpmn-js": "^12.0.0",
+    "ids": "^1.0.0",
     "vscode-codicons": "^0.0.17"
   }
 }

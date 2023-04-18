@@ -1,10 +1,16 @@
 'use strict';
+
 import * as vscode from 'vscode';
 import * as path from 'path';
 
 import { BpmnModelerBuilder } from './bpmnModelerBuilder';
 
+const Ids = require('ids');
+
+const ids = new Ids([ 32, 36, 1 ]);
+
 const fs = require('fs');
+
 
 export class EditingProvider {
 
@@ -20,7 +26,11 @@ export class EditingProvider {
 
     const localDocumentPath = localResource.fsPath;
 
-    const contents = fs.readFileSync(localDocumentPath, { encoding: 'utf8' });
+    let contents = fs.readFileSync(localDocumentPath, { encoding: 'utf8' });
+
+    if (contents === "") {
+      contents = this.getInitialDiagram();
+    }
 
     const builder = new BpmnModelerBuilder(contents, {
       modelerDistro: this.getUri(webview, 'node_modules', 'bpmn-js', 'dist', 'bpmn-modeler.development.js'),
@@ -33,5 +43,29 @@ export class EditingProvider {
     });
 
     return builder.buildModelerView();
+  }
+
+  private getInitialDiagram(): string {
+    const definitionsId = ids.next(),
+          processId = ids.next();
+
+    return `<?xml version="1.0" encoding="UTF-8"?>
+<bpmn:definitions
+  xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL"
+  xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI"
+  xmlns:dc="http://www.omg.org/spec/DD/20100524/DC"
+  id="Definitions_${ definitionsId }"
+  targetNamespace="http://bpmn.io/schema/bpmn">
+  <bpmn:process id="Process_${ processId }" isExecutable="true">
+    <bpmn:startEvent id="StartEvent_1" />
+  </bpmn:process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_1">
+    <bpmndi:BPMNPlane id="BPMNPlane_1" bpmnElement="Process_${ processId }">
+      <bpmndi:BPMNShape id="_BPMNShape_StartEvent_2" bpmnElement="StartEvent_1">
+        <dc:Bounds x="179" y="159" width="36" height="36" />
+      </bpmndi:BPMNShape>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</bpmn:definitions>`;
   }
 }
