@@ -20,7 +20,9 @@ export class EditingProvider {
 
     const localDocumentPath = localResource.fsPath;
 
-    const contents = fs.readFileSync(localDocumentPath, { encoding: 'utf8' });
+    let contents = fs.readFileSync(localDocumentPath, { encoding: 'utf8' });
+
+    if(contents === "") contents = this.getDefaultBpmnDiagram(localDocumentPath);
 
     const builder = new BpmnModelerBuilder(contents, {
       modelerDistro: this.getUri(webview, 'node_modules', 'bpmn-js', 'dist', 'bpmn-modeler.development.js'),
@@ -33,5 +35,24 @@ export class EditingProvider {
     });
 
     return builder.buildModelerView();
+  }
+
+  private getDefaultBpmnDiagram(fileName:string):string
+  {
+    const file:string = path.parse(fileName).name;
+
+    return `<?xml version="1.0" encoding="UTF-8"?>\n`
+    +`<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" `
+    +`   xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" `
+    +`   xmlns:dc="http://www.omg.org/spec/DD/20100524/DC" `
+    +`   id="${file}_Definitions" `
+    +`   targetNamespace="http://bpmn.io/schema/bpmn">\n`
+    +`  <bpmn:process id="${file}_Process" isExecutable="true">\n`
+    +`  </bpmn:process>\n`
+    +`  <bpmndi:BPMNDiagram id="${file}_BPMNDiagram">\n`
+    +`    <bpmndi:BPMNPlane id="${file}_BPMNPlane" bpmnElement="${file}_Process">\n`
+    +`    </bpmndi:BPMNPlane>\n`
+    +`  </bpmndi:BPMNDiagram>\n`
+    +`</bpmn:definitions>'`
   }
 }
