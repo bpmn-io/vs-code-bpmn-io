@@ -53,6 +53,6 @@ export class EditingProvider {
     +`    <bpmndi:BPMNPlane id="${file}_BPMNPlane" bpmnElement="${file}_Process">\n`
     +`    </bpmndi:BPMNPlane>\n`
     +`  </bpmndi:BPMNDiagram>\n`
-    +`</bpmn:definitions>'`
+    +`</bpmn:definitions>`
   }
 }
