@@ -39,7 +39,7 @@ export class EditingProvider {
 
   private getDefaultBpmnDiagram(fileName:string):string
   {
-    const file:string = path.parse(fileName).name;
+    const file:string = path.basename(fileName);
 
     return `<?xml version="1.0" encoding="UTF-8"?>\n`
     +`<bpmn:definitions xmlns:bpmn="http://www.omg.org/spec/BPMN/20100524/MODEL" `
