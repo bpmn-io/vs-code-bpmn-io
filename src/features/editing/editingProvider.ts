@@ -22,7 +22,9 @@ export class EditingProvider {
 
     let contents = fs.readFileSync(localDocumentPath, { encoding: 'utf8' });
 
-    if(contents === "") contents = this.getDefaultBpmnDiagram(localDocumentPath);
+    if(contents === "") {
+      contents = this.getDefaultBpmnDiagram(localDocumentPath);
+    }
 
     const builder = new BpmnModelerBuilder(contents, {
       modelerDistro: this.getUri(webview, 'node_modules', 'bpmn-js', 'dist', 'bpmn-modeler.development.js'),
@@ -37,8 +39,7 @@ export class EditingProvider {
     return builder.buildModelerView();
   }
 
-  private getDefaultBpmnDiagram(fileName:string):string
-  {
+  private getDefaultBpmnDiagram(fileName:string):string {
     const file:string = path.basename(fileName);
 
     return `<?xml version="1.0" encoding="UTF-8"?>\n`
