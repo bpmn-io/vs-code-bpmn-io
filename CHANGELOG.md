@@ -4,6 +4,10 @@ All notable changes to the bpmn-io vs-code extension will be documented in this 
 
 ## Unreleased Changes
 
+## 0.15.0
+
+* `FEAT`: open initial diagram if empty file ([#116](https://github.com/bpmn-io/vs-code-bpmn-io/pull/116))
+
 ## 0.14.0
 
 * `FIX`: escape single quotes before import ([#108](https://github.com/bpmn-io/vs-code-bpmn-io/issues/108))
