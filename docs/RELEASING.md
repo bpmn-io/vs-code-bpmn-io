@@ -17,7 +17,7 @@ or use it directly
 npx vsce --version
 ```
 
-As a second step before publishing new versions, you need to get a *personal access token* for our `bpmn-io` marketplace publisher. Refer the [official docs](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#get-a-personal-access-token) to eventually create a new token.
+As a second step before publishing new versions, you need to get a *personal access token* for our `bpmn-io` marketplace publisher. Refer the [official docs](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#get-a-personal-access-token) to create a new token.
 
 In case you want to do a *dry run* before publishing, simply do
 
@@ -52,7 +52,6 @@ This collects common release errors and possible solutions.
 
 ### I receive a 401 error on `vsce publish` although I created an access token
 
-Make sure you registered the personal access token for *all accessible organizations*, not only the
-`bpmn-io` one.
+Make sure you registered the personal access token for *all accessible organizations*, not only the `bpmn-io` one.
 
 Context: https://github.com/microsoft/vscode-vsce/issues/11
