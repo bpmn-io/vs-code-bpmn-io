@@ -4,9 +4,9 @@ import * as vscode from 'vscode';
 
 import { ExtensionContext, Uri, WebviewPanel, Webview } from 'vscode';
 
-import * as path from 'path';
+import path from 'node:path';
 
-const fs = require('fs');
+import fs from 'node:fs';
 
 import { EditingProvider } from './features/editing';
 
@@ -17,9 +17,9 @@ const COMMANDS = {
 };
 
 function createPanel(
-  context: ExtensionContext,
-  uri: Uri,
-  provider: EditingProvider
+    context: ExtensionContext,
+    uri: Uri,
+    provider: EditingProvider
 ): BpmnEditorPanel {
 
   const editorColumn =
@@ -51,8 +51,8 @@ function createPanel(
   panel.webview.onDidReceiveMessage(
     message => {
       switch (message.command) {
-        case 'saveContent':
-          return saveFile(uri, message.content);
+      case 'saveContent':
+        return saveFile(uri, message.content);
       }
     },
     undefined,
@@ -62,14 +62,14 @@ function createPanel(
   return { panel, resource: uri, provider };
 }
 
-function saveFile(uri: vscode.Uri, content: String) {
+function saveFile(uri: vscode.Uri, content: string) {
   const { fsPath: docPath } = uri.with({ scheme: 'vscode-resource' });
 
   fs.writeFileSync(docPath, content, { encoding: 'utf8' });
 }
 
 function refresh(
-  editor: BpmnEditorPanel
+    editor: BpmnEditorPanel
 ) {
   const {
     resource,
@@ -87,7 +87,7 @@ function autoSaveIfConfigured(editorPanel: BpmnEditorPanel, expectedStates: stri
   const autoSaveConfiguration: any = config.get('files.autoSave');
 
   // do not save changes if autosave option does not satisfy
-  if(
+  if (
     autoSaveConfiguration === 'off' ||
     expectedStates.indexOf(autoSaveConfiguration) < 0
   ) {
@@ -112,8 +112,8 @@ export function activate(context: ExtensionContext) {
   const editingProvider = new EditingProvider(context);
 
   const _revealIfAlreadyOpened = (
-    uri: Uri,
-    provider: EditingProvider
+      uri: Uri,
+      provider: EditingProvider
   ): boolean => {
 
     const opened = openedPanels.find(panel => {
@@ -135,7 +135,7 @@ export function activate(context: ExtensionContext) {
   };
 
   const _registerPanel = (
-    editorPanel: BpmnEditorPanel
+      editorPanel: BpmnEditorPanel
   ): void => {
 
     // on editor closed
@@ -155,7 +155,7 @@ export function activate(context: ExtensionContext) {
     editorPanel.panel.onDidChangeViewState(() => {
       refresh(editorPanel);
 
-      autoSaveIfConfigured(editorPanel, ['onFocusChange', 'onWindowChange']);
+      autoSaveIfConfigured(editorPanel, [ 'onFocusChange', 'onWindowChange' ]);
     });
 
     openedPanels.push(editorPanel);
@@ -180,7 +180,7 @@ export function activate(context: ExtensionContext) {
   };
 
   const _serializePanel = (
-    provider: EditingProvider
+      provider: EditingProvider
   ): void => {
 
     const viewType = editingType;
@@ -189,7 +189,7 @@ export function activate(context: ExtensionContext) {
       vscode.window.registerWebviewPanelSerializer(viewType, {
         async deserializeWebviewPanel(panel: WebviewPanel, state: any) {
 
-          if(!state || !state.resourcePath) {
+          if (!state || !state.resourcePath) {
             return;
           }
 
@@ -215,11 +215,11 @@ export function deactivate() {}
 // helper ///////
 
 function getPanelTitle(
-  uri: Uri,
-  provider: EditingProvider
+    uri: Uri,
+    _provider: EditingProvider
 ): string {
 
-  const prefix ='Edit';
+  const prefix = 'Edit';
 
   return `${prefix}: ${path.basename(uri.fsPath)}`;
 }
@@ -233,11 +233,11 @@ function getWebviewOptions(context: ExtensionContext, uri: Uri) {
 }
 
 function getLocalResourceRoots(
-  context: ExtensionContext,
-  resource: vscode.Uri
+    context: ExtensionContext,
+    resource: vscode.Uri
 ): vscode.Uri[] {
 
-  const baseRoots = [vscode.Uri.file(context.extensionPath)];
+  const baseRoots = [ vscode.Uri.file(context.extensionPath) ];
   const folder = vscode.workspace.getWorkspaceFolder(resource);
 
   if (folder) {
@@ -255,7 +255,7 @@ function getUri(...p: string[]): vscode.Uri {
   return vscode.Uri.file(path.join(...p));
 }
 
-function sendMessage(message: String, webview: Webview) {
+function sendMessage(message: string, webview: Webview) {
   webview.postMessage(message);
 }
 

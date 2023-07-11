@@ -1,4 +1,4 @@
-import * as path from 'path';
+import path from 'node:path';
 
 import { cp } from 'shelljs';
 
@@ -6,6 +6,7 @@ import { runTests } from 'vscode-test';
 
 async function main() {
   try {
+
     // The folder containing the Extension Manifest package.json
     // Passed to `--extensionDevelopmentPath`
     const extensionDevelopmentPath = path.resolve(__dirname, '../../');
