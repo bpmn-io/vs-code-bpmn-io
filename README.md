@@ -1,18 +1,17 @@
-# vs-code-bpmn-io
+# VSCode BPMN Editor
 
-![GitHub package.json version](https://img.shields.io/github/package-json/v/bpmn-io/vs-code-bpmn-io) ![vs-code-support](https://img.shields.io/badge/Visual%20Studio%20Code-1.38.0+-blue.svg) [![CI](https://github.com/bpmn-io/vs-code-bpmn-io/workflows/CI/badge.svg)](https://github.com/bpmn-io/vs-code-bpmn-io/actions?query=workflow%3ACI)
+![Latest version](https://img.shields.io/github/package-json/v/bpmn-io/vs-code-bpmn-io) ![VSCode support](https://img.shields.io/badge/Visual%20Studio%20Code-1.38.0+-blue.svg) [![CI](https://github.com/bpmn-io/vs-code-bpmn-io/workflows/CI/badge.svg)](https://github.com/bpmn-io/vs-code-bpmn-io/actions?query=workflow%3ACI)
 
-Display and edit BPMN diagrams in VS Code using [bpmn.io](https://bpmn.io/) tools.
+Display and edit BPMN diagrams in [VS Code](https://code.visualstudio.com/) using [bpmn.io tools](https://bpmn.io/).
+
+![VSCode BPMN Editor in use](./resources/screencast_preview.gif?raw=true)
+
 
 ## Features
 
-* Open BPMN 2.0 (`.bpmn`) in a Modeler to make changes to your diagrams
-  * From the editor toolbar
-  * Via the command palette ("Open BPMN Modeler")
-  * Via keyboard shortcut (`CTRL/CMD + SHIFT + V`)
+* View and edit [BPMN files](https://en.wikipedia.org/wiki/Business_Process_Model_and_Notation)
 * Save changes to your local file
 
-![alt](./resources/screencast_preview.gif?raw=true)
 
 ## How to get it
 
@@ -40,7 +39,7 @@ Press `F5` to load and debug the extension in a new VS Code instance.
 
 To execute the test suite simply use
 
-```bash
+```sh
 npm run test
 ```
 
