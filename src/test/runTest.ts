@@ -2,7 +2,7 @@ import path from 'node:path';
 
 import { cp } from 'shelljs';
 
-import { runTests } from 'vscode-test';
+import { runTests } from '@vscode/test-electron';
 
 async function main() {
   try {
