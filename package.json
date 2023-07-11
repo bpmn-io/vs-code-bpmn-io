@@ -126,8 +126,8 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
+    "@vscode/codicons": "^0.0.33",
     "bpmn-js": "^13.2.2",
-    "ids": "^1.0.0",
-    "vscode-codicons": "^0.0.17"
+    "ids": "^1.0.0"
   }
 }
