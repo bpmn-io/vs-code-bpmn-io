@@ -110,6 +110,7 @@
     "@types/vscode": "1.38.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
+    "@vscode/test-electron": "^2.3.3",
     "chai": "^4.3.7",
     "eslint": "^8.44.0",
     "eslint-plugin-bpmn-io": "^1.0.0",
@@ -122,8 +123,7 @@
     "sinon": "^15.2.0",
     "sinon-chai": "^3.7.0",
     "tslint-no-unused-expression-chai": "^0.1.4",
-    "typescript": "^5.1.6",
-    "vscode-test": "^1.6.1"
+    "typescript": "^5.1.6"
   },
   "dependencies": {
     "bpmn-js": "^13.2.2",
