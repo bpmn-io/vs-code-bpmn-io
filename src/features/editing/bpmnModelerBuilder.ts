@@ -13,7 +13,7 @@ export class BpmnModelerBuilder {
   }
 
   private replaceSingleQuotes(contents: string): string {
-    return contents.replace(/'/gm, "&#39;");
+    return contents.replace(/'/gm, '&#39;');
   }
 
   public buildModelerView(): string {
@@ -154,7 +154,7 @@ export class BpmnModelerBuilder {
       </body>
     `;
 
-    const tail = ['</html>'].join('\n');
+    const tail = [ '</html>' ].join('\n');
 
     return head + body + tail;
   }

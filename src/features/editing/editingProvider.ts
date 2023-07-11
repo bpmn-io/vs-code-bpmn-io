@@ -1,15 +1,16 @@
 'use strict';
 
 import * as vscode from 'vscode';
-import * as path from 'path';
+
+import path from 'node:path';
+import fs from 'node:fs';
 
 import { BpmnModelerBuilder } from './bpmnModelerBuilder';
 
-const Ids = require('ids');
+import Ids from 'ids';
 
 const ids = new Ids([ 32, 36, 1 ]);
 
-const fs = require('fs');
 
 
 export class EditingProvider {
@@ -28,7 +29,7 @@ export class EditingProvider {
 
     let contents = fs.readFileSync(localDocumentPath, { encoding: 'utf8' });
 
-    if (contents === "") {
+    if (contents === '') {
       contents = this.getInitialDiagram();
     }
 
