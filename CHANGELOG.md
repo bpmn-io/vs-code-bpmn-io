@@ -1,8 +1,14 @@
 # Changelog
 
-All notable changes to the bpmn-io vs-code extension will be documented in this file.
+All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-io/vs-code-bpmn-io) will be documented here. We use [semantic versioning](http://semver.org/) for releases.
 
 ## Unreleased Changes
+
+___Note:__ Yet to be released changes appear here._
+
+## 0.15.1
+
+* `CHORE`: improve package meta-data
 
 ## 0.15.0
 
