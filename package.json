@@ -132,6 +132,6 @@
   "dependencies": {
     "@vscode/codicons": "^0.0.33",
     "bpmn-js": "^13.2.2",
-    "ids": "^1.0.0"
+    "ids": "^1.0.3"
   }
 }
