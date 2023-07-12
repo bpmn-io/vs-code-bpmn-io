@@ -1,13 +1,13 @@
-import chai from 'chai';
+import * as chai from 'chai';
 
 import { it, beforeEach } from 'mocha';
 
-import sinonChai from 'sinon-chai';
+import * as sinonChai from 'sinon-chai';
 
 import { stub } from 'sinon';
 
-import path from 'node:path';
-import fs from 'node:fs';
+import path = require('node:path');
+import fs = require('node:fs');
 
 import * as vscode from 'vscode';
 

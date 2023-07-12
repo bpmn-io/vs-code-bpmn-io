@@ -1,11 +1,11 @@
-import chai from 'chai';
+import * as chai from 'chai';
 
 import { before, it } from 'mocha';
-import sinonChai from 'sinon-chai';
+import * as sinonChai from 'sinon-chai';
 
 import { spy } from 'sinon';
 
-import path from 'node:path';
+import * as path from 'node:path';
 
 import * as vscode from 'vscode';
 

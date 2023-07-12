@@ -1,5 +1,5 @@
-import path from 'node:path';
-import Mocha from 'mocha';
+import * as path from 'node:path';
+import * as Mocha from 'mocha';
 import { glob } from 'glob';
 
 export async function run() {

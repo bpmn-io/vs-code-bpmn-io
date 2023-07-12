@@ -4,9 +4,9 @@ import * as vscode from 'vscode';
 
 import { ExtensionContext, Uri, WebviewPanel, Webview } from 'vscode';
 
-import path from 'node:path';
+import * as path from 'node:path';
 
-import fs from 'node:fs';
+import * as fs from 'node:fs';
 
 import { EditingProvider } from './features/editing';
 
