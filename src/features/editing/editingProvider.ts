@@ -7,10 +7,9 @@ import * as fs from 'node:fs';
 
 import { BpmnModelerBuilder } from './bpmnModelerBuilder';
 
-import Ids from 'ids';
+import Ids = require('ids');
 
 const ids = new Ids([ 32, 36, 1 ]);
-
 
 
 export class EditingProvider {
