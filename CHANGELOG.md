@@ -6,6 +6,10 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.15.2
+
+_Republish of `v0.15.1`._
+
 ## 0.15.1
 
 * `CHORE`: improve package meta-data
