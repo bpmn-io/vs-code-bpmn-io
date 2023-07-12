@@ -123,7 +123,6 @@
     "shx": "^0.3.4",
     "sinon": "^15.2.0",
     "sinon-chai": "^3.7.0",
-    "tslint-no-unused-expression-chai": "^0.1.4",
     "typescript": "^5.1.6"
   },
   "dependencies": {
