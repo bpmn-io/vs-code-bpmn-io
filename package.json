@@ -15,7 +15,11 @@
   },
   "icon": "resources/logo_marketplace.png",
   "categories": [
+    "Visualization",
     "Other"
+  ],
+  "keywords": [
+    "bpmn"
   ],
   "activationEvents": [
     "onLanguage:bpmn",
