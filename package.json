@@ -1,7 +1,7 @@
 {
   "name": "vs-code-bpmn-io",
   "displayName": "BPMN.io Editor",
-  "description": "Edit BPMN 2.0 files inside VSCode. Based on bpmn.io tools.",
+  "description": "Edit BPMN 2.0 files, powered by bpmn.io tools.",
   "license": "MIT",
   "version": "0.15.0",
   "publisher": "bpmn-io",
