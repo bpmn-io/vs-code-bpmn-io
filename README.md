@@ -4,7 +4,7 @@
 
 Display and edit BPMN diagrams in [VS Code](https://code.visualstudio.com/) using [bpmn.io tools](https://bpmn.io/).
 
-![VSCode BPMN Editor in use](./resources/screencast_preview.gif?raw=true)
+![VSCode BPMN Editor in use](./docs/screencapture.gif?raw=true)
 
 
 ## Features
