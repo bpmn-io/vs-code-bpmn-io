@@ -7,14 +7,8 @@ This docs are partly adapted by the official [**VS Code publishing instructions*
 We use [`vsce`](https://github.com/microsoft/vscode-vsce) for publishing new version to the VS Code Marketplace. Install it globally
 
 ```bash
-npm install -g vsce
+npm install -g @vscode/vsce
 vsce --version
-```
-
-or use it directly
-
-```bash
-npx vsce --version
 ```
 
 As a second step before publishing new versions, you need to get a *personal access token* for our `bpmn-io` marketplace publisher. Refer the [official docs](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#get-a-personal-access-token) to create a new token.
