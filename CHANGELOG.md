@@ -6,6 +6,10 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.15.3
+
+* `FIX`: correctly bundle dependencies
+
 ## 0.15.2
 
 _Republish of `v0.15.1`._
@@ -16,6 +20,7 @@ _Republish of `v0.15.1`._
 
 ## 0.15.0
 
+* `FEAT`: update to `bpmn-js@13.2.0`
 * `FEAT`: open initial diagram if empty file ([#116](https://github.com/bpmn-io/vs-code-bpmn-io/pull/116))
 
 ## 0.14.0
