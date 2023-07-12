@@ -12,9 +12,7 @@ import { EditingProvider } from './features/editing';
 
 const editingType = 'bpmn-io.editing';
 
-const COMMANDS = {
-  EDIT_CMD: 'extension.bpmn-io.edit'
-};
+const editCommand = 'extension.bpmn-io.edit';
 
 function createPanel(
     context: ExtensionContext,
@@ -162,11 +160,8 @@ export function activate(context: ExtensionContext) {
   };
 
   const _registerCommands = (): void => {
-    const {
-      EDIT_CMD
-    } = COMMANDS;
 
-    vscode.commands.registerCommand(EDIT_CMD, (uri: Uri) => {
+    context.subscriptions.push(vscode.commands.registerCommand(editCommand, (uri: Uri) => {
       const documentUri = getDocumentUri(uri);
 
       if (documentUri && !_revealIfAlreadyOpened(documentUri, editingProvider)) {
@@ -176,7 +171,7 @@ export function activate(context: ExtensionContext) {
 
         return panel;
       }
-    });
+    }));
   };
 
   const _serializePanel = (
