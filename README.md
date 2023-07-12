@@ -20,7 +20,7 @@ Type `vs-code-bpmn-io` in the Extensions section and directly install it. You ca
 Besides that, several release versions are available from the [releases page](https://github.com/bpmn-io/vs-code-bpmn-io/releases). To install such `.vsix` packages, simply use following command.
 
 ```sh
-$ code --install-extension ./vs-code-bpmn-io-[VERSION].vsix
+code --install-extension ./vs-code-bpmn-io-[VERSION].vsix
 ```
 
 
@@ -29,10 +29,10 @@ $ code --install-extension ./vs-code-bpmn-io-[VERSION].vsix
 First step, clone this project to your local machine.
 
 ```sh
-$ git clone https://github.com/bpmn-io/vs-code-bpmn-io.git
-$ cd ./vs-code-bpmn-io
-$ npm install
-$ code .
+git clone https://github.com/bpmn-io/vs-code-bpmn-io.git
+cd ./vs-code-bpmn-io
+npm install
+code .
 ```
 
 Press `F5` to load and debug the extension in a new VS Code instance.
