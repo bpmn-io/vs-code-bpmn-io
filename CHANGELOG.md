@@ -6,6 +6,10 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.15.4
+
+_Republish of `v0.15.3`._
+
 ## 0.15.3
 
 * `FIX`: correctly bundle dependencies
