@@ -16,3 +16,4 @@ docs
 .eslintrc
 tsconfig.json
 renovate.json
+vs-code-*
