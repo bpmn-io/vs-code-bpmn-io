@@ -1,8 +1,8 @@
-# VSCode BPMN Editor
+# BPMN Editor
 
 ![Latest version](https://img.shields.io/github/package-json/v/bpmn-io/vs-code-bpmn-io) ![VSCode support](https://img.shields.io/badge/Visual%20Studio%20Code-1.38.0+-blue.svg) [![CI](https://github.com/bpmn-io/vs-code-bpmn-io/workflows/CI/badge.svg)](https://github.com/bpmn-io/vs-code-bpmn-io/actions?query=workflow%3ACI)
 
-Display and edit BPMN diagrams in [VS Code](https://code.visualstudio.com/) using [bpmn.io tools](https://bpmn.io/).
+View and edit BPMN diagrams in [VS Code](https://code.visualstudio.com/), powered by [bpmn.io tools](https://bpmn.io/).
 
 ![VSCode BPMN Editor in use](https://raw.githubusercontent.com/bpmn-io/vs-code-bpmn-io/main/docs/screencapture.gif)
 
