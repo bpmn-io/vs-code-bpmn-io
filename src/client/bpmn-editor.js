@@ -10,6 +10,7 @@ import './bpmn-editor.css';
 
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 
+import KeyboardModule from './features/keyboard';
 
 /**
  * @type { import('vscode') }
@@ -17,7 +18,13 @@ import BpmnModeler from 'bpmn-js/lib/Modeler';
 const vscode = acquireVsCodeApi();
 
 const modeler = new BpmnModeler({
-  container: '#canvas'
+  container: '#canvas',
+  keyboard: {
+    bindTo: document
+  },
+  additionalModules: [
+    KeyboardModule
+  ]
 });
 
 modeler.on('import.done', () => {
@@ -49,8 +56,6 @@ window.addEventListener('message', async (event) => {
     body,
     requestId
   } = event.data;
-
-  console.log('message', type, body);
 
   switch (type) {
   case 'init':
