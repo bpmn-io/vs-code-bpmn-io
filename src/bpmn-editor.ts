@@ -267,41 +267,10 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
    */
   private readonly webviews = new WebviewCollection();
 
-  private _activeEditor : vscode.WebviewPanel | null = null;
-
   constructor(
     private readonly _context: vscode.ExtensionContext
   ) {
 
-    const actions = [
-      'lassoTool',
-      'handTool',
-      'spaceTool',
-      'globalConnectTool',
-      'directEditing',
-      'find',
-      'replaceElement'
-    ];
-
-    for (const action of actions) {
-      this._context.subscriptions.push(
-        vscode.commands.registerCommand(`bpmn-io.bpmnEditor.${action}`, () => {
-
-          console.log('trigger action', action);
-
-          const activeEditor = this._activeEditor;
-
-          if (!activeEditor) {
-            console.log('no active editor!');
-            return;
-          }
-
-          this.postMessage(activeEditor, 'triggerAction', {
-            action
-          });
-        })
-      );
-    }
   }
 
   // #region CustomEditorProvider
@@ -415,9 +384,6 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
         this._activeEditor = null;
       }
     });
-
-    // set as active
-    this._activeEditor = webviewPanel;
   }
 
   private readonly _onDidChangeCustomDocument = new vscode.EventEmitter<vscode.CustomDocumentEditEvent<BpmnDocument>>();
