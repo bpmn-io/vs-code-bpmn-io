@@ -27,13 +27,14 @@ const modeler = new BpmnModeler({
   ]
 });
 
-modeler.on('import.done', () => {
+modeler.on('import.done', event => {
   return vscode.postMessage({
     type: 'import',
+    error: event.error?.message,
+    warnings: event.warnings.map(warning => warning.message),
     idx: -1
   });
 });
-
 
 modeler.on('commandStack.changed', () => {
 
