@@ -1,4 +1,4 @@
-# BPMN Editor for VS Code
+# BPMN Editor
 
 [![CI](https://github.com/bpmn-io/vs-code-bpmn-io/workflows/CI/badge.svg)](https://github.com/bpmn-io/vs-code-bpmn-io/actions?query=workflow%3ACI)
 
