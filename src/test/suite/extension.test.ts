@@ -12,8 +12,16 @@ import * as vscode from 'vscode';
 chai.use(sinonChai);
 
 
-const TEST_FILE = vscode.Uri.file(
+const SIMPLE_TEST_FILE = vscode.Uri.file(
   path.join(__dirname, '..', 'fixtures', 'simple.bpmn')
+);
+
+const EMPTY_TEST_FILE = vscode.Uri.file(
+  path.join(__dirname, '..', 'fixtures', 'empty.bpmn')
+);
+
+const BROKEN_TEST_FILE = vscode.Uri.file(
+  path.join(__dirname, '..', 'fixtures', 'broken.bpmn')
 );
 
 
@@ -30,10 +38,10 @@ describe('extension', function() {
     it('should open file', async () => {
 
       // when
-      await vscode.commands.executeCommand('vscode.open', TEST_FILE);
+      await vscode.commands.executeCommand('vscode.open', SIMPLE_TEST_FILE);
 
       // then
-      const extension = await getExtension(TEST_FILE);
+      const extension = await getExtension(SIMPLE_TEST_FILE);
 
       expect(extension, 'editor open').to.exist;
     });
@@ -42,10 +50,10 @@ describe('extension', function() {
     it('should open as BPMN', async () => {
 
       // when
-      await vscode.commands.executeCommand('vscode.open', TEST_FILE);
+      await vscode.commands.executeCommand('vscode.open', SIMPLE_TEST_FILE);
 
       // then
-      const extension = await getExtension(TEST_FILE);
+      const extension = await getExtension(SIMPLE_TEST_FILE);
 
       expect(extension, 'editor open').to.exist;
     });
@@ -54,12 +62,36 @@ describe('extension', function() {
     it('should create new BPMN file', async () => {
 
       // when
-      const uri = await vscode.commands.executeCommand('bpmn-io.bpmnEditor.new');
+      const uri = await vscode.commands.executeCommand('bpmn-io.bpmnEditor.new') as vscode.Uri;
 
       // then
       expect(uri, 'uri exists').to.exist;
 
-      const extension = await getExtension(TEST_FILE);
+      const extension = await getExtension(uri);
+
+      expect(extension, 'editor open').to.exist;
+    });
+
+
+    it('should open empty BPMN file', async () => {
+
+      // when
+      await vscode.commands.executeCommand('vscode.open', EMPTY_TEST_FILE);
+
+      // then
+      const extension = await getExtension(EMPTY_TEST_FILE);
+
+      expect(extension, 'editor open').to.exist;
+    });
+
+
+    it('should open broken BPMN file', async () => {
+
+      // when
+      await vscode.commands.executeCommand('vscode.open', BROKEN_TEST_FILE);
+
+      // then
+      const extension = await getExtension(BROKEN_TEST_FILE);
 
       expect(extension, 'editor open').to.exist;
     });
@@ -68,13 +100,13 @@ describe('extension', function() {
     it('should close opened editor', async () => {
 
       // given
-      await vscode.commands.executeCommand('vscode.open', TEST_FILE);
+      await vscode.commands.executeCommand('vscode.open', SIMPLE_TEST_FILE);
 
       // when
       await vscode.commands.executeCommand('workbench.action.closeActiveEditor');
 
       // then
-      const extension = await getExtension(TEST_FILE);
+      const extension = await getExtension(SIMPLE_TEST_FILE);
 
       expect(extension, 'editor closed').not.to.exist;
     });
