@@ -27,15 +27,8 @@ class BpmnDocument extends Disposable implements vscode.CustomDocument {
 
     // If we have a backup, read that. Otherwise read the resource from the workspace
     const dataFile = typeof backupId === 'string' ? vscode.Uri.parse(backupId) : uri;
-    const text = await BpmnDocument.readFile(dataFile);
+    const text = await readFile(dataFile);
     return new BpmnDocument(uri, text, delegate);
-  }
-
-  private static async readFile(uri: vscode.Uri): Promise<string> {
-    if (uri.scheme === 'untitled') {
-      return '';
-    }
-    return Buffer.from(await vscode.workspace.fs.readFile(uri)).toString('utf8');
   }
 
   private readonly _uri: vscode.Uri;
@@ -70,7 +63,7 @@ class BpmnDocument extends Disposable implements vscode.CustomDocument {
    */
   public readonly onDidDispose = this._onDidDispose.event;
 
-  private readonly _onDidChangeDocument = this._register(new vscode.EventEmitter<{
+  private readonly _onDidChangeContent = this._register(new vscode.EventEmitter<{
     readonly content?: string;
     readonly undo?: boolean;
     readonly redo?: boolean;
@@ -79,7 +72,7 @@ class BpmnDocument extends Disposable implements vscode.CustomDocument {
   /**
    * Fired to notify webviews that the document has changed.
    */
-  public readonly onDidChangeContent = this._onDidChangeDocument.event;
+  public readonly onDidChangeContent = this._onDidChangeContent.event;
 
   private readonly _onDidChange = this._register(new vscode.EventEmitter<{
     readonly label: string;
@@ -111,8 +104,8 @@ class BpmnDocument extends Disposable implements vscode.CustomDocument {
    */
   makeEdit(edit: BpmnEdit) {
 
-    // initial import
     if (edit.idx === -1) {
+      console.log('document#makeEdit', 'SKIP (import)', edit);
       return;
     }
 
@@ -122,22 +115,29 @@ class BpmnDocument extends Disposable implements vscode.CustomDocument {
 
     // un- or re-doing a known edit
     if (lastEdit.idx === edit.idx) {
+      console.log('document#makeEdit', 'SKIP (undo/redo)', edit);
       return;
     }
+
+    console.log('document#makeEdit', edit);
 
     this._edits.push(edit);
 
     this._onDidChange.fire({
       label: 'edit',
       undo: async () => {
+        console.log('makeEdit#undo', edit);
+
         this._edits.pop();
-        this._onDidChangeDocument.fire({
+        this._onDidChangeContent.fire({
           undo: true
         });
       },
       redo: async () => {
+        console.log('makeEdit#redo', edit);
+
         this._edits.push(edit);
-        this._onDidChangeDocument.fire({
+        this._onDidChangeContent.fire({
           redo: true
         });
       }
@@ -162,14 +162,14 @@ class BpmnDocument extends Disposable implements vscode.CustomDocument {
 
     this._text = text;
 
-    await vscode.workspace.fs.writeFile(targetResource, Buffer.from(text, 'utf8'));
+    await writeFile(targetResource, text);
   }
 
   /**
    * Called by VS Code when the user calls `revert` on a document.
    */
   async revert(_cancellation: vscode.CancellationToken): Promise<void> {
-    const text = await BpmnDocument.readFile(this.uri);
+    const text = await readFile(this.uri);
 
     return this.reset(text);
   }
@@ -182,7 +182,7 @@ class BpmnDocument extends Disposable implements vscode.CustomDocument {
     this._text = content;
     this._edits = [];
 
-    this._onDidChangeDocument.fire({
+    this._onDidChangeContent.fire({
       content
     });
   }
@@ -211,16 +211,6 @@ class BpmnDocument extends Disposable implements vscode.CustomDocument {
 
 /**
  * Provider for visual BPMN editing.
- *
- * This provider demonstrates:
- *
- * - How to implement a custom editor for binary files.
- * - Setting up the initial webview for a custom editor.
- * - Loading scripts and styles in a custom editor.
- * - Communication between VS Code and the custom editor.
- * - Using CustomDocuments to store information that is shared between multiple custom editors.
- * - Implementing save, undo, redo, and revert.
- * - Backing up a custom editor.
  */
 export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
 
@@ -297,31 +287,11 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
 
     listeners.push(document.onDidChange(e => {
 
-      // Tell VS Code that the document has been edited by the user.
+      // indicate that the document has been changed
       this._onDidChangeCustomDocument.fire({
         document,
         ...e,
       });
-    }));
-
-    listeners.push(vscode.workspace.onDidChangeTextDocument(e => {
-      const {
-        document: textDocument
-      } = e;
-
-      console.log('TEXT DOCUMENT CHANGED', e);
-
-      if (textDocument.uri.toString() !== document.uri.toString()) {
-        return;
-      }
-
-      const newText = textDocument.getText();
-
-      if (newText !== document.getText()) {
-        console.log('RESET', document.uri);
-
-        return document.reset(newText);
-      }
     }));
 
     listeners.push(document.onDidChangeContent(e => {
@@ -375,14 +345,22 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
       }
     });
 
-    webviewPanel.onDidChangeViewState(e => {
+    webviewPanel.onDidChangeViewState(async e => {
+      if (!e.webviewPanel.active) {
+        return;
+      }
 
-      const { webviewPanel } = e;
+      const content = await readFile(document.uri);
 
-      if (webviewPanel.active) {
-        this._activeEditor = webviewPanel;
-      } else if (this._activeEditor === webviewPanel) {
-        this._activeEditor = null;
+      if (content !== document.getText()) {
+        const action = await vscode.window.showInformationMessage(
+          'Diagram changed externally, do you want to reload it?',
+          'Reload'
+        );
+
+        if (action === 'Reload') {
+          await document.reset(content);
+        }
       }
     });
   }
@@ -530,4 +508,16 @@ class WebviewCollection {
 
     return null;
   }
+}
+
+
+async function readFile(uri: vscode.Uri): Promise<string> {
+  if (uri.scheme === 'untitled') {
+    return '';
+  }
+  return Buffer.from(await vscode.workspace.fs.readFile(uri)).toString('utf8');
+}
+
+async function writeFile(uri: vscode.Uri, text: string): Promise<void> {
+  await vscode.workspace.fs.writeFile(uri, Buffer.from(text, 'utf8'));
 }
