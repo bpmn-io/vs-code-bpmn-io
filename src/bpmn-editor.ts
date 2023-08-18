@@ -393,7 +393,7 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
 
     // local path to script and css for the webview
     const scriptUri = webview.asWebviewUri(vscode.Uri.joinPath(
-      this._context.extensionUri, 'media', 'bpmn-editor.js'));
+      this._context.extensionUri, 'out/client', 'bpmn-editor.js'));
 
     const styleResetUri = webview.asWebviewUri(vscode.Uri.joinPath(
       this._context.extensionUri, 'media', 'reset.css'));
@@ -402,7 +402,7 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
       this._context.extensionUri, 'media', 'vscode.css'));
 
     const styleMainUri = webview.asWebviewUri(vscode.Uri.joinPath(
-      this._context.extensionUri, 'media', 'bpmn-editor.css'));
+      this._context.extensionUri, 'out/client', 'bpmn-editor.css'));
 
     // use a nonce to whitelist which scripts can be run
     const nonce = getNonce();

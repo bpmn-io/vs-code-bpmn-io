@@ -1,20 +1,21 @@
 /* eslint-env node */
 
-const resolve = require('@rollup/plugin-node-resolve');
-const commonjs = require('@rollup/plugin-commonjs');
-const url = require('@rollup/plugin-url');
+import resolve from '@rollup/plugin-node-resolve';
+import commonjs from '@rollup/plugin-commonjs';
+import url from '@rollup/plugin-url';
+import typescript from '@rollup/plugin-typescript';
 
-const css = require('rollup-plugin-css-only');
-
-const distDirectory = './media';
+import css from 'rollup-plugin-css-only';
 
 module.exports = [
+
+  // client
   {
     input: 'src/client/bpmn-editor.js',
     output: {
       sourcemap: true,
       format: 'iife',
-      file: distDirectory + '/bpmn-editor.js'
+      file: './out/client/bpmn-editor.js'
     },
     plugins: [
       url({
@@ -24,6 +25,25 @@ module.exports = [
 
       css({ output: 'bpmn-editor.css' }),
 
+      resolve(),
+      commonjs()
+    ],
+    watch: {
+      clearScreen: false
+    }
+  },
+
+  // app
+  {
+    input: 'src/extension.ts',
+    output: {
+      sourcemap: true,
+      format: 'commonjs',
+      file: './out/extension.js'
+    },
+    external: [ 'vscode' ],
+    plugins: [
+      typescript(),
       resolve(),
       commonjs()
     ],

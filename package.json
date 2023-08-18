@@ -49,19 +49,20 @@
     "all": "run-s lint test",
     "lint": "eslint . --ext js,ts",
     "vscode:prepublish": "npm run compile",
-    "compile": "run-s compile:clean compile:ts compile:assets",
-    "compile:ts": "tsc -p ./",
+    "compile": "run-s compile:clean compile:app compile:tests",
+    "compile:app": "rollup -c rollup.config.js --bundleConfigAsCjs",
+    "compile:tests": "tsc -p ./src/test",
     "compile:clean": "shx rm -rf out",
-    "compile:assets": "shx cp -r src/assets out",
-    "watch:ts": "tsc -watch -p ./",
-    "watch:assets": "nodemon -e css --watch src/assets -x \"npm run compile:assets\"",
-    "watch": "run-p watch:ts watch:assets",
+    "watch:app": "npm run compile:app -- -w",
+    "watch": "run-p watch:*",
     "pretest": "run-s compile",
-    "test": "node ./out/test/runTest.js"
+    "test": "node ./out/test/run-tests.js"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^25.0.3",
+    "@rollup/plugin-json": "^6.0.0",
     "@rollup/plugin-node-resolve": "^15.1.0",
+    "@rollup/plugin-typescript": "^11.1.2",
     "@rollup/plugin-url": "^8.0.1",
     "@types/chai": "^4.3.3",
     "@types/glob": "^8.0.0",
@@ -87,6 +88,7 @@
     "shx": "^0.3.4",
     "sinon": "^15.2.0",
     "sinon-chai": "^3.7.0",
+    "tslib": "^2.6.1",
     "typescript": "^5.1.6"
   },
   "dependencies": {
