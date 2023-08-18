@@ -19,7 +19,11 @@ In case you want to do a *dry run* before publishing, simply do
 vsce package
 ```
 
-This will create a `.vsix` file for the extension. It can be used to share privately.
+This will create a `.vsix` file for the extension. It can be used to share privately or install it via the command line:
+
+```bash
+code --install-extension some-extension.vsix
+```
 
 ## Publish a new Version
 
