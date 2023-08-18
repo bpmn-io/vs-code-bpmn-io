@@ -7,6 +7,7 @@ import { getNonce } from './util';
  */
 interface BpmnEdit {
   readonly idx: number;
+  readonly type: string;
 }
 
 interface BpmnDocumentDelegate {
