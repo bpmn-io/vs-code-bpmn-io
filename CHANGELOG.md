@@ -6,6 +6,13 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.16.0
+
+* `FEAT`: turn into custom editor ([#67](https://github.com/bpmn-io/vs-code-bpmn-io/issues/67), [#62](https://github.com/bpmn-io/vs-code-bpmn-io/issues/62), [#99](https://github.com/bpmn-io/vs-code-bpmn-io/issues/99))
+* `FEAT`: make menu save actions work ([#88](https://github.com/bpmn-io/vs-code-bpmn-io/issues/88))
+* `FEAT`: make dirty indicator work ([#48](https://github.com/bpmn-io/vs-code-bpmn-io/issues/48))
+* `FEAT`: handle external file changes ([#18](https://github.com/bpmn-io/vs-code-bpmn-io/issues/18))
+
 ## 0.15.4
 
 _Republish of `v0.15.3`._
