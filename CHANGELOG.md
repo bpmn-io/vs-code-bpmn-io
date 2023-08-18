@@ -6,6 +6,10 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.16.1
+
+* `DOCS`: update documentation
+
 ## 0.16.0
 
 * `FEAT`: turn into custom editor ([#67](https://github.com/bpmn-io/vs-code-bpmn-io/issues/67), [#62](https://github.com/bpmn-io/vs-code-bpmn-io/issues/62), [#99](https://github.com/bpmn-io/vs-code-bpmn-io/issues/99))
