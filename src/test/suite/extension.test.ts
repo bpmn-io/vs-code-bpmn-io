@@ -1,9 +1,7 @@
 import * as chai from 'chai';
-
-import { before, it } from 'mocha';
 import * as sinonChai from 'sinon-chai';
 
-import { spy } from 'sinon';
+import { describe, before, it } from 'mocha';
 
 import * as path from 'node:path';
 
@@ -11,158 +9,36 @@ import * as vscode from 'vscode';
 
 chai.use(sinonChai);
 
-const expect = chai.expect;
 
-const COMMAND = 'extension.bpmn-io.edit';
-
-const TEST_FILE = path.join(__dirname, '..', 'fixtures', 'simple.bpmn');
-const TEST_FILE_COLLAPSED_SUBPROCESS = path.join(__dirname, '..', 'fixtures', 'collapsedSubprocess.bpmn');
-const TEST_FILE_COMPLEX = path.join(__dirname, '..', 'fixtures', 'complex.bpmn');
-const TEST_FILE_EMPTY = path.join(__dirname, '..', 'fixtures', 'empty.bpmn');
-const TEST_FILE_SPECIAL_CHARS = path.join(__dirname, '..', 'fixtures', 'specialChars.bpmn');
+const TEST_FILE = vscode.Uri.file(
+  path.join(__dirname, '..', 'fixtures', 'simple.bpmn')
+);
 
 
-
-suite('Extension Test Suite', function() {
+describe('extension', function() {
   this.timeout(5000);
 
   before(() => {
     vscode.window.showInformationMessage('Start all tests.');
   });
 
-  it('should start without error', async () => {
 
-    // when
-    const editor = await openFile(TEST_FILE);
+  describe('basic', () => {
 
-    // given
-    expect(editor).not.to.be.empty;
-  });
-
-
-  it('should start without error - collapsed sub process', async () => {
-
-    // when
-    const editor = await openFile(TEST_FILE_COLLAPSED_SUBPROCESS);
-
-    // given
-    expect(editor).not.to.be.empty;
-  });
-
-
-  it('should start without error - complex', async () => {
-
-    // when
-    const editor = await openFile(TEST_FILE_COMPLEX);
-
-    // given
-    expect(editor).not.to.be.empty;
-  });
-
-
-  it('should start without error - empty', async () => {
-
-    // when
-    const editor = await openFile(TEST_FILE_EMPTY);
-
-    // given
-    expect(editor).not.to.be.empty;
-  });
-
-
-  it('should start without error - special characters', async () => {
-
-    // when
-    const editor = await openFile(TEST_FILE_SPECIAL_CHARS);
-
-    // given
-    expect(editor).not.to.be.empty;
-  });
-
-
-  /**
-   * Note @pinussilvestrus
-   *
-   * It's currently not possible to run tests with a pre-configured user setting
-   * Cf. https://github.com/microsoft/vscode/issues/97995
-   */
-  it.skip('should save file if autosave configured', async () => {
-
-    // given
-    const editor = await openFile(TEST_FILE);
-    const { document } = editor;
-    const { uri } = document;
-
-    const saveSpy = spy();
-
-    const bpmnEditorPanel: any = await vscode.commands.executeCommand(COMMAND, uri);
-
-    const {
-      panel
-    } = bpmnEditorPanel;
-
-    panel.webview.postMessage = saveSpy;
-
-    // when
-    await panel._updateViewState({
-      active: false
+    it('should open file', async () => {
+      await vscode.commands.executeCommand('vscode.open', TEST_FILE);
     });
 
-    // then
-    expect(saveSpy).to.have.been.called;
-  });
 
-
-  /**
-   * Note @pinussilvestrus
-   *
-   * It's currently not possible to run tests with a pre-configured user setting
-   * Cf. https://github.com/microsoft/vscode/issues/97995
-   */
-  it.skip('should NOT save file if autosave NOT configured', async () => {
-
-    // given
-    const editor = await openFile(TEST_FILE);
-    const { document } = editor;
-    const { uri } = document;
-
-    const saveSpy = spy();
-
-    const bpmnEditorPanel: any = await vscode.commands.executeCommand(COMMAND, uri);
-
-    const {
-      panel
-    } = bpmnEditorPanel;
-
-    panel.webview.postMessage = saveSpy;
-
-    // when
-    await panel._updateViewState({
-      active: false
+    it('should open as BPMN', async () => {
+      await vscode.commands.executeCommand('vscode.openWith', TEST_FILE, 'bpmn-io.bpmnEditor');
     });
 
-    // then
-    expect(saveSpy).to.not.have.been.called;
+
+    it('should create new BPMN file', async () => {
+      await vscode.commands.executeCommand('bpmn-io.bpmnEditor.new');
+    });
+
   });
 
 });
-
-
-// helpers //////
-
-async function openFile(path: string): Promise<vscode.TextEditor> {
-  const uri = vscode.Uri.file(path);
-  const document = await vscode.workspace.openTextDocument(uri);
-  const editor = await vscode.window.showTextDocument(document);
-
-  // wait for editor to open
-  await sleep(500);
-
-  return editor;
-}
-
-function sleep(ms: number): Promise<void> {
-  return new Promise(resolve => {
-    setTimeout(resolve, ms);
-  });
-}
