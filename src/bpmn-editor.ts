@@ -87,6 +87,18 @@ class BpmnDocument extends Disposable implements vscode.CustomDocument {
    */
   public readonly onDidChange = this._onDidChange.event;
 
+  private readonly _onDidRename = this._register(new vscode.EventEmitter<{
+    oldUri: vscode.Uri,
+    newUri: vscode.Uri
+  }>());
+
+  /**
+   * Fired to tell others that the document got renamed.
+   *
+   * This updates the document's dirty indicator.
+   */
+  public readonly onDidRename = this._onDidRename.event;
+
   /**
    * Called by VS Code when there are no more references to the document.
    *
@@ -163,6 +175,11 @@ class BpmnDocument extends Disposable implements vscode.CustomDocument {
     this._text = text;
 
     await writeFile(targetResource, text);
+
+    this._onDidRename.fire({
+      oldUri: this.uri,
+      newUri: targetResource
+    });
   }
 
   /**
@@ -218,7 +235,7 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
 
   public static register(context: vscode.ExtensionContext): vscode.Disposable {
     context.subscriptions.push(
-      vscode.commands.registerCommand('bpmn-io.bpmnEditor.new', () => {
+      vscode.commands.registerCommand('bpmn-io.bpmnEditor.new', async () => {
 
         const currentDocumentUri =
           vscode.window.activeTextEditor?.document.uri ||
@@ -235,7 +252,9 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
           uri = vscode.Uri.joinPath((currentDocumentUri || workspaceUri)!, fileName).with({ scheme: 'untitled' });
         }
 
-        vscode.commands.executeCommand('vscode.openWith', uri, BpmnEditor.viewType);
+        await vscode.commands.executeCommand('vscode.openWith', uri, BpmnEditor.viewType);
+
+        return uri;
       })
     );
 
@@ -258,10 +277,32 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
    */
   private readonly webviews = new WebviewCollection();
 
+  /**
+   * Tracks all known documents
+   */
+  private readonly documents = new DocumentCollection();
+
   constructor(
     private readonly _context: vscode.ExtensionContext
   ) {
 
+    _context.subscriptions.push(
+      vscode.commands.registerCommand('bpmn-io.bpmnEditor.__state', (uri: vscode.Uri) => {
+
+        const document = this.documents.get(uri);
+
+        if (!document) {
+          return null;
+        }
+
+        const webviews = Array.from(this.webviews.get(document.uri));
+
+        return {
+          document,
+          webviewPanel: webviews[0]
+        };
+      })
+    );
   }
 
   // #region CustomEditorProvider
@@ -307,6 +348,16 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
     }));
 
     document.onDidDispose(() => disposeAll(listeners));
+
+    // track documents across rename and deletion
+
+    this.documents.add(uri, document);
+
+    document.onDidRename(e => {
+      this.documents.rename(e.oldUri, e.newUri);
+    });
+
+    document.onDidDispose(() => this.documents.remove(document.uri));
 
     return document;
   }
@@ -460,6 +511,43 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
         this._callbacks.get(message.requestId)
       )?.(message.body);
     }
+  }
+}
+
+class DocumentCollection {
+  private readonly _documents = new Map<string, BpmnDocument>();
+
+  remove(uri: vscode.Uri) {
+    const key = uri.toString();
+
+    return this._documents.delete(key);
+  }
+
+  rename(oldUri: vscode.Uri, newUri: vscode.Uri) {
+
+    const document = this.get(oldUri);
+
+    if (!document) {
+      throw new Error('document not found');
+    }
+
+    this.remove(oldUri);
+    this.add(newUri, document);
+  }
+
+  add(uri: vscode.Uri, document: BpmnDocument) {
+
+    if (this.get(uri)) {
+      throw new Error('document already exists');
+    }
+
+    this._documents.set(uri.toString(), document);
+  }
+
+  get(uri: vscode.Uri) {
+    const key = uri.toString();
+
+    return this._documents.get(key);
   }
 }
 
