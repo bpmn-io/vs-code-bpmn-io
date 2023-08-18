@@ -60,7 +60,7 @@ window.addEventListener('message', async (event) => {
 
   switch (type) {
   case 'init':
-    if (body.untitled) {
+    if (!body.content) {
       return modeler.createDiagram();
     } else {
       return modeler.importXML(body.content);
