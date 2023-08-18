@@ -270,6 +270,8 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
     );
   }
 
+  private readonly log = vscode.window.createOutputChannel('BPMN Editor');
+
   private static readonly viewType = 'bpmn-io.bpmnEditor';
 
   /**
@@ -503,7 +505,22 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
   private onMessage(document: BpmnDocument, message: any) {
     switch (message.type) {
     case 'change':
+      return document.makeEdit(message as BpmnEdit);
+
     case 'import':
+
+      if (message.error) {
+        this.log.appendLine(`${document.uri.fsPath} - ${message.error}`);
+      }
+
+      for (const warning of message.warnings) {
+        this.log.appendLine(`${document.uri.fsPath} - ${warning}`);
+      }
+
+      if (message.error || message.warnings.length) {
+        this.log.show(true);
+      }
+
       return document.makeEdit(message as BpmnEdit);
 
     case 'response':
