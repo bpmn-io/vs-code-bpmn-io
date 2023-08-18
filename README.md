@@ -11,6 +11,8 @@ View and edit BPMN diagrams in [VS Code](https://code.visualstudio.com/), powere
 
 * View and edit [BPMN files](https://en.wikipedia.org/wiki/Business_Process_Model_and_Notation)
 * Save changes to your local file
+* Undo/redo and other keyboard shortcuts
+* Create from empty `.bpmn` files
 
 
 ## How to get it
