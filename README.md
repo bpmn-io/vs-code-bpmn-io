@@ -22,7 +22,7 @@ Download it from the [VSCode Marketplace](https://marketplace.visualstudio.com/i
 
 ## Build and Run
 
-First step, clone this project to your local machine.
+First step, clone this project to your local machine and open it with [VSCode](https://code.visualstudio.com/):
 
 ```sh
 git clone https://github.com/bpmn-io/vs-code-bpmn-io.git
@@ -31,9 +31,7 @@ npm install
 code .
 ```
 
-Press `F5` to load and debug the extension in a new VS Code instance.
-
-The extension integration tests can also be executed from VS Code itself, simple choose the *Extension Tests* in the Debug mode.
+Press `F5` to load and debug the extension in a new VSCode instance. To exectute the tests choose the *Extension Tests* in the Debug mode.
 
 You can build the extension from the command line, too:
 
