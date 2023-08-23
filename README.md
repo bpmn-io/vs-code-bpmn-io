@@ -46,12 +46,6 @@ npm run all
 ```
 
 
-## Go further
-
-* Get a [Quickstart](./docs/DEVELOPMENT_QUICKSTART.md) on how to develop VS Code extensions
-* Learn how to [release a new version](./docs/RELEASING.md)
-
-
 ## License
 
 MIT
