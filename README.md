@@ -15,18 +15,12 @@ View and edit BPMN diagrams in [VSCode](https://code.visualstudio.com/). Powered
 * Create from empty `.bpmn` files
 
 
-## How to get it
+## Installation
 
-Type `vs-code-bpmn-io` in the Extensions section and directly install it. You can also download it in the [Visual Studio Code Marketplace](https://marketplace.visualstudio.com/items?itemName=bpmn-io.vs-code-bpmn-io) or [setup it locally](#development-setup). 
-
-Besides that, several release versions are available from the [releases page](https://github.com/bpmn-io/vs-code-bpmn-io/releases). To install such `.vsix` packages, simply use following command.
-
-```sh
-code --install-extension ./vs-code-bpmn-io-[VERSION].vsix
-```
+Download it from the [VSCode Marketplace](https://marketplace.visualstudio.com/items?itemName=bpmn-io.vs-code-bpmn-io) or search for `vs-code-bpmn-io` directly inside VSCode.
 
 
-## Development Setup
+## Build and Run
 
 First step, clone this project to your local machine.
 
@@ -39,18 +33,24 @@ code .
 
 Press `F5` to load and debug the extension in a new VS Code instance.
 
-To execute the test suite simply use
+The extension integration tests can also be executed from VS Code itself, simple choose the *Extension Tests* in the Debug mode.
+
+You can build the extension from the command line, too:
 
 ```sh
+# execute the test suite
 npm run test
+
+# execute all scripts
+npm run all
 ```
 
-The extension integration tests can also be executed from VS Code itself, simple choose the *Extension Tests* in the Debug mode.
 
 ## Go further
 
 * Get a [Quickstart](./docs/DEVELOPMENT_QUICKSTART.md) on how to develop VS Code extensions
 * Learn how to [release a new version](./docs/RELEASING.md)
+
 
 ## License
 
