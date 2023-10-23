@@ -1,6 +1,6 @@
 # BPMN Editor
 
-[![CI](https://github.com/bpmn-io/vs-code-bpmn-io/workflows/CI/badge.svg)](https://github.com/bpmn-io/vs-code-bpmn-io/actions?query=workflow%3ACI)
+[![CI](https://github.com/bpmn-io/vs-code-bpmn-io/actions/workflows/CI.yml/badge.svg)](https://github.com/bpmn-io/vs-code-bpmn-io/actions/workflows/CI.yml)
 
 View and edit BPMN diagrams in [VSCode](https://code.visualstudio.com/). Powered by [bpmn.io tools](https://bpmn.io/).
 
