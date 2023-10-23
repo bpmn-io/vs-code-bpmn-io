@@ -1,0 +1,43 @@
+on:
+  push:
+    branches:
+      - main
+name: release
+jobs:
+  release-please:
+    outputs:
+      release_created: ${{ steps.release.outputs.release_created }}
+    permissions:
+      contents: write # to create release commit (google-github-actions/release-please-action)
+      pull-requests: write # to create release PR (google-github-actions/release-please-action)
+
+    runs-on: ubuntu-latest
+    steps:
+      - uses: google-github-actions/release-please-action@v3
+        id: release
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          release-type: node
+          pull-request-title-pattern: 'chore: release v${version}'
+          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"deps","section":"Dependency Updates","hidden":false}]'
+          changelog-notes-type: github
+
+  publish:
+    needs: release-please
+    if: ${{ needs.release-please.outputs.release_created }}
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Use Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+          cache: 'npm'
+      - name: Install dependencies
+        run: npm ci
+      - run: npx @vscode/vsce publish
+        env:
+          VSCE_PAT: ${{ secrets.MARKETPLACE_TOKEN }}
+
