@@ -6,6 +6,14 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.17.1 (2023-10-25)
+
+## What's Changed
+* chore: update actions/setup-node action to v4 by @renovate in https://github.com/bpmn-io/vs-code-bpmn-io/pull/138
+
+
+**Full Changelog**: https://github.com/bpmn-io/vs-code-bpmn-io/compare/v0.17.0...v0.17.1
+
 ## 0.17.0
 
 * `DEPS`: update dependency bpmn-js to v14
