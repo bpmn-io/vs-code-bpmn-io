@@ -93,6 +93,6 @@
   },
   "dependencies": {
     "@vscode/codicons": "^0.0.33",
-    "bpmn-js": "^14.0.0"
+    "bpmn-js": "^15.0.0"
   }
 }
