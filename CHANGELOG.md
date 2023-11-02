@@ -6,6 +6,10 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.18.1
+
+_Re-release of v0.18.0 due to incorrect version in [package.json](./package.json)._
+
 ## 0.18.0
 
 * `DEPS`: update dependency bpmn-js to v15
