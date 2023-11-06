@@ -6,6 +6,14 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.18.2 (2023-11-06)
+
+## What's Changed
+* chore: update dependency @types/sinon to v17 by @renovate in https://github.com/bpmn-io/vs-code-bpmn-io/pull/143
+
+
+**Full Changelog**: https://github.com/bpmn-io/vs-code-bpmn-io/compare/v0.18.1...v0.18.2
+
 ## 0.18.1
 
 _Re-release of v0.18.0 due to incorrect version in [package.json](./package.json)._
