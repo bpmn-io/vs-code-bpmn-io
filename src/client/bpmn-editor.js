@@ -10,6 +10,8 @@ import './bpmn-editor.css';
 
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 
+import BpmnColorPickerModule from 'bpmn-js-color-picker';
+
 import KeyboardModule from './features/keyboard';
 
 /**
@@ -23,7 +25,8 @@ const modeler = new BpmnModeler({
     bindTo: document
   },
   additionalModules: [
-    KeyboardModule
+    KeyboardModule,
+    BpmnColorPickerModule
   ]
 });
 
