@@ -93,6 +93,7 @@
   },
   "dependencies": {
     "@vscode/codicons": "^0.0.33",
-    "bpmn-js": "^15.0.0"
+    "bpmn-js": "^15.0.0",
+    "bpmn-js-color-picker": "^0.6.1"
   }
 }
