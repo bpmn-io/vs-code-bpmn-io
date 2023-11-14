@@ -10,7 +10,7 @@
     "url": "https://github.com/bpmn-io/vs-code-bpmn-io"
   },
   "engines": {
-    "vscode": "^1.79.2",
+    "vscode": "^2023.0.0",
     "node": ">= 16"
   },
   "icon": "resources/logo_marketplace.png",
