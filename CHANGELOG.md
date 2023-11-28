@@ -8,14 +8,7 @@ ___Note:__ Yet to be released changes appear here._
 
 ## 0.19.0 (2023-11-28)
 
-## What's Changed
-* chore: update dependency @types/sinon to v17 by @renovate in https://github.com/bpmn-io/vs-code-bpmn-io/pull/143
-* feat: add bpmn-js-color-picker dep by @tpucci in https://github.com/bpmn-io/vs-code-bpmn-io/pull/145
-
-## New Contributors
-* @tpucci made their first contribution in https://github.com/bpmn-io/vs-code-bpmn-io/pull/145
-
-**Full Changelog**: https://github.com/bpmn-io/vs-code-bpmn-io/compare/v0.18.1...v0.19.0
+* `FEAT`: add ability to color BPMN elements ([#93](https://github.com/bpmn-io/vs-code-bpmn-io/issues/93), [#145](https://github.com/bpmn-io/vs-code-bpmn-io/pull/145))
 
 ## 0.18.1
 
