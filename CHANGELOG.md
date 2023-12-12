@@ -6,6 +6,14 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.19.1 (2023-12-12)
+
+## What's Changed
+* deps: update dependency bpmn-js to v16 by @renovate in https://github.com/bpmn-io/vs-code-bpmn-io/pull/150
+
+
+**Full Changelog**: https://github.com/bpmn-io/vs-code-bpmn-io/compare/v0.19.0...v0.19.1
+
 ## 0.19.0
 
 * `FEAT`: add ability to color BPMN elements ([#93](https://github.com/bpmn-io/vs-code-bpmn-io/issues/93), [#145](https://github.com/bpmn-io/vs-code-bpmn-io/pull/145))
