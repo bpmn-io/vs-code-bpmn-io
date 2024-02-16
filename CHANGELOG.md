@@ -6,6 +6,17 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.20.1 (2024-02-16)
+
+## What's Changed
+* chore: replace dependency npm-run-all with npm-run-all2 ^5.0.0 by @renovate in https://github.com/bpmn-io/vs-code-bpmn-io/pull/153
+* chore: update dependency npm-run-all2 to v6 by @renovate in https://github.com/bpmn-io/vs-code-bpmn-io/pull/155
+* deps: update dependency bpmn-js to v17 by @renovate in https://github.com/bpmn-io/vs-code-bpmn-io/pull/157
+* Housekeeping by @barmac in https://github.com/bpmn-io/vs-code-bpmn-io/pull/160
+
+
+**Full Changelog**: https://github.com/bpmn-io/vs-code-bpmn-io/compare/v0.20.0...v0.20.1
+
 ## 0.21.0
 
 * `DEPS`: update dependency bpmn-js to v17
