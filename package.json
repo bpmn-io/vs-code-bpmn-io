@@ -71,10 +71,10 @@
     "@types/shelljs": "^0.8.12",
     "@types/sinon": "^17.0.0",
     "@types/sinon-chai": "^3.2.8",
-    "@types/vscode": "^1.79.2",
+    "@types/vscode": "^1.86.0",
     "@typescript-eslint/eslint-plugin": "^6.0.0",
     "@typescript-eslint/parser": "^6.0.0",
-    "@vscode/test-electron": "^2.3.4",
+    "@vscode/test-electron": "^2.3.9",
     "chai": "^4.3.7",
     "eslint": "^8.44.0",
     "eslint-plugin-bpmn-io": "^1.0.0",
@@ -92,7 +92,7 @@
     "typescript": "^5.1.6"
   },
   "dependencies": {
-    "@vscode/codicons": "^0.0.33",
+    "@vscode/codicons": "^0.0.35",
     "bpmn-js": "^17.0.0",
     "bpmn-js-color-picker": "^0.6.1"
   }
