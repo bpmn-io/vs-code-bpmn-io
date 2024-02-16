@@ -6,6 +6,10 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.21.0
+
+* `DEPS`: update dependency bpmn-js to v17
+
 ## 0.20.0
 
 * `DEPS`: update dependency bpmn-js to v16
