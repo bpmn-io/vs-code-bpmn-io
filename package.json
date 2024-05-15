@@ -75,7 +75,7 @@
     "@typescript-eslint/eslint-plugin": "^7.0.1",
     "@typescript-eslint/parser": "^7.0.1",
     "@vscode/test-electron": "^2.3.9",
-    "chai": "^4.4.1",
+    "chai": "^5.0.0",
     "eslint": "^8.56.0",
     "eslint-plugin-bpmn-io": "^1.0.0",
     "glob": "^10.3.10",
@@ -85,7 +85,7 @@
     "rollup-plugin-css-only": "^4.5.2",
     "shelljs": "^0.8.5",
     "shx": "^0.3.4",
-    "sinon": "^17.0.1",
+    "sinon": "^18.0.0",
     "sinon-chai": "^3.7.0",
     "typescript": "^5.3.3"
   },
