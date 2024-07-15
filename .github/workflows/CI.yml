@@ -28,3 +28,5 @@ jobs:
     - name: Execute tests (MacOS, Windows)
       run: npm run all
       if: runner.os != 'Linux'
+    - name: Dry-run release
+      run: npx @vscode/vsce ls
