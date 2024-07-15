@@ -6,6 +6,11 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.21.1
+
+* `CHORE`: update dependency @rollup/plugin-commonjs to v26 ([#169](https://github.com/bpmn-io/vs-code-bpmn-io/pull/169))
+* `CHORE`: update dependency glob to v11 ([#171](https://github.com/bpmn-io/vs-code-bpmn-io/pull/171))
+
 ## 0.21.0
 
 * `DEPS`: update dependency bpmn-js to v17
