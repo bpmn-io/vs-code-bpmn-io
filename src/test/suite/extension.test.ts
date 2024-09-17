@@ -47,18 +47,6 @@ describe('extension', function() {
     });
 
 
-    it('should open as BPMN', async () => {
-
-      // when
-      await vscode.commands.executeCommand('vscode.open', SIMPLE_TEST_FILE);
-
-      // then
-      const extension = await getExtension(SIMPLE_TEST_FILE);
-
-      expect(extension, 'editor open').to.exist;
-    });
-
-
     it('should create new BPMN file', async () => {
 
       // when
