@@ -351,13 +351,9 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
 
     document.onDidDispose(() => disposeAll(listeners));
 
-    // track documents across rename and deletion
+    // track documents
 
     this.documents.add(uri, document);
-
-    document.onDidRename(e => {
-      this.documents.rename(e.oldUri, e.newUri);
-    });
 
     document.onDidDispose(() => this.documents.remove(document.uri));
 
@@ -538,18 +534,6 @@ class DocumentCollection {
     const key = uri.toString();
 
     return this._documents.delete(key);
-  }
-
-  rename(oldUri: vscode.Uri, newUri: vscode.Uri) {
-
-    const document = this.get(oldUri);
-
-    if (!document) {
-      throw new Error('document not found');
-    }
-
-    this.remove(oldUri);
-    this.add(newUri, document);
   }
 
   add(uri: vscode.Uri, document: BpmnDocument) {
