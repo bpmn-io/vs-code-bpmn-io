@@ -3,7 +3,7 @@
   "displayName": "BPMN.io Editor",
   "description": "Edit BPMN 2.0 files, powered by bpmn.io tools.",
   "license": "MIT",
-  "version": "0.21.2",
+  "version": "0.21.3",
   "publisher": "bpmn-io",
   "repository": {
     "type": "git",
