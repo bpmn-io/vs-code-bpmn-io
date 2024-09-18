@@ -6,6 +6,16 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.21.3 (2024-09-18)
+
+## What's Changed
+* Removed duplicated unit test by @huddeldaddel in https://github.com/bpmn-io/vs-code-bpmn-io/pull/177
+
+## New Contributors
+* @huddeldaddel made their first contribution in https://github.com/bpmn-io/vs-code-bpmn-io/pull/177
+
+**Full Changelog**: https://github.com/bpmn-io/vs-code-bpmn-io/compare/v0.21.2...v0.21.3
+
 ## 0.21.2
 
 * `DEPS`: pin vscode types version to engine
