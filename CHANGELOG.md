@@ -6,6 +6,14 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.21.4 (2024-09-23)
+
+## What's Changed
+* fix: document tracking issue when path of document changed by @huddeldaddel in https://github.com/bpmn-io/vs-code-bpmn-io/pull/178
+
+
+**Full Changelog**: https://github.com/bpmn-io/vs-code-bpmn-io/compare/v0.21.3...v0.21.4
+
 ## 0.21.3 (2024-09-18)
 
 ## What's Changed
