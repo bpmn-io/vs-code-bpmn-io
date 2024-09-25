@@ -6,6 +6,14 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.21.5 (2024-09-25)
+
+## What's Changed
+* chore: update rollup* dependencies (major) by @renovate in https://github.com/bpmn-io/vs-code-bpmn-io/pull/182
+
+
+**Full Changelog**: https://github.com/bpmn-io/vs-code-bpmn-io/compare/v0.21.4...v0.21.5
+
 ## 0.21.4 (2024-09-23)
 
 ## What's Changed
