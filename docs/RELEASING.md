@@ -27,22 +27,7 @@ code --install-extension some-extension.vsix
 
 ## Publish a new Version
 
-Use the access token to create and publish a new version to the VS Code Marketplace. Make sure the access token is bound to a [publisher](https://code.visualstudio.com/api/working-with-extensions/publishing-extension#create-a-publisher).
-
-```bash
-vsce publish patch -p <ACCESS_TOKEN>
-vsce publish minor -p <ACCESS_TOKEN>
-vsce publish major -p <ACCESS_TOKEN>
-```
-
-Alternatively, you can also login beforehand and publish afterward.
-
-```bash
-vsce login
-vsce publish minor
-```
-
-The version will be auto-incremented by our [semantic versioning schema](https://semver.org/).
+Publishing is done by release-please in the [RELEASE.yml](../.github/workflows/RELEASE.yml) action. The action uses an Azure Personal Access Token with Manage permission in the Marketplace group.
 
 ## Troubleshooting 
 
