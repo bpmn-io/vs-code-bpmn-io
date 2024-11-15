@@ -47,7 +47,7 @@
   },
   "scripts": {
     "all": "run-s lint test",
-    "lint": "eslint . --ext js,ts",
+    "lint": "eslint .",
     "vscode:prepublish": "npm run compile",
     "compile": "run-s compile:clean compile:app compile:tests",
     "compile:app": "rollup -c rollup.config.mjs",
@@ -72,12 +72,10 @@
     "@types/sinon": "^17.0.3",
     "@types/sinon-chai": "^3.2.12",
     "@types/vscode": "1.79.0",
-    "@typescript-eslint/eslint-plugin": "^7.0.1",
-    "@typescript-eslint/parser": "^7.0.1",
     "@vscode/test-electron": "^2.4.1",
     "chai": "^4.5.0",
-    "eslint": "^8.56.0",
-    "eslint-plugin-bpmn-io": "^1.0.0",
+    "eslint": "^9.14.0",
+    "eslint-plugin-bpmn-io": "^2.0.2",
     "glob": "^11.0.0",
     "mocha": "^10.8.2",
     "npm-run-all2": "^7.0.1",
@@ -87,7 +85,8 @@
     "shx": "^0.3.4",
     "sinon": "^17.0.1",
     "sinon-chai": "^3.7.0",
-    "typescript": "^5.6.3"
+    "typescript": "^5.6.3",
+    "typescript-eslint": "^8.14.0"
   },
   "dependencies": {
     "@vscode/codicons": "^0.0.35",

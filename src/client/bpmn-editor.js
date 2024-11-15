@@ -1,5 +1,3 @@
-/* eslint-env browser */
-
 /* global acquireVsCodeApi */
 
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
