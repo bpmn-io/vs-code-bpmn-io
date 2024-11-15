@@ -90,7 +90,7 @@
   },
   "dependencies": {
     "@vscode/codicons": "^0.0.35",
-    "bpmn-js": "^17.0.1",
-    "bpmn-js-color-picker": "^0.7.0"
+    "bpmn-js": "^18.1.2",
+    "bpmn-js-color-picker": "^0.7.1"
   }
 }
