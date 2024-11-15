@@ -6,6 +6,17 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.21.6 (2024-11-15)
+
+## What's Changed
+* docs: replace manual publishing with release-please by @barmac in https://github.com/bpmn-io/vs-code-bpmn-io/pull/184
+* chore: update dependency npm-run-all2 to v7 by @renovate in https://github.com/bpmn-io/vs-code-bpmn-io/pull/186
+* Housekeeping by @nikku in https://github.com/bpmn-io/vs-code-bpmn-io/pull/190
+* Housekeeping by @nikku in https://github.com/bpmn-io/vs-code-bpmn-io/pull/192
+
+
+**Full Changelog**: https://github.com/bpmn-io/vs-code-bpmn-io/compare/v0.21.5...v0.21.6
+
 ## 0.21.5 (2024-09-25)
 
 ## What's Changed
