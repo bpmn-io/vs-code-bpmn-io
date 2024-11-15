@@ -59,10 +59,10 @@
     "test": "node ./out/test/run-tests.js"
   },
   "devDependencies": {
-    "@rollup/plugin-commonjs": "^28.0.0",
+    "@rollup/plugin-commonjs": "^28.0.1",
     "@rollup/plugin-json": "^6.1.0",
-    "@rollup/plugin-node-resolve": "^15.2.3",
-    "@rollup/plugin-typescript": "^12.0.0",
+    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-typescript": "^12.1.1",
     "@rollup/plugin-url": "^8.0.2",
     "@types/chai": "^4.3.20",
     "@types/glob": "^8.1.0",
@@ -81,7 +81,7 @@
     "glob": "^11.0.0",
     "mocha": "^10.8.2",
     "npm-run-all2": "^7.0.1",
-    "rollup": "^4.12.0",
+    "rollup": "^4.27.0",
     "rollup-plugin-css-only": "^4.5.2",
     "shelljs": "^0.8.5",
     "shx": "^0.3.4",
