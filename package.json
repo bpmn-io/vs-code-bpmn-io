@@ -33,6 +33,44 @@
         "category": "BPMN"
       }
     ],
+    "keybindings": [
+      {
+        "command": "",
+        "key": "ctrl+a",
+        "mac": "cmd+a",
+        "when": "activeCustomEditorId == 'bpmn-io.bpmnEditor' && focusedView == '' && !inputFocus"
+      },
+      {
+        "command": "",
+        "key": "ctrl+0",
+        "mac": "cmd+0",
+        "when": "activeCustomEditorId == 'bpmn-io.bpmnEditor' && focusedView == ''"
+      },
+      {
+        "command": "",
+        "key": "ctrl+numpad_add",
+        "mac": "cmd+numpad_add",
+        "when": "activeCustomEditorId == 'bpmn-io.bpmnEditor' && focusedView == ''"
+      },
+      {
+        "command": "",
+        "key": "ctrl+numpad_subtract",
+        "mac": "cmd+numpad_subtract",
+        "when": "activeCustomEditorId == 'bpmn-io.bpmnEditor' && focusedView == ''"
+      },
+      {
+        "command": "",
+        "key": "ctrl+=",
+        "mac": "cmd+=",
+        "when": "activeCustomEditorId == 'bpmn-io.bpmnEditor' && focusedView == ''"
+      },
+      {
+        "command": "",
+        "key": "ctrl+-",
+        "mac": "cmd+-",
+        "when": "activeCustomEditorId == 'bpmn-io.bpmnEditor' && focusedView == ''"
+      }
+    ],
     "customEditors": [
       {
         "viewType": "bpmn-io.bpmnEditor",
@@ -90,7 +128,7 @@
   },
   "dependencies": {
     "@vscode/codicons": "^0.0.35",
-    "bpmn-js": "^17.0.1",
-    "bpmn-js-color-picker": "^0.7.0"
+    "bpmn-js": "^18.1.1",
+    "bpmn-js-color-picker": "^0.7.1"
   }
 }
