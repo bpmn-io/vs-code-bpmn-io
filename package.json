@@ -33,6 +33,50 @@
         "category": "BPMN"
       }
     ],
+    "keybindings": [
+      {
+        "command": "",
+        "key": "ctrl+a",
+        "mac": "cmd+a",
+        "when": "bpmn-io.bpmnEditor.canvasFocused"
+      },
+      {
+        "command": "",
+        "key": "ctrl+0",
+        "mac": "cmd+0",
+        "when": "bpmn-io.bpmnEditor.canvasFocused"
+      },
+      {
+        "command": "",
+        "key": "ctrl+numpad_add",
+        "mac": "cmd+numpad_add",
+        "when": "bpmn-io.bpmnEditor.canvasFocused"
+      },
+      {
+        "command": "",
+        "key": "ctrl+numpad_subtract",
+        "mac": "cmd+numpad_subtract",
+        "when": "bpmn-io.bpmnEditor.canvasFocused"
+      },
+      {
+        "command": "",
+        "key": "ctrl+=",
+        "mac": "cmd+=",
+        "when": "bpmn-io.bpmnEditor.canvasFocused"
+      },
+      {
+        "command": "",
+        "key": "ctrl+-",
+        "mac": "cmd+-",
+        "when": "bpmn-io.bpmnEditor.canvasFocused"
+      },
+      {
+        "command": "",
+        "key": "ctrl+z",
+        "mac": "cmd+z",
+        "when": "bpmn-io.bpmnEditor.canvasFocused"
+      }
+    ],
     "customEditors": [
       {
         "viewType": "bpmn-io.bpmnEditor",
