@@ -10,8 +10,6 @@ import BpmnModeler from 'bpmn-js/lib/Modeler';
 
 import BpmnColorPickerModule from 'bpmn-js-color-picker';
 
-import KeyboardModule from './features/keyboard';
-
 /**
  * @type { import('vscode') }
  */
@@ -19,11 +17,7 @@ const vscode = acquireVsCodeApi();
 
 const modeler = new BpmnModeler({
   container: '#canvas',
-  keyboard: {
-    bindTo: document
-  },
   additionalModules: [
-    KeyboardModule,
     BpmnColorPickerModule
   ]
 });
@@ -83,9 +77,6 @@ window.addEventListener('message', async (event) => {
     break;
   }
 
-  case 'triggerAction':
-    return modeler.get('editorActions').trigger(body.action, body.options);
-
   case 'getText':
     return modeler.saveXML({ format: true }).then(({ xml }) => {
       return vscode.postMessage({
@@ -95,6 +86,9 @@ window.addEventListener('message', async (event) => {
       });
     });
 
+  case 'focusCanvas':
+    modeler.get('canvas').focus();
+    return;
   }
 });
 
