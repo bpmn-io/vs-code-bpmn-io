@@ -303,6 +303,17 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
           document,
           webviewPanel: webviews[0]
         };
+      }),
+      vscode.window.tabGroups.onDidChangeTabs(({ opened, changed }) => {
+
+        const tabs = [ ...opened, ...changed ];
+        const active = tabs.find(tab => tab.isActive);
+        const uri = (active?.input as vscode.TabInputText)?.uri;
+        const webviews = Array.from(this.webviews.get(uri));
+
+        if (!webviews.length) return;
+
+        this.restoreFocusOnCanvas(webviews[0]);
       })
     );
   }
@@ -436,6 +447,15 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
   // #endregion
 
   /**
+   * Restore focus on the modeling canvas. Enables keyboard shortcuts.
+   */
+  private restoreFocusOnCanvas(webviewPanel: vscode.WebviewPanel) {
+    vscode.commands.executeCommand('workbench.action.focusActiveEditorGroup');
+
+    this.postMessage(webviewPanel, 'focusCanvas');
+  }
+
+  /**
    * Get the static HTML used for in our editor's webviews.
    */
   private getHtmlForWebview(webview: vscode.Webview): string {
@@ -523,6 +543,11 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
       return (
         this._callbacks.get(message.requestId)
       )?.(message.body);
+
+    case 'canvas-focus-change':
+      vscode.commands.executeCommand('setContext', 'bpmn-io.bpmnEditor.canvasFocused', message.value);
+      return;
+
     }
   }
 }
@@ -566,7 +591,7 @@ class WebviewCollection {
    * Get all known webviews for a given uri.
    */
   public *get(uri: vscode.Uri): Iterable<vscode.WebviewPanel> {
-    const key = uri.toString();
+    const key = uri?.toString();
     for (const entry of this._webviews) {
       if (entry.resource === key) {
         yield entry.webviewPanel;
