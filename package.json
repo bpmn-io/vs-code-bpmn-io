@@ -93,6 +93,7 @@
     "all": "run-s lint test",
     "lint": "eslint .",
     "vscode:prepublish": "npm run compile",
+    "package": "npx @vscode/vsce pack",
     "compile": "run-s compile:clean compile:app compile:tests",
     "compile:app": "rollup -c rollup.config.mjs",
     "compile:tests": "tsc -p ./src/test",
