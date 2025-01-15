@@ -6,6 +6,12 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.22.0
+
+* `FIX`: make standard keyboard shortcuts work for macOS ([#92](https://github.com/bpmn-io/vs-code-bpmn-io/issues/92))
+* `DEPS`: update dependency bpmn-js to v18
+* `CHORE`: handle BPMN key bindings with VS Code API
+
 ## 0.21.5 (2024-09-25)
 
 ## What's Changed
