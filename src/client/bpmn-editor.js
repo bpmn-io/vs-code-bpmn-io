@@ -10,10 +10,14 @@ import BpmnModeler from 'bpmn-js/lib/Modeler';
 
 import BpmnColorPickerModule from 'bpmn-js-color-picker';
 
+import { handleMacOsKeyboard } from './utils/macos-keyboard';
+
 /**
  * @type { import('vscode') }
  */
 const vscode = acquireVsCodeApi();
+
+handleMacOsKeyboard();
 
 const modeler = new BpmnModeler({
   container: '#canvas',
