@@ -6,6 +6,19 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.22.0 (2025-01-17)
+
+## What's Changed
+* docs: replace manual publishing with release-please by @barmac in https://github.com/bpmn-io/vs-code-bpmn-io/pull/184
+* chore: update dependency npm-run-all2 to v7 by @renovate in https://github.com/bpmn-io/vs-code-bpmn-io/pull/186
+* Housekeeping by @nikku in https://github.com/bpmn-io/vs-code-bpmn-io/pull/190
+* Housekeeping by @nikku in https://github.com/bpmn-io/vs-code-bpmn-io/pull/192
+* chore: update dependency @rollup/plugin-node-resolve to v16 by @renovate in https://github.com/bpmn-io/vs-code-bpmn-io/pull/193
+* deps: update dependency bpmn-js to v18 by @renovate in https://github.com/bpmn-io/vs-code-bpmn-io/pull/189
+
+
+**Full Changelog**: https://github.com/bpmn-io/vs-code-bpmn-io/compare/v0.21.5...v0.22.0
+
 ## 0.22.0
 
 * `FIX`: make standard keyboard shortcuts work for macOS ([#92](https://github.com/bpmn-io/vs-code-bpmn-io/issues/92))
