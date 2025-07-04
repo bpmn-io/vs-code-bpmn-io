@@ -134,7 +134,7 @@
     "typescript-eslint": "^8.14.0"
   },
   "dependencies": {
-    "@vscode/codicons": "^0.0.35",
+    "@vscode/codicons": "^0.0.36",
     "bpmn-js": "^18.1.2",
     "bpmn-js-color-picker": "^0.7.1"
   }
