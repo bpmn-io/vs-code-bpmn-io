@@ -6,6 +6,14 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.22.2 (2025-07-04)
+
+## What's Changed
+* chore: update dependency @types/glob to v9 by @renovate in https://github.com/bpmn-io/vs-code-bpmn-io/pull/199
+
+
+**Full Changelog**: https://github.com/bpmn-io/vs-code-bpmn-io/compare/v0.22.1...v0.22.2
+
 ## 0.22.1 (2025-05-05)
 
 ## What's Changed
