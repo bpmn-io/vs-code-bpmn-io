@@ -6,6 +6,16 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.22.3 (2025-10-14)
+
+## What's Changed
+* chore: update actions/checkout action to v5 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/202
+* chore: update actions/setup-node action to v5 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/205
+* chore: update actions/setup-node action to v6 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/207
+
+
+**Full Changelog**: https://github.com/bpmn-io/vs-code-bpmn-io/compare/v0.22.2...v0.22.3
+
 ## 0.22.2 (2025-07-04)
 
 ## What's Changed
