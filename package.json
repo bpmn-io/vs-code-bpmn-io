@@ -117,6 +117,7 @@
     "@types/sinon-chai": "^3.2.12",
     "@types/vscode": "1.79.0",
     "@vscode/test-electron": "^2.4.1",
+    "@vscode/vsce": "^3.7.0",
     "chai": "^4.5.0",
     "eslint": "^9.39.1",
     "eslint-plugin-bpmn-io": "^2.2.0",
