@@ -1,6 +1,6 @@
 import * as path from 'node:path';
 
-import { cp } from 'shelljs';
+import * as fs from 'node:fs';
 
 import { runTests } from '@vscode/test-electron';
 
@@ -27,7 +27,7 @@ function copyTestFiles() {
 
   const dest = path.resolve(__dirname, 'fixtures');
 
-  cp('-R', src, dest);
+  fs.cpSync(src, dest, { recursive: true });
 }
 
 copyTestFiles();
