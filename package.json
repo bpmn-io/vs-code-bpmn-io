@@ -11,7 +11,7 @@
   },
   "engines": {
     "vscode": "^1.79.2",
-    "node": ">= 16"
+    "node": ">= 20.12"
   },
   "icon": "resources/logo_marketplace.png",
   "categories": [
@@ -135,7 +135,8 @@
   },
   "dependencies": {
     "@vscode/codicons": "^0.0.35",
-    "bpmn-js": "^18.1.2",
-    "bpmn-js-color-picker": "^0.7.1"
+    "bpmn-js": "^18.13.1",
+    "bpmn-js-color-picker": "^0.7.1",
+    "bpmn-js-native-copy-paste": "^0.3.0"
   }
 }

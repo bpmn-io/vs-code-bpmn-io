@@ -9,6 +9,7 @@ import './bpmn-editor.css';
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 
 import BpmnColorPickerModule from 'bpmn-js-color-picker';
+import NativeCopyPasteModule from 'bpmn-js-native-copy-paste';
 
 import { handleMacOsKeyboard } from './utils/macos-keyboard';
 
@@ -22,8 +23,13 @@ handleMacOsKeyboard();
 const modeler = new BpmnModeler({
   container: '#canvas',
   additionalModules: [
-    BpmnColorPickerModule
+    BpmnColorPickerModule,
+    NativeCopyPasteModule
   ]
+});
+
+modeler.get('eventBus').on('native-copy-paste:error', (event) => {
+  console.warn('Native copy-paste failed, falling back to local clipboard', event.error);
 });
 
 modeler.on('import.done', event => {
