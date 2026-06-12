@@ -10,6 +10,8 @@ import BpmnModeler from 'bpmn-js/lib/Modeler';
 
 import BpmnColorPickerModule from 'bpmn-js-color-picker';
 
+import { CreateAppendAnythingModule } from 'bpmn-js-create-append-anything';
+
 import { handleMacOsKeyboard } from './utils/macos-keyboard';
 
 /**
@@ -22,7 +24,8 @@ handleMacOsKeyboard();
 const modeler = new BpmnModeler({
   container: '#canvas',
   additionalModules: [
-    BpmnColorPickerModule
+    BpmnColorPickerModule,
+    CreateAppendAnythingModule
   ]
 });
 
