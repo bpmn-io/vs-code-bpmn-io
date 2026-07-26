@@ -158,7 +158,8 @@
     "watch:app": "npm run compile:app -- -w",
     "watch": "run-p watch:*",
     "pretest": "run-s compile",
-    "test": "node ./out/test/run-tests.js"
+    "test": "node ./out/test/run-tests.js",
+    "test:unit": "tsc -p ./src/test && mocha --timeout 5000 out/test/unit/*.test.js"
   },
   "devDependencies": {
     "@rollup/plugin-commonjs": "^28.0.1",
@@ -180,6 +181,7 @@
     "eslint-plugin-bpmn-io": "^2.0.2",
     "glob": "^11.0.0",
     "mocha": "^10.8.2",
+    "mocha-junit-reporter": "^2.2.1",
     "mochawesome": "^7.1.4",
     "npm-run-all2": "^8.0.0",
     "puppeteer": "^24.35.0",

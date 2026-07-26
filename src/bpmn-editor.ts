@@ -232,6 +232,12 @@ class BpmnDocument extends Disposable implements vscode.CustomDocument {
  */
 export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
 
+  /**
+   * The currently active BpmnEditor instance. Used by extension.ts
+   * to push configuration updates to all webviews.
+   */
+  public static currentInstance: BpmnEditor | null = null;
+
   private static newFileId = 1;
 
   public static register(context: vscode.ExtensionContext, customPropertiesConfig: CustomPropertiesConfig): vscode.Disposable {
@@ -284,13 +290,14 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
    * Tracks all known documents
    */
   private readonly documents = new DocumentCollection();
-  private readonly customPropertiesConfig: CustomPropertiesConfig;
+  private customPropertiesConfig: CustomPropertiesConfig;
 
   constructor(
     private readonly _context: vscode.ExtensionContext,
     customPropertiesConfig: CustomPropertiesConfig
   ) {
     this.customPropertiesConfig = customPropertiesConfig;
+    BpmnEditor.currentInstance = this;
     _context.subscriptions.push(
       vscode.commands.registerCommand('bpmn-flex.bpmnEditor.__state', (uri: vscode.Uri) => {
 
@@ -391,6 +398,11 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
     webviewPanel.webview.onDidReceiveMessage(e => this.onMessage(document, e));
 
     webviewPanel.webview.onDidReceiveMessage(e => {
+      if (e.type === 'refreshCustomConfig') {
+        this.reloadAndSendConfig(webviewPanel);
+        return;
+      }
+
       if (e.type === 'ready') {
         if (document.uri.scheme === 'untitled') {
           this.postMessage(webviewPanel, 'init', {
@@ -522,6 +534,43 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
     panel.webview.postMessage({ type, body });
   }
 
+  /**
+   * Reload custom properties config from VS Code settings and send to a webview.
+   */
+  private reloadAndSendConfig(panel: vscode.WebviewPanel): void {
+    const config = vscode.workspace.getConfiguration('bpmn-flex');
+    const commonProps = config.get<Array<{ label: string; xpath: string }>>('commonProperties');
+    const elementSpecificProps = config.get<Record<string, Array<{ label: string; xpath: string }>>>('elementSpecificProperties');
+
+    this.customPropertiesConfig = {
+      common: commonProps || [],
+      elementSpecific: elementSpecificProps || {}
+    };
+
+    this.postMessage(panel, 'customConfig', this.customPropertiesConfig);
+    console.log('BPMN.flex: Custom properties config refreshed and sent to webview');
+  }
+
+  /**
+   * Broadcast updated custom properties config to all active webviews.
+   * Called from extension.ts when VS Code settings change.
+   */
+  public broadcastConfigRefresh(): void {
+    const config = vscode.workspace.getConfiguration('bpmn-flex');
+    const commonProps = config.get<Array<{ label: string; xpath: string }>>('commonProperties');
+    const elementSpecificProps = config.get<Record<string, Array<{ label: string; xpath: string }>>>('elementSpecificProperties');
+
+    this.customPropertiesConfig = {
+      common: commonProps || [],
+      elementSpecific: elementSpecificProps || {}
+    };
+
+    this.webviews.forEach((panel) => {
+      this.postMessage(panel, 'customConfig', this.customPropertiesConfig);
+    });
+    console.log('BPMN.flex: Custom properties config broadcast to all webviews');
+  }
+
   private onMessage(document: BpmnDocument, message: { type: string, requestId?: number, body?: unknown, error?: string, warnings?: string[], value?: boolean, idx?: number }) {
     switch (message.type) {
     case 'change':
@@ -591,6 +640,15 @@ class WebviewCollection {
     readonly resource: string;
     readonly webviewPanel: vscode.WebviewPanel;
   }>();
+
+  /**
+   * Invoke a callback for every webview panel in the collection.
+   */
+  public forEach(cb: (panel: vscode.WebviewPanel) => void): void {
+    for (const entry of this._webviews) {
+      cb(entry.webviewPanel);
+    }
+  }
 
   /**
    * Get all known webviews for a given uri.

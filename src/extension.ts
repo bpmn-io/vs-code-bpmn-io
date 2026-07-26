@@ -54,4 +54,18 @@ export async function activate(context: vscode.ExtensionContext) {
 
   // register our custom editor providers
   context.subscriptions.push(BpmnEditor.register(context, customPropertiesConfig)); // Pass config here
+
+  // Watch for configuration changes and push updates to webviews
+  context.subscriptions.push(
+    vscode.workspace.onDidChangeConfiguration(async (e) => {
+      if (e.affectsConfiguration('bpmn-flex.commonProperties') ||
+          e.affectsConfiguration('bpmn-flex.elementSpecificProperties')) {
+        await loadCustomPropertiesConfig(context);
+        const instance = BpmnEditor.currentInstance;
+        if (instance) {
+          instance.broadcastConfigRefresh();
+        }
+      }
+    })
+  );
 }

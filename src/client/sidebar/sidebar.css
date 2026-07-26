@@ -1,4 +1,38 @@
-/* src/client/sidebar/sidebar.css */
+/* ─────────────────────────────────────────────────────
+   BPMN.flex Sidebar — Theme-aware, clean redesign
+   ──────────────────────────────────────────────────── */
+
+/* ══════════════════════════════════════════════════════
+   CSS Variables (VS Code theme integration)
+   ══════════════════════════════════════════════════════ */
+
+#sidebar {
+  --sb-bg:               var(--vscode-sideBar-background, #f3f3f3);
+  --sb-fg:               var(--vscode-sideBar-foreground, #333);
+  --sb-border:           var(--vscode-sideBar-border, #e0e0e0);
+  --sb-hover:            var(--vscode-list-hoverBackground, #e8e8e8);
+  --sb-active:           var(--vscode-list-activeSelectionBackground, #d6ebff);
+  --sb-active-fg:        var(--vscode-list-activeSelectionForeground, #111);
+  --input-bg:            var(--vscode-input-background, #fff);
+  --input-fg:            var(--vscode-input-foreground, #333);
+  --input-border:        var(--vscode-input-border, #cecece);
+  --input-focus-border:  var(--vscode-focusBorder, #007acc);
+  --btn-bg:              var(--vscode-button-background, #007acc);
+  --btn-fg:              var(--vscode-button-foreground, #fff);
+  --btn-hover-bg:        var(--vscode-button-hoverBackground, #0062a3);
+  --badge-bg:            var(--vscode-badge-background, #c4c4c4);
+  --badge-fg:            var(--vscode-badge-foreground, #333);
+  --error-fg:            var(--vscode-errorForeground, #e51400);
+  --desc-fg:             var(--vscode-descriptionForeground, #717171);
+  --toolbar-height:      36px;
+  --section-gap:         6px;
+  --radius:              6px;
+  --transition:          0.15s ease;
+}
+
+/* ══════════════════════════════════════════════════════
+   Editor Layout
+   ══════════════════════════════════════════════════════ */
 
 #editor-container {
   display: flex;
@@ -10,186 +44,626 @@
   overflow: hidden;
   flex: 1;
   height: 100%;
-  transition: all 0.3s ease; /* Keep transition for potential canvas resize effects */
 }
 
-/* Ensure canvas focus outline is handled if needed, or remove if not specific to sidebar context */
 #canvas svg:focus {
   outline: none;
 }
 
+/* ══════════════════════════════════════════════════════
+   Sidebar
+   ══════════════════════════════════════════════════════ */
+
 #sidebar {
-  width: 300px;
-  height: 100%;
-  background: #f5f5f5;
-  border-left: 1px solid #ddd;
-  transition: all 0.3s ease;
+  order: 2;
   position: relative;
-  overflow: auto;
-  transform-origin: top right; /* For expand/collapse animation */
+  width: 300px;
+  min-width: 240px;
+  height: 100%;
+  background: var(--sb-bg);
+  color: var(--sb-fg);
+  border-left: 1px solid var(--sb-border);
+  display: flex;
+  flex-direction: column;
+  overflow: visible;
+  flex-shrink: 0;
+  transition: width 0.2s ease, min-width 0.2s ease;
+  font-family: var(--vscode-font-family, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif);
+  font-size: 13px;
 }
 
 #sidebar.collapsed {
-  width: 40px;
+  width: 0 !important;
+  min-width: 0;
+  border-left: none;
+  overflow: visible;
 }
 
-#sidebar.collapsed #custom-properties-content {
-  display: none;
-  opacity: 0;
-  transition: opacity 0.2s ease;
+/* Inner scroll wrapper — clips content but allows edge button to overflow */
+#sidebar-inner {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  overflow: hidden;
 }
 
-#sidebar:not(.collapsed) #custom-properties-content {
-  display: block;
-  opacity: 1;
-  transition: opacity 0.3s ease 0.1s;
-}
+/* ── Resize handle ─────────────────────────────────── */
 
-/* Styles for the expanded state (popup-like) */
-#sidebar.expanded {
-  position: fixed;
-  width: 60%; /* Or use calc as in the original: calc(100% - 200px) */
-  height: 80%; /* Or use calc as in the original: calc(100% - 200px) */
-  top: 10%;    /* Or use 100px */
-  left: 20%;   /* Or use 100px */
-  z-index: 1000;
-  box-shadow: 0 0 20px rgba(0,0,0,0.2);
-  /* The animation will handle the transform and opacity */
-  animation: expand 0.3s forwards;
-}
-
-#sidebar-toggle {
+#sidebar-resize-handle {
   position: absolute;
-  left: 10px;
-  bottom: 10px;
-  width: 24px;
-  height: 24px;
-  background: #f5f5f5;
-  border: 1px solid #ddd;
+  left: -3px;
+  top: 0;
+  width: 6px;
+  height: 100%;
+  cursor: col-resize;
+  z-index: 100;
+  transition: background-color 0.2s ease;
+}
+
+#sidebar-resize-handle:hover,
+#sidebar-resize-handle.active {
+  background-color: var(--vscode-focusBorder, #007acc);
+  opacity: 0.6;
+}
+
+body.sidebar-resizing {
+  user-select: none;
+  -webkit-user-select: none;
+  cursor: col-resize;
+}
+
+/* ══════════════════════════════════════════════════════
+   Sidebar Header (toolbar at top)
+   ══════════════════════════════════════════════════════ */
+
+#sidebar-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--toolbar-height);
+  min-height: var(--toolbar-height);
+  padding: 0 8px;
+  border-bottom: 1px solid var(--sb-border);
+  background: var(--sb-bg);
+  gap: 4px;
+  flex-shrink: 0;
+}
+
+#sidebar-header .header-title {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--desc-fg);
+  user-select: none;
+  flex: 1;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ── Header buttons ────────────────────────────────── */
+
+.sb-btn {
+  width: 26px;
+  height: 26px;
+  border: none;
   border-radius: 4px;
+  background: transparent;
   cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
-  font-size: 16px;
+  color: var(--desc-fg);
+  transition: background-color var(--transition), color var(--transition);
+  flex-shrink: 0;
+  padding: 0;
 }
 
-#sidebar-expand {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
+.sb-btn:hover {
+  background: var(--sb-hover);
+  color: var(--sb-fg);
 }
 
-#sidebar-minimize {
-  position: absolute;
-  right: 10px;
-  top: 10px;
-  width: 24px;
-  height: 24px;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  display: none; /* Initially hidden */
+.sb-btn:active {
+  opacity: 0.7;
 }
 
-#sidebar.expanded #sidebar-toggle {
+.sb-btn svg {
+  width: 16px;
+  height: 16px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.8;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ── Language button & dropdown ────────────────────── */
+
+#lang-btn {
+  font-size: 11px;
+  font-weight: 600;
+  width: auto;
+  padding: 0 6px;
+  gap: 3px;
+  letter-spacing: 0.3px;
+}
+
+#lang-btn .lang-arrow {
+  font-size: 8px;
+  transition: transform 0.2s ease;
+}
+
+#lang-btn.open .lang-arrow {
+  transform: rotate(180deg);
+}
+
+#lang-dropdown {
   display: none;
-}
-
-#sidebar.expanded #sidebar-expand {
-  display: none;
-}
-
-#sidebar.expanded #sidebar-minimize {
-  display: flex;
-}
-
-/*
-  The second #sidebar.expanded rule in the original CSS seemed to override parts of the first one,
-  specifically for animation. I've merged the animation part into the primary #sidebar.expanded rule.
-  The transform-origin was moved to the base #sidebar rule.
-*/
-
-@keyframes expand {
-  from {
-    transform: scale(0.5);
-    opacity: 0;
-  }
-  to {
-    transform: scale(1);
-    opacity: 1;
-  }
-}
-
-/* 
-  The original #sidebar:not(.expanded) rule with 'collapse' animation had 'opacity: 0' at the end,
-  which would make the sidebar invisible after collapsing if it's not immediately hidden or width changed.
-  The current .collapsed class (width: 40px) handles the collapsed state.
-  The transition on width in #sidebar and #sidebar.collapsed should handle the visual change.
-  If a specific collapse animation is still desired, it might need adjustment.
-  For now, relying on the width transition. If a fade-out/scale-out is needed before width change,
-  this might need to be revisited.
-*/
-/* 
-#sidebar:not(.expanded) {
-  animation: collapse 0.3s forwards;
-  opacity: 1 !important;
-  transform: scale(1) !important;
-}
-
-@keyframes collapse {
-  from {
-    transform: scale(1);
-    opacity: 1;
-  }
-  to {
-    transform: scale(0.5);
-    opacity: 0;
-  }
-}
-*/
-
-/* Styles for Custom Properties Display */
-#custom-properties-content {
-  padding: 10px;
-  font-family: Arial, sans-serif; /* Or inherit from body/vscode styles */
-  font-size: 13px;
-  color: #333; /* Or inherit */
-  margin-top: 32px
-}
-
-#custom-properties-content p { /* For placeholder messages */
-  margin-top: 0;
-  color: #666; /* Slightly muted placeholder text */
-}
-
-#custom-properties-content ul {
-  list-style-type: none;
-  padding-left: 0;
-  margin-top: 0;
-}
-
-#custom-properties-content li {
+  position: absolute;
+  top: var(--toolbar-height);
+  left: 8px;
+  background: var(--vscode-dropdown-background, #fff);
+  border: 1px solid var(--sb-border);
+  border-radius: var(--radius);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+  z-index: 300;
+  min-width: 130px;
   padding: 4px 0;
-  border-bottom: 1px solid #eee; /* Separator for items */
-  word-wrap: break-word; /* Ensure long values wrap */
 }
 
-#custom-properties-content li:last-child {
+#lang-dropdown.open {
+  display: block;
+  animation: fadeIn 0.12s ease;
+}
+
+.lang-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 7px 14px;
+  border: none;
+  background: none;
+  cursor: pointer;
+  font-size: 13px;
+  color: var(--sb-fg);
+  text-align: left;
+  transition: background-color 0.1s ease;
+}
+
+.lang-option:hover {
+  background: var(--sb-hover);
+}
+
+.lang-option.active {
+  color: var(--vscode-focusBorder, #007acc);
+  font-weight: 600;
+}
+
+.lang-option.active::after {
+  content: '✓';
+  margin-left: auto;
+  font-size: 11px;
+}
+
+/* ── Refresh config button ─────────────────────────── */
+
+#refresh-config-btn.spinning svg {
+  animation: refreshSpin 0.6s ease-in-out;
+}
+
+@keyframes refreshSpin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+/* ══════════════════════════════════════════════════════
+   Sidebar Toggle (edge button — collapsed state)
+   ══════════════════════════════════════════════════════ */
+
+#sidebar-collapse-btn {
+  position: absolute;
+  right: 100%;
+  top: 6px;
+  width: 24px;
+  height: 24px;
+  border: 1px solid var(--sb-border);
+  border-right: none;
+  border-radius: 4px 0 0 4px;
+  background: var(--sb-bg);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--desc-fg);
+  opacity: 0;
+  transition: opacity 0.2s ease, background-color var(--transition);
+  z-index: 50;
+}
+
+#sidebar.collapsed #sidebar-collapse-btn,
+#sidebar:hover #sidebar-collapse-btn {
+  opacity: 1;
+}
+
+#sidebar-collapse-btn:hover {
+  background: var(--sb-hover);
+  color: var(--sb-fg);
+}
+
+#sidebar-collapse-btn svg {
+  width: 14px;
+  height: 14px;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 2;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ══════════════════════════════════════════════════════
+   Sidebar Content (scrollable)
+   ══════════════════════════════════════════════════════ */
+
+#sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+/* ══════════════════════════════════════════════════════
+   Section: Root Elements
+   ══════════════════════════════════════════════════════ */
+
+.sb-section {
+  padding: 10px 10px var(--section-gap);
+  border-bottom: 1px solid var(--sb-border);
+}
+
+.sb-section:last-child {
   border-bottom: none;
 }
 
-#custom-properties-content li b {
-  font-weight: 600; /* Make labels a bit bolder */
-  margin-right: 5px;
-  color: #111; /* Darker color for labels */
+.sb-section-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 6px;
+  cursor: pointer;
+  user-select: none;
+  padding: 2px 4px;
+  border-radius: 3px;
+  transition: background-color 0.1s ease;
+}
+
+.sb-section-header:hover {
+  background: var(--sb-hover);
+}
+
+.sb-section-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  color: var(--desc-fg);
+}
+
+.sb-section-toggle {
+  font-size: 10px;
+  color: var(--desc-fg);
+  transition: transform 0.2s ease;
+  line-height: 1;
+}
+
+.sb-section.collapsed .sb-section-toggle {
+  transform: rotate(-90deg);
+}
+
+.sb-section.collapsed .sb-section-body {
+  display: none;
+}
+
+/* ── Root element list items ───────────────────────── */
+
+#root-elements-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.root-element-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 5px 8px;
+  margin: 1px 0;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+  transition: background-color 0.1s ease;
+  border: 1px solid transparent;
+}
+
+.root-element-item:hover {
+  background-color: var(--sb-hover);
+}
+
+.root-element-item.selected {
+  background-color: var(--sb-active);
+  color: var(--sb-active-fg);
+  border-color: var(--vscode-focusBorder, #007acc);
+  border-color: color-mix(in srgb, var(--vscode-focusBorder, #007acc) 50%, transparent);
+}
+
+.root-element-type-badge {
+  display: inline-block;
+  font-size: 9px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: var(--badge-bg);
+  color: var(--badge-fg);
+  white-space: nowrap;
+  flex-shrink: 0;
+  letter-spacing: 0.3px;
+}
+
+.root-element-item.selected .root-element-type-badge {
+  background: var(--vscode-focusBorder, #007acc);
+  color: #fff;
+}
+
+.root-element-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+/* ── Root element type badge variants ──────────────── */
+/* All badges now use the base monochrome style.          */
+/* Type distinction comes from the label text itself.     */
+
+/* ── Root element relation indicator ───────────────── */
+
+.root-element-relation {
+  font-size: 10px;
+  color: var(--desc-fg);
+  white-space: nowrap;
+  flex-shrink: 0;
+  max-width: 100px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.root-element-relation.standalone {
+  opacity: 0.5;
+  font-style: italic;
+}
+
+/* ── Root element separator ────────────────────────── */
+
+.root-elements-separator {
+  height: 1px;
+  margin: 4px 14px;
+  background: var(--sb-border);
+  list-style: none;
+  opacity: 0.5;
+}
+
+/* ── Root element tree children (participant / process) ── */
+
+.root-tree-participant {
+  padding-left: 20px;
+  font-size: 12px;
+  border-left: 2px solid var(--sb-border);
+  border-radius: 0 4px 4px 0;
+  margin: 1px 0 1px 4px;
+}
+
+.root-tree-participant:hover {
+  border-left-color: var(--vscode-focusBorder, #007acc);
+  background-color: var(--sb-hover);
+}
+
+.root-tree-participant.selected {
+  border-left-color: var(--vscode-focusBorder, #007acc);
+  background-color: var(--sb-active);
+  color: var(--sb-active-fg);
+}
+
+.root-tree-process {
+  padding-left: 36px;
+  font-size: 11px;
+  opacity: 0.75;
+  border-left: 1px solid var(--sb-border);
+  border-radius: 0 4px 4px 0;
+  margin: 0 0 2px 4px;
+}
+
+.root-tree-process:hover {
+  opacity: 1;
+  border-left-color: var(--vscode-focusBorder, #007acc);
+  background-color: var(--sb-hover);
+}
+
+.root-tree-process.selected {
+  opacity: 1;
+  border-left-color: var(--vscode-focusBorder, #007acc);
+  background-color: var(--sb-active);
+  color: var(--sb-active-fg);
+}
+
+.root-tree-name {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  flex: 1;
+}
+
+/* ══════════════════════════════════════════════════════
+   Section: Custom Properties
+   ══════════════════════════════════════════════════════ */
+
+/* ── Empty state ──────────────────────────────────── */
+
+.properties-empty-state {
+  text-align: center;
+  padding: 24px 16px;
+  color: var(--desc-fg);
+}
+
+.properties-empty-state .empty-icon {
+  display: block;
+  font-size: 28px;
+  margin-bottom: 8px;
+  opacity: 0.5;
+}
+
+.properties-empty-state .empty-title {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: var(--sb-fg);
+}
+
+.properties-empty-state .empty-desc {
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+/* ── Individual property rows ─────────────────────── */
+
+.prop-row {
+  padding: 5px 0;
+}
+
+.prop-row + .prop-row {
+  border-top: 1px solid var(--sb-border);
+  border-color: color-mix(in srgb, var(--sb-border) 50%, transparent);
+}
+
+.prop-label {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  color: var(--desc-fg);
+  margin-bottom: 4px;
+}
+
+.prop-error-badge {
+  color: var(--error-fg);
+  font-size: 12px;
+  cursor: help;
+  flex-shrink: 0;
+}
+
+/* ── Input fields ─────────────────────────────────── */
+
+.prop-input {
+  width: 100%;
+  padding: 4px 7px;
+  box-sizing: border-box;
+  border: 1px solid var(--input-border);
+  border-radius: 3px;
+  font-size: 12px;
+  font-family: var(--vscode-font-family, inherit);
+  color: var(--input-fg);
+  background: var(--input-bg);
+  transition: border-color 0.12s ease, box-shadow 0.12s ease;
+  line-height: 1.4;
+}
+
+textarea.prop-input {
+  resize: vertical;
+  min-height: 60px;
+}
+
+select.prop-input {
+  cursor: pointer;
+  appearance: auto;
+}
+
+.prop-input:focus {
+  outline: none;
+  border-color: var(--input-focus-border);
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--input-focus-border) 40%, transparent);
+}
+
+.prop-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background: var(--vscode-input-background, #fff);
+  filter: brightness(0.97);
+}
+
+/* ── Validation ───────────────────────────────────── */
+
+.prop-input.input-error {
+  border-color: var(--error-fg);
+}
+
+.prop-input.input-error:focus {
+  box-shadow: 0 0 0 1px color-mix(in srgb, var(--error-fg) 40%, transparent);
+}
+
+.validation-error {
+  display: block;
+  color: var(--error-fg);
+  font-size: 11px;
+  margin-top: 3px;
+  animation: fadeIn 0.15s ease;
+}
+
+/* ══════════════════════════════════════════════════════
+   Status Bar (bottom, optional)
+   ══════════════════════════════════════════════════════ */
+
+#sidebar-statusbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 3px 10px;
+  font-size: 10px;
+  color: var(--desc-fg);
+  border-top: 1px solid var(--sb-border);
+  flex-shrink: 0;
+  user-select: none;
+  min-height: 20px;
+  background: var(--sb-bg);
+}
+
+/* ══════════════════════════════════════════════════════
+   Animations
+   ══════════════════════════════════════════════════════ */
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(-2px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ══════════════════════════════════════════════════════
+   Scrollbar styling
+   ══════════════════════════════════════════════════════ */
+
+#sidebar-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+#sidebar-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+#sidebar-content::-webkit-scrollbar-thumb {
+  background: var(--vscode-scrollbarSlider-background, #c1c1c1);
+  border-radius: 3px;
+}
+
+#sidebar-content::-webkit-scrollbar-thumb:hover {
+  background: var(--vscode-scrollbarSlider-hoverBackground, #a8a8a8);
 }
