@@ -521,11 +521,11 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
   }
 
   private _requestId = 1;
-  private readonly _callbacks = new Map<number, (response: any) => void>();
+  private readonly _callbacks = new Map<number, (response: unknown) => void>();
 
   private postMessageWithResponse<R = unknown>(panel: vscode.WebviewPanel, type: string, body: object): Promise<R> {
     const requestId = this._requestId++;
-    const p = new Promise<R>(resolve => this._callbacks.set(requestId, resolve));
+    const p = new Promise<R>(resolve => this._callbacks.set(requestId, resolve as (response: unknown) => void));
     panel.webview.postMessage({ type, requestId, body });
     return p;
   }
