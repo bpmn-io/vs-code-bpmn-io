@@ -383,6 +383,7 @@ export default class Sidebar {
 
     if (this._rootElements.length === 0) {
       this.rootElementsSection.style.display = 'none';
+
       // Clear stale selection if tree is now empty
       if (this._selectedRootElement) {
         this._selectedRootElement = null;
@@ -415,12 +416,14 @@ export default class Sidebar {
 
     // ── Render collaboration tree ──────────────────────
     collaborations.forEach(function(re) {
+
       // Collaboration header
       var collLi = self._createRootItem(re, true);
       self.rootElementsList.appendChild(collLi);
 
       if (re.participants && re.participants.length > 0) {
         re.participants.forEach(function(part) {
+
           // ── Participant (Pool) ──
           var partLi = document.createElement('li');
           partLi.className = 'root-element-item root-tree-participant';
@@ -493,6 +496,7 @@ export default class Sidebar {
     });
 
     if (standaloneProcesses.length > 0) {
+
       // Only show separator if there were collaborations above
       if (collaborations.length > 0) {
         var sep = document.createElement('li');
@@ -530,6 +534,7 @@ export default class Sidebar {
    * @param {string} id - The ID of the root element to re-select
    */
   _restoreSelectionById(id) {
+
     // Find the fresh data object in the new _rootElements array
     var freshData = null;
 
@@ -540,10 +545,12 @@ export default class Sidebar {
         freshData = re;
         break;
       }
+
       // Also search nested participants for processes
       if (re.type === 'bpmn:Collaboration' && re.participants) {
         for (var j = 0; j < re.participants.length; j++) {
           if (re.participants[j].id === id) {
+
             // Participant: select on canvas instead
             this._trySelectOnCanvas(id);
             return;
@@ -553,6 +560,7 @@ export default class Sidebar {
     }
 
     if (freshData) {
+
       // Update the stored reference to the fresh object
       this._selectedRootElement = freshData;
       this._updateStatusbar(freshData.type.replace('bpmn:', '') + ' · ' + (freshData.name || freshData.id));
@@ -563,6 +571,7 @@ export default class Sidebar {
         this._selectTreeItem(li);
       }
     } else {
+
       // Element no longer exists — clear stale selection
       this._selectedRootElement = null;
       this._updateStatusbar('');
@@ -913,6 +922,7 @@ export default class Sidebar {
    * Refresh static translatable UI elements after language change.
    */
   _refreshTranslatableUI() {
+
     // Section titles
     var titleEls = document.querySelectorAll('.sb-section-title');
     if (titleEls[0]) titleEls[0].textContent = this._t('sidebar.rootElements');

@@ -152,23 +152,17 @@ const bpmnXML = `<?xml version="1.0" encoding="UTF-8"?>
 
     // 2. Switch to Chinese
     console.log('Switching to Chinese...');
-    await page.select('#language-select', 'zh');
-    await page.evaluate(() => {
-        const select = document.getElementById('language-select');
-        const event = new Event('change');
-        select.dispatchEvent(event);
-    });
+    await page.click('#lang-btn');
+    await new Promise(r => setTimeout(r, 200));
+    await page.click('.lang-option[data-lang="zh"]');
     await new Promise(r => setTimeout(r, 1000));
     await page.screenshot({ path: path.join(ROOT, 'ui-chinese.png') });
 
     // 3. Switch to Japanese
     console.log('Switching to Japanese...');
-    await page.select('#language-select', 'ja');
-    await page.evaluate(() => {
-        const select = document.getElementById('language-select');
-        const event = new Event('change');
-        select.dispatchEvent(event);
-    });
+    await page.click('#lang-btn');
+    await new Promise(r => setTimeout(r, 200));
+    await page.click('.lang-option[data-lang="ja"]');
     await new Promise(r => setTimeout(r, 1000));
     await page.screenshot({ path: path.join(ROOT, 'ui-japanese.png') });
 
@@ -197,13 +191,7 @@ const bpmnXML = `<?xml version="1.0" encoding="UTF-8"?>
     await page.click('[data-element-id="Task_0zlv465"]');
     await new Promise(r => setTimeout(r, 500));
 
-    // Expand sidebar
-    try {
-        await page.click('#sidebar-toggle');
-    } catch (e) {
-        await page.click('#sidebar-expand');
-    }
-
+    // Sidebar is expanded by default — wait for render
     await new Promise(r => setTimeout(r, 1000));
     await page.screenshot({ path: path.join(ROOT, 'ui-sidebar-custom-props.png') });
     console.log('Screenshot: ui-sidebar-custom-props.png');
@@ -211,48 +199,37 @@ const bpmnXML = `<?xml version="1.0" encoding="UTF-8"?>
     // 5. Test Editing
     console.log('Testing Editing...');
 
-    // Find the textarea for Documentation
-    // It should contain "Original Documentation"
+    // Wait for the properties form to render
     const textareaSelector = '#custom-properties-content textarea';
     await page.waitForSelector(textareaSelector);
 
-    // Check Documentation (Raw JSON)
-    // const textareaSelector = '#custom-properties-content textarea'; // Already declared above?
-    // Wait, in previous patch I might have removed the declaration. Let's check context.
-    // Ah, I see in previous patch I just commented it out or modified it but if I used const again it errors.
-    // Let's just use the selector string directly or check if declared.
-    const docTextareaSelector = '#custom-properties-content textarea';
-    await page.waitForSelector(docTextareaSelector);
-    // Don't edit it to avoid breaking JSON for next step
-
-    // Update Date
-    const dateInputSelector = '#custom-properties-content ul li:nth-child(3) input';
+    // Update Date (3rd prop-row: Documentation → Name → Start Date)
+    const dateInputSelector = '#custom-properties-content .prop-row:nth-child(3) input';
     await page.evaluate((sel) => {
         const el = document.querySelector(sel);
         el.value = '2023-12-31';
         el.dispatchEvent(new Event('change'));
     }, dateInputSelector);
 
-    // Update Number
-    const numInputSelector = '#custom-properties-content ul li:nth-child(4) input';
+    // Update Number (4th prop-row: Priority)
+    const numInputSelector = '#custom-properties-content .prop-row:nth-child(4) input';
     await page.evaluate((sel) => {
         const el = document.querySelector(sel);
         el.value = '99';
         el.dispatchEvent(new Event('change'));
     }, numInputSelector);
 
-    // Update Boolean
-    const boolInputSelector = '#custom-properties-content ul li:nth-child(5) select';
+    // Update Boolean (5th prop-row: Is Active)
+    const boolInputSelector = '#custom-properties-content .prop-row:nth-child(5) select';
     await page.select(boolInputSelector, 'false');
     await page.evaluate((sel) => {
         const el = document.querySelector(sel);
         el.dispatchEvent(new Event('change'));
     }, boolInputSelector);
 
-    // Update JSON Number
-    // Item 6 (Nested Prop) is likely skipped because the path doesn't exist in the XML, so extractProperties skips it.
-    // So Retry Count should be the 6th item (or last item).
-    const jsonInputSelector = '#custom-properties-content ul li:last-child input';
+    // Update JSON Number (last prop-row: Retry Count)
+    // Nested Prop is skipped because custom:nested/custom:val doesn't exist in the XML
+    const jsonInputSelector = '#custom-properties-content .prop-row:last-child input';
     await page.waitForSelector(jsonInputSelector);
     await page.evaluate((sel) => {
         const el = document.querySelector(sel);

@@ -76,6 +76,7 @@ function extractProperties(bpmnElement, config) {
         value = currentObj;
         break;
       case 'boolean':
+
         // Normalize boolean value display
         if (currentObj === true || currentObj === 'true' || currentObj === '1') {
           value = 'true';
@@ -104,6 +105,7 @@ function extractProperties(bpmnElement, config) {
         break;
       }
       case 'fullXPath':
+
         // TODO: Implement full XPath evaluation against serialized XML
         console.warn('Full XPath evaluation not yet implemented for property "' + propDef.label + '"');
         value = '';
@@ -155,7 +157,7 @@ function updateProperty(element, propDef, newValue, modeling, moddle) {
     return part.replace('bpmn:', '');
   };
 
-  if (['attribute', 'date', 'number', 'boolean'].indexOf(propDef.type) !== -1) {
+  if ([ 'attribute', 'date', 'number', 'boolean' ].indexOf(propDef.type) !== -1) {
 
     var currentObj = businessObject;
     var propName = '';
@@ -208,7 +210,7 @@ function updateProperty(element, propDef, newValue, modeling, moddle) {
     // Special handling for bpmn:documentation creation
     if (propDef.xpath === 'bpmn:documentation' && (!businessObject.documentation || businessObject.documentation.length === 0)) {
       var newDoc = moddle.create('bpmn:Documentation', { text: newValue });
-      modeling.updateProperties(element, { documentation: [newDoc] });
+      modeling.updateProperties(element, { documentation: [ newDoc ] });
       return;
     }
 
@@ -266,6 +268,7 @@ function updateProperty(element, propDef, newValue, modeling, moddle) {
         } else if (propDef.inputType === 'boolean') {
           valueToStore = (newValue === 'true' || newValue === '1' || newValue === true);
         } else if (propDef.inputType === 'date') {
+
           // Validate date format YYYY-MM-DD
           if (!/^\d{4}-\d{2}-\d{2}$/.test(newValue) && newValue !== '') {
             console.warn('Invalid date value "' + newValue + '" for JSON property "' + propDef.label + '"');
@@ -300,9 +303,11 @@ function setDeep(obj, path, value) {
   current[parts[parts.length - 1]] = value;
 }
 
+/* eslint-disable no-undef */
 module.exports = {
   extractProperties: extractProperties,
   updateProperty: updateProperty,
   getDeep: getDeep,
   setDeep: setDeep
 };
+/* eslint-enable no-undef */

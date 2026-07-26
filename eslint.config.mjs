@@ -74,7 +74,8 @@ export default [
       '@typescript-eslint/no-unused-vars': [
         'error', {
           'varsIgnorePattern': '^_',
-          'argsIgnorePattern': '^_'
+          'argsIgnorePattern': '^_',
+          'caughtErrorsIgnorePattern': '^_'
         }
       ]
     },
@@ -102,7 +103,8 @@ export default [
       '@typescript-eslint/no-require-imports': 'off'
     },
     files: [
-      ...files.node_test
+      ...files.node_test,
+      ...files.test
     ]
   }
 ];

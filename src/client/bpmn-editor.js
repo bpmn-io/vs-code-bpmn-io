@@ -305,7 +305,7 @@ function showRootElementProperties(rootEl, bpmnModeler) {
  * @param {Object} modeling
  * @param {Object} moddle
  */
-function updateRootProperty(bpmnModeler, wrapper, propDef, newValue, modeling, moddle) {
+function updateRootProperty(bpmnModeler, wrapper, propDef, newValue, modeling, _moddle) {
   var pathParts = propDef.xpath.split('/');
   var bo = wrapper.businessObject;
 
@@ -536,6 +536,7 @@ function setupModelerListeners(bpmnModeler) {
     if (selectedRoot) {
       showRootElementProperties(selectedRoot, bpmnModeler);
     } else if (selectedRootId) {
+
       // Previously selected root element was deleted — clear highlight
       _clearCanvasHighlight(bpmnModeler);
 
@@ -560,6 +561,7 @@ function setupModelerListeners(bpmnModeler) {
   });
 
   bpmnModeler.on('selection.changed', function(event) {
+
     // Don't clear sidebar root selection when this change was triggered
     // by clicking a Process in the root elements tree (it selects the
     // associated pool for visual feedback while keeping process props).

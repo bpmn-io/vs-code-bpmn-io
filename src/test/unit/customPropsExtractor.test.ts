@@ -177,7 +177,7 @@ describe('extractProperties', function() {
   it('should extract a common attribute property', function() {
     const el = createMockElement('bpmn:Task', createMockBusinessObject({ name: 'My Task' }));
     const config = {
-      common: [{ label: 'Name', xpath: 'name', type: 'attribute' } as PropDef]
+      common: [ { label: 'Name', xpath: 'name', type: 'attribute' } as PropDef ]
     };
     const result = extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
     expect(result).to.have.lengthOf(1);
@@ -187,11 +187,11 @@ describe('extractProperties', function() {
 
   it('should extract elementText property (e.g. documentation)', function() {
     const bo = createMockBusinessObject({
-      documentation: [{ text: 'Some documentation text' }]
+      documentation: [ { text: 'Some documentation text' } ]
     });
     const el = createMockElement('bpmn:Task', bo);
     const config = {
-      common: [{ label: 'Documentation', xpath: 'bpmn:documentation', type: 'elementText' } as PropDef]
+      common: [ { label: 'Documentation', xpath: 'bpmn:documentation', type: 'elementText' } as PropDef ]
     };
     const result = extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
     expect(result).to.have.lengthOf(1);
@@ -203,7 +203,7 @@ describe('extractProperties', function() {
     bo.$attrs!['custom:startDate'] = '2025-01-15';
     const el = createMockElement('bpmn:Task', bo);
     const config = {
-      common: [{ label: 'Start Date', xpath: 'custom:startDate', type: 'date' } as PropDef]
+      common: [ { label: 'Start Date', xpath: 'custom:startDate', type: 'date' } as PropDef ]
     };
     const result = extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
     expect(result[0].value).to.equal('2025-01-15');
@@ -214,7 +214,7 @@ describe('extractProperties', function() {
     bo.$attrs!['custom:priority'] = 5;
     const el = createMockElement('bpmn:Task', bo);
     const config = {
-      common: [{ label: 'Priority', xpath: 'custom:priority', type: 'number' } as PropDef]
+      common: [ { label: 'Priority', xpath: 'custom:priority', type: 'number' } as PropDef ]
     };
     const result = extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
     expect(result[0].value).to.equal('5');
@@ -225,7 +225,7 @@ describe('extractProperties', function() {
     bo.$attrs!['custom:isActive'] = true;
     const el = createMockElement('bpmn:Task', bo);
     const config = {
-      common: [{ label: 'Is Active', xpath: 'custom:isActive', type: 'boolean' } as PropDef]
+      common: [ { label: 'Is Active', xpath: 'custom:isActive', type: 'boolean' } as PropDef ]
     };
     const result = extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
     expect(result[0].value).to.equal('true');
@@ -236,7 +236,7 @@ describe('extractProperties', function() {
     bo.$attrs!['custom:isActive'] = false;
     const el = createMockElement('bpmn:Task', bo);
     const config = {
-      common: [{ label: 'Is Active', xpath: 'custom:isActive', type: 'boolean' } as PropDef]
+      common: [ { label: 'Is Active', xpath: 'custom:isActive', type: 'boolean' } as PropDef ]
     };
     const result = extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
     expect(result[0].value).to.equal('false');
@@ -247,7 +247,7 @@ describe('extractProperties', function() {
     bo.$attrs!['custom:flag'] = '1';
     const el = createMockElement('bpmn:Task', bo);
     const config = {
-      common: [{ label: 'Flag', xpath: 'custom:flag', type: 'boolean' } as PropDef]
+      common: [ { label: 'Flag', xpath: 'custom:flag', type: 'boolean' } as PropDef ]
     };
     const result = extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
     expect(result[0].value).to.equal('true');
@@ -276,7 +276,7 @@ describe('extractProperties', function() {
     });
     const el = createMockElement('bpmn:Task', bo);
     const config = {
-      common: [{ label: 'Config', xpath: 'custom:config', type: 'json', jsonPath: 'field' } as PropDef]
+      common: [ { label: 'Config', xpath: 'custom:config', type: 'json', jsonPath: 'field' } as PropDef ]
     };
     const result = extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
     expect(result[0].value).to.equal('');
@@ -285,7 +285,7 @@ describe('extractProperties', function() {
   it('should return empty string for missing property', function() {
     const el = createMockElement('bpmn:Task', createMockBusinessObject());
     const config = {
-      common: [{ label: 'Missing', xpath: 'nonExistent', type: 'attribute' } as PropDef]
+      common: [ { label: 'Missing', xpath: 'nonExistent', type: 'attribute' } as PropDef ]
     };
     const result = extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
     expect(result[0].value).to.equal('');
@@ -298,8 +298,8 @@ describe('extractProperties', function() {
     const config = {
       common: [] as PropDef[],
       elementSpecific: {
-        'bpmn:Task': [{ label: 'Task Label', xpath: 'name', type: 'attribute' } as PropDef],
-        'bpmn:Process': [{ label: 'Process Label', xpath: 'name', type: 'attribute' } as PropDef]
+        'bpmn:Task': [ { label: 'Task Label', xpath: 'name', type: 'attribute' } as PropDef ],
+        'bpmn:Process': [ { label: 'Process Label', xpath: 'name', type: 'attribute' } as PropDef ]
       }
     };
     const result = extractProperties(taskEl as unknown as Parameters<typeof extractProperties>[0], config);
@@ -311,7 +311,7 @@ describe('extractProperties', function() {
     const eventEl = createMockElement('bpmn:StartEvent', createMockBusinessObject({ name: 'Start' }));
     const config = {
       elementSpecific: {
-        'bpmn:Task': [{ label: 'Task Label', xpath: 'name', type: 'attribute' } as PropDef]
+        'bpmn:Task': [ { label: 'Task Label', xpath: 'name', type: 'attribute' } as PropDef ]
       }
     };
     const result = extractProperties(eventEl as unknown as Parameters<typeof extractProperties>[0], config);
@@ -324,10 +324,10 @@ describe('extractProperties', function() {
     const inner: Record<string, unknown> = {};
     inner['custom:nested'] = 'deep-value';
     const bo = createMockBusinessObject();
-    bo.extensionElements = { values: [inner] };
+    bo.extensionElements = { values: [ inner ] };
     const el = createMockElement('bpmn:Task', bo);
     const config = {
-      common: [{ label: 'Nested', xpath: 'extensionElements/values/custom:nested', type: 'attribute' } as PropDef]
+      common: [ { label: 'Nested', xpath: 'extensionElements/values/custom:nested', type: 'attribute' } as PropDef ]
     };
     const result = extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
     expect(result[0].value).to.equal('deep-value');
@@ -338,7 +338,7 @@ describe('extractProperties', function() {
   it('should return empty string for fullXPath type (not implemented)', function() {
     const el = createMockElement('bpmn:Task', createMockBusinessObject());
     const config = {
-      common: [{ label: 'Full Path', xpath: '//test', type: 'fullXPath' } as PropDef]
+      common: [ { label: 'Full Path', xpath: '//test', type: 'fullXPath' } as PropDef ]
     };
     const result = extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
     expect(result[0].value).to.equal('');
@@ -349,7 +349,7 @@ describe('extractProperties', function() {
   it('should handle unknown type gracefully', function() {
     const el = createMockElement('bpmn:Task', createMockBusinessObject({ name: 'X' }));
     const config = {
-      common: [{ label: 'Unknown', xpath: 'name', type: 'unknownType' } as PropDef]
+      common: [ { label: 'Unknown', xpath: 'name', type: 'unknownType' } as PropDef ]
     };
     const result = extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
     expect(result[0].value).to.equal('');
@@ -362,9 +362,9 @@ describe('extractProperties', function() {
     bo['custom:priority'] = 1;
     const el = createMockElement('bpmn:Task', bo);
     const config = {
-      common: [{ label: 'Name', xpath: 'name', type: 'attribute' } as PropDef],
+      common: [ { label: 'Name', xpath: 'name', type: 'attribute' } as PropDef ],
       elementSpecific: {
-        'bpmn:Task': [{ label: 'Priority', xpath: 'custom:priority', type: 'number' } as PropDef]
+        'bpmn:Task': [ { label: 'Priority', xpath: 'custom:priority', type: 'number' } as PropDef ]
       }
     };
     const result = extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
@@ -378,7 +378,7 @@ describe('extractProperties', function() {
   it('should include propDef reference in result', function() {
     const el = createMockElement('bpmn:Task', createMockBusinessObject({ name: 'T' }));
     const propDef: PropDef = { label: 'Name', xpath: 'name', type: 'attribute' };
-    const config = { common: [propDef] };
+    const config = { common: [ propDef ] };
     const result = extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
     expect(result[0].propDef).to.equal(propDef);
   });
@@ -386,11 +386,14 @@ describe('extractProperties', function() {
   // -- error handling: includes _error on failure --
 
   it('should include _error field when extraction throws', function() {
+
     // Create a malformed config that will cause the traversal to fail in an unexpected way
     const el = createMockElement('bpmn:Task', createMockBusinessObject());
+
     // Passing a propDef with no xpath causes split() to fail, testing the catch block
     const badPropDef = { label: 'Bad', xpath: undefined as unknown as string, type: 'attribute' };
-    const config = { common: [badPropDef] };
+    const config = { common: [ badPropDef ] };
+
     // Should not throw; should return property with _error
     expect(function() {
       extractProperties(el as unknown as Parameters<typeof extractProperties>[0], config);
@@ -541,12 +544,12 @@ describe('updateProperty', function() {
     expect(createdDoc).to.not.be.null;
     expect(createdDoc!.type).to.equal('bpmn:Documentation');
     expect((createdDoc!.props as Record<string, unknown>).text).to.equal('New docs');
-    expect(updatePropsReceived!.documentation).to.deep.equal([createdDoc]);
+    expect(updatePropsReceived!.documentation).to.deep.equal([ createdDoc ]);
   });
 
   it('should update existing element text', function() {
     const docObj = { text: 'Old docs' };
-    const bo = createMockBusinessObject({ documentation: [docObj] });
+    const bo = createMockBusinessObject({ documentation: [ docObj ] });
     const el = createMockElement('bpmn:Task', bo);
     let updatedText: string | null = null;
     const modeling = {
