@@ -12,6 +12,10 @@ View and edit BPMN diagrams in [VS Code](https://code.visualstudio.com/).
 * Create from empty `.bpmn` files
 * Internationalization support (English, 中文, 日本語)
 * **Custom properties panel** — define your own editable fields in VS Code settings
+* **Dark theme support** — fully adapts to VS Code dark theme, including diagram canvas, palette, and context menus
+* **Dual-engine property resolution** — supports both Moddle object tree navigation and native XPath queries
+* **YAML/JSON embedded content editing** — edit structured YAML or JSON configs within extension elements
+* **Grouped collapsible panels** — properties organized into collapsible groups with sorting and tooltips
 
 ## Custom Properties Configuration
 

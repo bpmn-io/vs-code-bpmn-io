@@ -3,7 +3,7 @@
   "displayName": "BPMN.flex Editor",
   "description": "Edit BPMN 2.0 files, powered by bpmn.io tools. Add more custom features",
   "license": "MIT",
-  "version": "0.19.0",
+  "version": "0.20.0",
   "publisher": "gikoyo",
   "repository": {
     "type": "git",
@@ -270,7 +270,7 @@
     "@types/sinon": "^17.0.3",
     "@types/sinon-chai": "^3.2.12",
     "@types/vscode": "1.79.0",
-    "@vscode/test-electron": "^2.4.1",
+    "@vscode/test-electron": "^3.1.0",
     "chai": "^4.5.0",
     "eslint": "^9.14.0",
     "eslint-plugin-bpmn-io": "^2.0.2",

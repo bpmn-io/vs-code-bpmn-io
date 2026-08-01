@@ -16,7 +16,9 @@ async function main() {
     const extensionTestsPath = path.resolve(__dirname, './suite/index');
 
     // Download VS Code, unzip it and run the integration test
-    await runTests({ extensionDevelopmentPath, extensionTestsPath });
+    // Pin to a known-stable version to avoid ENOENT issues
+    // with bleeding-edge VS Code releases on macOS (e.g. 1.131.0 changed .app structure)
+    await runTests({ extensionDevelopmentPath, extensionTestsPath, version: '1.100.2' });
   } catch (err) {
     process.exit(1);
   }
