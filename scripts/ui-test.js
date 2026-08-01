@@ -169,16 +169,16 @@ const bpmnXML = `<?xml version="1.0" encoding="UTF-8"?>
     // 4. Sidebar & Custom Properties
     console.log('Testing Sidebar & Custom Properties...');
 
-    // Inject configuration
+    // Inject configuration (new schema: source/control/path/engine/field/format)
     const customConfig = {
       common: [
-        { label: 'Documentation', xpath: 'bpmn:documentation', type: 'elementText' },
-        { label: 'Name', xpath: 'name', type: 'attribute' },
-        { label: 'Start Date', xpath: 'custom:startDate', type: 'date' },
-        { label: 'Priority', xpath: 'custom:priority', type: 'number' },
-        { label: 'Is Active', xpath: 'custom:isActive', type: 'boolean' },
-        { label: 'Nested Prop', xpath: 'custom:nested/custom:val', type: 'attribute' },
-        { label: 'Retry Count', xpath: 'bpmn:documentation', type: 'json', jsonPath: 'retry.count', inputType: 'number' }
+        { label: 'Documentation', path: 'bpmn:documentation', source: 'text', control: 'textarea' },
+        { label: 'Name', path: '@name', source: 'attribute', control: 'text' },
+        { label: 'Start Date', path: '@custom:startDate', source: 'attribute', control: 'date' },
+        { label: 'Priority', path: '@custom:priority', source: 'attribute', control: 'number' },
+        { label: 'Is Active', path: '@custom:isActive', source: 'attribute', control: 'boolean' },
+        { label: 'Nested Prop', path: 'custom:nested/custom:val', source: 'attribute', control: 'text' },
+        { label: 'Retry Count', path: 'bpmn:documentation', source: 'embedded', format: 'json', field: 'retry.count', control: 'number' }
       ]
     };
 
@@ -199,40 +199,47 @@ const bpmnXML = `<?xml version="1.0" encoding="UTF-8"?>
     // 5. Test Editing
     console.log('Testing Editing...');
 
-    // Wait for the properties form to render
+    // Wait for the properties form to render (Documentation uses textarea control)
     const textareaSelector = '#custom-properties-content textarea';
-    await page.waitForSelector(textareaSelector);
+    await page.waitForSelector(textareaSelector, { timeout: 10000 });
+
+    // Properties render as direct children of #custom-properties-content when no 'group' is specified.
+    // Order: Documentation(0), Name(1), Start Date(2), Priority(3), Is Active(4), Nested Prop(5), Retry Count(6)
+    // Note: nth-child is 1-indexed in CSS.
 
     // Update Date (3rd prop-row: Documentation → Name → Start Date)
-    const dateInputSelector = '#custom-properties-content .prop-row:nth-child(3) input';
+    const dateInputSelector = '#custom-properties-content > .prop-row:nth-child(3) input';
     await page.evaluate((sel) => {
         const el = document.querySelector(sel);
+        if (!el) throw new Error('Date input not found: ' + sel);
         el.value = '2023-12-31';
         el.dispatchEvent(new Event('change'));
     }, dateInputSelector);
 
     // Update Number (4th prop-row: Priority)
-    const numInputSelector = '#custom-properties-content .prop-row:nth-child(4) input';
+    const numInputSelector = '#custom-properties-content > .prop-row:nth-child(4) input';
     await page.evaluate((sel) => {
         const el = document.querySelector(sel);
+        if (!el) throw new Error('Number input not found: ' + sel);
         el.value = '99';
         el.dispatchEvent(new Event('change'));
     }, numInputSelector);
 
     // Update Boolean (5th prop-row: Is Active)
-    const boolInputSelector = '#custom-properties-content .prop-row:nth-child(5) select';
-    await page.select(boolInputSelector, 'false');
+    const boolInputSelector = '#custom-properties-content > .prop-row:nth-child(5) select';
     await page.evaluate((sel) => {
         const el = document.querySelector(sel);
+        if (!el) throw new Error('Boolean select not found: ' + sel);
+        el.value = 'false';
         el.dispatchEvent(new Event('change'));
     }, boolInputSelector);
 
-    // Update JSON Number (last prop-row: Retry Count)
-    // Nested Prop is skipped because custom:nested/custom:val doesn't exist in the XML
-    const jsonInputSelector = '#custom-properties-content .prop-row:last-child input';
-    await page.waitForSelector(jsonInputSelector);
+    // Update JSON Number (7th prop-row: Retry Count)
+    const jsonInputSelector = '#custom-properties-content > .prop-row:nth-child(7) input';
+    await page.waitForSelector(jsonInputSelector, { timeout: 5000 });
     await page.evaluate((sel) => {
         const el = document.querySelector(sel);
+        if (!el) throw new Error('JSON number input not found: ' + sel);
         el.value = '10';
         el.dispatchEvent(new Event('change'));
     }, jsonInputSelector);

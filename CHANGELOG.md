@@ -44,6 +44,7 @@ The custom properties system has been completely redesigned with a new, more pow
 - Added `mocha-junit-reporter` for CI test reporting
 - ESLint config enhancements
 - UI test scripts now capture screenshots for multiple languages (EN/ZH/JA) and sidebar states
+- Fixed UI test config schema and selectors to match refactored property system
 
 ### ✅ Testing
 
