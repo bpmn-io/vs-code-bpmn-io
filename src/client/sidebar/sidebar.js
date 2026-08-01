@@ -730,45 +730,135 @@ export default class Sidebar {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
 
-    // Render properties as flat rows (no grouping)
-    properties.forEach(function(prop) {
-      const row = document.createElement('div');
-      row.className = 'prop-row';
+    // Group properties
+    var groups = self._groupProperties(properties);
 
-      // Label
-      const label = document.createElement('label');
-      label.className = 'prop-label';
-      label.textContent = prop.label;
+    if (groups._ungrouped) {
 
-      if (prop._error) {
-        const errorBadge = document.createElement('span');
-        errorBadge.className = 'prop-error-badge';
-        errorBadge.textContent = '⚠';
-        errorBadge.title = prop._error;
-        label.appendChild(errorBadge);
-      }
-      row.appendChild(label);
+      // Properties without a group: render flat
+      groups._ungrouped.forEach(function(prop) {
+        var row = self._renderPropertyRow(prop, onUpdate);
+        self.customPropertiesContent.appendChild(row);
+      });
+    }
 
-      // Input
-      const input = self._createInput(prop, onUpdate);
-      row.appendChild(input);
+    // Render named groups as collapsible sections
+    var groupNames = Object.keys(groups).filter(function(k) { return k !== '_ungrouped'; });
+    groupNames.forEach(function(groupName) {
+      var groupProps = groups[groupName];
 
-      self.customPropertiesContent.appendChild(row);
+      var section = document.createElement('div');
+      section.className = 'prop-group-section';
+
+      // Group header
+      var header = document.createElement('div');
+      header.className = 'prop-group-header';
+      header.innerHTML = '<span class="prop-group-title">' + self._escapeHtml(groupName) + '</span>' +
+                         '<span class="prop-group-toggle">▾</span>';
+      header.addEventListener('click', function() {
+        section.classList.toggle('collapsed');
+      });
+      section.appendChild(header);
+
+      // Group body
+      var body = document.createElement('div');
+      body.className = 'prop-group-body';
+      groupProps.forEach(function(prop) {
+        body.appendChild(self._renderPropertyRow(prop, onUpdate));
+      });
+      section.appendChild(body);
+
+      self.customPropertiesContent.appendChild(section);
     });
+  }
+
+  /**
+   * Group properties by their 'group' field, sorted by 'order'.
+   * @param {Array} properties
+   * @returns {Object} { groupName: [props...], _ungrouped: [props...] }
+   */
+  _groupProperties(properties) {
+    var groups = { _ungrouped: [] };
+    properties.forEach(function(prop) {
+      var pd = prop.propDef || {};
+      var group = pd.group || '_ungrouped';
+      if (!groups[group]) groups[group] = [];
+      groups[group].push(prop);
+    });
+
+    // Sort each group by 'order'
+    Object.keys(groups).forEach(function(k) {
+      groups[k].sort(function(a, b) {
+        var oa = (a.propDef && a.propDef.order !== undefined) ? a.propDef.order : 999;
+        var ob = (b.propDef && b.propDef.order !== undefined) ? b.propDef.order : 999;
+        return oa - ob;
+      });
+    });
+
+    return groups;
+  }
+
+  /**
+   * Render a single property row.
+   * @param {Object} prop - { label, value, propDef, _error }
+   * @param {function} onUpdate
+   * @returns {HTMLElement}
+   */
+  _renderPropertyRow(prop, onUpdate) {
+    // eslint-disable-next-line @typescript-eslint/no-this-alias
+    var self = this;
+    var pd = prop.propDef || {};
+
+    var row = document.createElement('div');
+    row.className = 'prop-row';
+
+    // Label
+    var label = document.createElement('label');
+    label.className = 'prop-label';
+    label.textContent = prop.label;
+
+    // Description tooltip
+    if (pd.description) {
+      var tip = document.createElement('span');
+      tip.className = 'prop-label-tip';
+      tip.textContent = '?';
+      tip.title = pd.description;
+      label.appendChild(tip);
+    }
+
+    // Error badge
+    if (prop._error) {
+      var errorBadge = document.createElement('span');
+      errorBadge.className = 'prop-error-badge';
+      errorBadge.textContent = '⚠';
+      errorBadge.title = prop._error;
+      label.appendChild(errorBadge);
+    }
+    row.appendChild(label);
+
+    // Input
+    var input = self._createInput(prop, onUpdate);
+    row.appendChild(input);
+
+    return row;
   }
 
   _createInput(prop, onUpdate) {
     // eslint-disable-next-line @typescript-eslint/no-this-alias
     const self = this;
     const pd = prop.propDef || {};
-    const type = pd.inputType || pd.type;
+    const control = pd.control || 'text';
     let input;
 
-    switch (type) {
-    case 'elementText':
+    switch (control) {
+    case 'textarea':
+    case 'code':
       input = document.createElement('textarea');
-      input.rows = 4;
+      input.rows = control === 'code' ? 8 : 4;
       input.className = 'prop-input';
+      if (control === 'code') {
+        input.classList.add('prop-input-code');
+      }
       break;
     case 'date':
       input = document.createElement('input');
@@ -789,32 +879,58 @@ export default class Sidebar {
       input.appendChild(self._option(self._t('sidebar.boolean.true'), 'true'));
       input.appendChild(self._option(self._t('sidebar.boolean.false'), 'false'));
       break;
+    case 'select':
+      input = document.createElement('select');
+      input.className = 'prop-input';
+      if (pd.options && pd.options.length > 0) {
+        pd.options.forEach(function(opt) {
+          input.appendChild(self._option(opt.label, opt.value));
+        });
+      }
+      break;
     default:
+
+      // 'text' or fallback
       input = document.createElement('input');
       input.type = 'text';
       input.className = 'prop-input';
     }
 
+    // Placeholder
+    if (pd.placeholder) {
+      input.placeholder = pd.placeholder;
+    }
+
     // Set value
-    if (type === 'boolean') {
-      if (prop.value === '1' || prop.value === '0') {
+    if (control === 'boolean') {
+      var boolVal = String(prop.value);
+      if (boolVal === '1' || boolVal === '0') {
+
+        // Update option values for 0/1 convention
         input.options[0].value = '1';
         input.options[1].value = '0';
-        input.value = prop.value;
+        input.value = boolVal;
       } else {
-        input.value = String(prop.value) === 'true' ? 'true' : 'false';
+        input.value = (boolVal === 'true') ? 'true' : 'false';
       }
     } else {
       input.value = prop.value != null ? prop.value : '';
     }
 
+    // Default value for empty
+    if (!prop.value && pd.defaultValue !== undefined && pd.defaultValue !== null) {
+      input.value = String(pd.defaultValue);
+    }
+
     // Event handlers
-    if (onUpdate && pd.type) {
+    if (onUpdate && pd.source) {
       input.addEventListener('change', function(e) {
         const validation = self._validateInput(pd, e.target.value);
         if (!validation.valid) {
           self._showInputError(e.target, validation.error);
-          e.target.value = prop.value;
+
+          // Revert to saved value
+          e.target.value = prop.value != null ? prop.value : '';
           return;
         }
         self._clearInputError(e.target);
@@ -827,7 +943,9 @@ export default class Sidebar {
           self._clearInputError(e.target);
         }
       });
-    } else {
+    } else if (!pd.source) {
+
+      // No source = read-only display (but still show the value)
       input.disabled = true;
     }
 
@@ -850,9 +968,9 @@ export default class Sidebar {
   _validateInput(propDef, value) {
     if (!propDef) return { valid: true, error: null };
 
-    const type = propDef.inputType || propDef.type;
+    const control = propDef.control || 'text';
 
-    if (type === 'number') {
+    if (control === 'number') {
       if (value !== '' && isNaN(Number(value))) {
         return { valid: false, error: this._t('sidebar.validation.invalidNumber') };
       }
@@ -864,9 +982,22 @@ export default class Sidebar {
       }
     }
 
-    if (type === 'date') {
+    if (control === 'date') {
       if (value !== '' && !/^\d{4}-\d{2}-\d{2}$/.test(value)) {
         return { valid: false, error: this._t('sidebar.validation.invalidDate') };
+      }
+    }
+
+    // Pattern validation
+    if (propDef.pattern && value !== '') {
+      try {
+        var re = new RegExp(propDef.pattern);
+        if (!re.test(value)) {
+          return { valid: false, error: this._t('sidebar.validation.patternMismatch') };
+        }
+      } catch (_e) {
+
+        // Invalid regex in config, skip
       }
     }
 

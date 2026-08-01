@@ -94,54 +94,149 @@
       "properties": {
         "bpmn-flex.commonProperties": {
           "type": "array",
-          "description": "Define common properties applicable to all BPMN elements.",
+          "description": "Custom properties applicable to all BPMN elements. Each property defines a data source, UI control, and metadata.",
           "items": {
-            "type": "object",
-            "title": "Common Property",
-            "properties": {
-              "label": {
-                "type": "string",
-                "description": "The display label for the property."
-              },
-              "xpath": {
-                "type": "string",
-                "description": "The XPath expression to select the property's value from the BPMN XML."
-              }
-            },
-            "required": [
-              "label",
-              "xpath"
-            ]
+            "$ref": "#/definitions/propertyDefinition"
           },
           "default": []
         },
         "bpmn-flex.elementSpecificProperties": {
           "type": "object",
-          "description": "Define properties specific to certain BPMN element types. Use the BPMN element type (e.g., 'bpmn:Task', 'bpmn:UserTask') as the key.",
+          "description": "Properties specific to certain BPMN element types. Key = BPMN element type (e.g. 'bpmn:Task', 'bpmn:Process').",
           "additionalProperties": {
             "type": "array",
-            "description": "Properties for the specified element type.",
+            "description": "Properties for this element type.",
             "items": {
-              "type": "object",
-              "title": "Element Specific Property",
-              "properties": {
-                "label": {
-                  "type": "string",
-                  "description": "The display label for the property."
-                },
-                "xpath": {
-                  "type": "string",
-                  "description": "The XPath expression to select the property's value from the BPMN XML for this element type."
-                }
-              },
-              "required": [
-                "label",
-                "xpath"
-              ]
+              "$ref": "#/definitions/propertyDefinition"
             },
             "default": []
           },
           "default": {}
+        }
+      },
+      "definitions": {
+        "propertyDefinition": {
+          "type": "object",
+          "title": "Property Definition",
+          "required": [
+            "label",
+            "path",
+            "source",
+            "control"
+          ],
+          "properties": {
+            "label": {
+              "type": "string",
+              "description": "Display label shown in the sidebar."
+            },
+            "path": {
+              "type": "string",
+              "description": "Path to the data within the BPMN element. For engine=moddle (default): '@attrName' for attributes, 'ns:elemName' for child elements, '/' to nest. For engine=xpath: real XPath expression (e.g., '@name', 'bpmn:documentation/text()')."
+            },
+            "engine": {
+              "type": "string",
+              "enum": [
+                "moddle",
+                "xpath"
+              ],
+              "description": "Resolution engine: 'moddle' (default) navigates the BPMN moddle object tree, 'xpath' uses real XML XPath queries against the serialized diagram."
+            },
+            "source": {
+              "type": "string",
+              "enum": [
+                "attribute",
+                "text",
+                "embedded"
+              ],
+              "description": "Data source type: 'attribute' = XML attribute value, 'text' = child element text content, 'embedded' = parsed field inside child element text (JSON or YAML)."
+            },
+            "control": {
+              "type": "string",
+              "enum": [
+                "text",
+                "textarea",
+                "number",
+                "boolean",
+                "date",
+                "select",
+                "code"
+              ],
+              "description": "UI control type for editing the value."
+            },
+            "format": {
+              "type": "string",
+              "enum": [
+                "json",
+                "yaml"
+              ],
+              "description": "Format of the embedded content (required when source='embedded')."
+            },
+            "field": {
+              "type": "string",
+              "description": "Dot-separated path to the field inside embedded JSON/YAML content (used with source='embedded'). Example: 'service.name', 'retry.count'."
+            },
+            "options": {
+              "type": "array",
+              "description": "Dropdown options (required when control='select').",
+              "items": {
+                "type": "object",
+                "required": [
+                  "label",
+                  "value"
+                ],
+                "properties": {
+                  "label": {
+                    "type": "string",
+                    "description": "Option display text."
+                  },
+                  "value": {
+                    "type": "string",
+                    "description": "Option value."
+                  }
+                }
+              }
+            },
+            "min": {
+              "type": "number",
+              "description": "Minimum value (control='number')."
+            },
+            "max": {
+              "type": "number",
+              "description": "Maximum value (control='number')."
+            },
+            "step": {
+              "type": "number",
+              "description": "Step increment (control='number')."
+            },
+            "pattern": {
+              "type": "string",
+              "description": "Regular expression for input validation."
+            },
+            "defaultValue": {
+              "type": "string",
+              "description": "Default value when creating a new element."
+            },
+            "placeholder": {
+              "type": "string",
+              "description": "Placeholder text shown when the input is empty."
+            },
+            "description": {
+              "type": "string",
+              "description": "Help text shown as a tooltip on hover."
+            },
+            "group": {
+              "type": "string",
+              "description": "Group name for collapsible sections in the sidebar."
+            },
+            "order": {
+              "type": "number",
+              "description": "Sort order within the group (lower = first)."
+            },
+            "autoCreate": {
+              "type": "boolean",
+              "description": "When true (default), missing intermediate moddle objects are automatically created during property updates. Set to false to disable."
+            }
+          }
         }
       }
     }
@@ -196,7 +291,7 @@
   },
   "dependencies": {
     "@vscode/codicons": "^0.0.35",
-    "bpmn-js": "^18.6.1",
+    "bpmn-js": "^18.22.1",
     "bpmn-js-color-picker": "^0.7.1",
     "bpmn-js-i18n": "^2.3.0",
     "tslib": "^2.8.1",

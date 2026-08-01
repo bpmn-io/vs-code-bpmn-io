@@ -15,7 +15,7 @@ export const customTranslations = {
     'sidebar.noSelection': '未選択',
     'sidebar.noSelection.desc': 'BPMN要素を選択するか、上記のルート要素を選んでください。',
     'sidebar.noProperties': 'プロパティなし',
-    'sidebar.noProperties.desc': 'この要素タイプにはカスタムプロパティが<br>設定されていません。',
+    'sidebar.noProperties.desc': 'この要素タイプにはカスタムプロパティが<br>設定されていません。<br><br>VS Code設定で <code>bpmn-flex.commonProperties</code> や<br><code>bpmn-flex.elementSpecificProperties</code> を<br>追加してください。',
     'sidebar.standalone': 'スタンドアロン',
 
     // Collaboration tooltip
@@ -38,6 +38,7 @@ export const customTranslations = {
     'sidebar.validation.minValue': '最小値は {min}',
     'sidebar.validation.maxValue': '最大値は {max}',
     'sidebar.validation.invalidDate': '有効な日付を入力してください (YYYY-MM-DD)',
+    'sidebar.validation.patternMismatch': '入力形式が一致しません',
 
     // Boolean select
     'sidebar.boolean.true': 'はい',
@@ -78,7 +79,7 @@ export const customTranslations = {
     'sidebar.noSelection': '未选择',
     'sidebar.noSelection.desc': '选择一个 BPMN 元素，或在上方根元素中选择。',
     'sidebar.noProperties': '无属性',
-    'sidebar.noProperties.desc': '此元素类型没有配置<br>自定义属性。',
+    'sidebar.noProperties.desc': '此元素类型没有配置自定义属性。<br><br>请在 VS Code 设置中添加<br><code>bpmn-flex.commonProperties</code> 或<br><code>bpmn-flex.elementSpecificProperties</code>。',
     'sidebar.standalone': '独立',
 
     // Collaboration tooltip
@@ -101,6 +102,7 @@ export const customTranslations = {
     'sidebar.validation.minValue': '最小值为 {min}',
     'sidebar.validation.maxValue': '最大值为 {max}',
     'sidebar.validation.invalidDate': '请输入有效日期 (YYYY-MM-DD)',
+    'sidebar.validation.patternMismatch': '输入格式不匹配',
 
     // Boolean select
     'sidebar.boolean.true': '是',
@@ -141,7 +143,7 @@ export const customTranslations = {
     'sidebar.noSelection': 'No Selection',
     'sidebar.noSelection.desc': 'Select a BPMN element on the canvas\nor choose a Root Element above.',
     'sidebar.noProperties': 'No Properties',
-    'sidebar.noProperties.desc': 'No custom properties configured<br>for this element type.',
+    'sidebar.noProperties.desc': 'No custom properties configured for this element type.<br><br>Add <code>bpmn-flex.commonProperties</code> or<br><code>bpmn-flex.elementSpecificProperties</code><br>in your VS Code settings.',
     'sidebar.standalone': 'standalone',
 
     // Collaboration tooltip
@@ -164,6 +166,7 @@ export const customTranslations = {
     'sidebar.validation.minValue': 'Minimum value is {min}',
     'sidebar.validation.maxValue': 'Maximum value is {max}',
     'sidebar.validation.invalidDate': 'Please enter a valid date (YYYY-MM-DD)',
+    'sidebar.validation.patternMismatch': 'Input does not match the required pattern',
 
     // Boolean select
     'sidebar.boolean.true': 'True',
@@ -173,7 +176,7 @@ export const customTranslations = {
     'sidebar.info.name': 'Name',
     'sidebar.info.id': 'ID',
     'sidebar.info.type': 'Type',
-    'sidebar.info.noConfig': 'No configured custom properties for this element type.',
+    'sidebar.info.noConfig': 'No custom properties configured for this element type.<br><br>Add <code>bpmn-flex.commonProperties</code> or<br><code>bpmn-flex.elementSpecificProperties.&lt;elementType&gt;</code><br>in your VS Code settings.',
     'sidebar.info.selectHint': 'Select a BPMN element or choose a Root Element above to see its properties.',
 
     // Misc

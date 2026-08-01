@@ -1,6 +1,8 @@
 # 自定义属性面板 - 开发状态 & Roadmap
 
 > 更新日期: 2025-07-21
+>
+> **Phase 1: ✅ 完成 | Phase 2: ✅ 完成 | Phase 3: 待开始**
 
 ---
 
@@ -43,10 +45,10 @@
 
 | 问题 | 严重程度 | 位置 | 说明 |
 |------|----------|------|------|
-| **`fullXPath` 类型** | 中 | `customPropsExtractor.js:103` | 已声明但标记为 TODO，从未实现 |
-| **非真实 XPath** | 中 | `customPropsExtractor.js` | 用 `/` 分割路径手动遍历 moddle 对象，不是基于 XML 的真正 XPath 引擎。对简单路径有效，但对带条件的 XPath 表达式（如 `//bpmn:Task[@name='foo']`）无效 |
-| **中间路径缺失** | 中 | `customPropsExtractor.js:138-142` | 更新属性时如果中间路径对象不存在，仅 `console.warn` 后 return，不自动创建 |
-| **语言切换重建** | 低 | `bpmn-editor.js:48-65` | 切换语言时 `modeler.destroy()` + 重新 `new BpmnModeler` + `importXML`，性能开销大 |
+| **`fullXPath` 类型** | ~~中~~ ✅ | `customPropsExtractor.js` | Phase 2.1 已实现，使用浏览器原生 DOMParser + XPath |
+| **中间路径缺失** | ~~中~~ ✅ | `customPropsExtractor.js` | Phase 2.2 已实现，自动用 moddle.create() 补全 |
+| **语言切换重建** | ~~低~~ ✅ | `bpmn-editor.js` | Phase 2.5 已优化，改为 saveXML → importXML |
+| **非真实 XPath** | 低 | `customPropsExtractor.js` | 现在支持两种引擎：moddle（默认）和 xpath（真实 XPath） |
 | **单元素选择** | 低 | `bpmn-editor.js:111-130` | 仅处理 `newSelection.length === 1`，多选时显示占位符 |
 
 ---
@@ -55,10 +57,8 @@
 
 | 缺失功能 | 优先级 | 说明 |
 |----------|--------|------|
-| **单元测试** | 🔴 高 | `extension.test.ts` 只测了配置是否存在，没有测 `extractProperties`/`updateProperty` 逻辑 |
-| **输入验证** | 🔴 高 | number 类型不限制范围，date 不校验格式，boolean 不处理异常值 |
-| **暗色主题** | 🟡 中 | 侧边栏硬编码 `#f5f5f5`、`#333` 等亮色值，VS Code 暗色主题下不协调 |
-| **内联样式到 CSS** | 🟡 中 | `sidebar.js` 中大量 `input.style.xxx`，应迁移到 CSS 类 |
+| **暗色主题** | ~~🟡 中~~ ✅ | Phase 2.3 已修复，CSS 全面使用 VS Code 变量 |
+| **内联样式到 CSS** | ~~🟡 中~~ ✅ | Phase 2.4 已完成，sidebar.js 无内联样式 |
 | **错误用户提示** | 🟡 中 | 错误仅 `console.warn`，用户看不到；侧边栏显示 "Error evaluating" 不友好 |
 | **属性排序** | 🟢 低 | 按配置数组顺序，不支持拖拽重排 |
 | **默认值** | 🟢 低 | 新建元素时属性为空，无默认值概念 |
@@ -102,34 +102,41 @@
 
 ---
 
-### Phase 2: 完善 & 补全（中期 - 2~4 周）
+### Phase 2: 完善 & 补全（中期 - 2~4 周） ✅ 已完成
 
 ```
 目标：补齐半完成功能，解决已知痛点
 ```
 
-- [ ] **2.1 实现 `fullXPath` 类型**
-  - 将 businessObject 序列化为 XML (DOM)
-  - 使用 `xmldom` + `xpath` 库做真正的 XPath 查询
-  - 性能考虑：缓存序列化结果，仅在 XML 变更时刷新
+- [x] **2.1 实现 `fullXPath` 类型**
+  - 新增 `engine` 字段（`'moddle'` 默认 / `'xpath'` 真实 XPath）
+  - 使用浏览器原生 `DOMParser` + `XPathEvaluator` 执行真实 XPath 查询
+  - 自动收集 XML 命名空间，支持带前缀的 XPath 表达式
+  - 支持属性、元素文本、内嵌字段的读写
+  - Async 模式：moddle 属性同步渲染，XPath 属性异步获取后合并
+  - 错误降级：XPath 失败时保留 moddle 提取结果
 
-- [ ] **2.2 中间路径自动创建**
-  - updateProperty 时若中间对象缺失，自动用 `moddle.create()` 创建
-  - 提供 `autoCreate` 配置开关，默认开启
+- [x] **2.2 中间路径自动创建**
+  - `updateProperty` 时若中间对象缺失，自动用 `moddle.create()` 创建
+  - 智能推断 moddle 类型（从命名空间前缀和父类型推断）
+  - `autoCreate` 配置开关（默认开启），可设为 `false` 禁用
+  - 创建失败时友好降级（打 warn 并跳过）
 
-- [ ] **2.3 暗色主题适配**
-  - 使用 VS Code CSS variables（`--vscode-editor-background` 等）
-  - 或通过 webview postMessage 传递主题信息
-  - 监听 `vscode.window.onDidChangeActiveColorTheme`
+- [x] **2.3 暗色主题适配** ✅ (2025-07 复查：升级 bpmn-js 18.22.1 + diagram-js 15.23.2 后重新应用)
+  - 全面使用 VS Code CSS 变量覆写 diagram-js 的 50+ 颜色 token
+  - 调色板、Context-Pad、Popup、Search、Canvas、Resizer 等全部适配
+  - BpmnModeler 构造时传入 `defaultFillColor`/`defaultStrokeColor`/`defaultLabelColor`
+  - CSS 形状填充 + 标签颜色安全网确保主题切换后仍可读
 
-- [ ] **2.4 样式重构**
-  - 将 `sidebar.js` 中内联样式提取到 `sidebar.css`
-  - 使用 BEM 或类似命名规范
-  - 清理注释掉的 collapse 动画代码
+- [x] **2.4 样式重构**
+  - sidebar.js 中无内联样式，全部在 sidebar.css 中
+  - 使用 CSS 变量 + BEM 风格命名
+  - 已通过 `--fix` 修复所有 `lines-around-comment` lint 警告
 
-- [ ] **2.5 语言切换优化**
-  - 探索不销毁 Modeler 的语言切换方式
-  - 或至少保留状态（选中、视口位置、undo stack）
+- [x] **2.5 语言切换优化**
+  - 从"销毁 Modeler + 重建"改为"saveXML → importXML"
+  - 避免 DOM 重建开销和事件监听器重新注册
+  - 仍能刷新 bpmn-js 的调色板、标签等 UI 文字
 
 ---
 
@@ -192,7 +199,7 @@
 
 ```
 Phase 1 (已完成)   → 1.3 输入验证 ✅ → 1.4 错误处理 ✅ → 1.1/1.2 单元测试 ✅ (47 tests)
-Phase 2 (下一步)  → 2.4 样式重构 → 2.3 暗色主题 → 2.2 自动创建 → 2.5 语言切换
+Phase 2 (✅ 已完成) → Phase 3 (下一步)
 Phase 3 (按需)    → 根据用户反馈选择 3.1~3.7
 ```
 

@@ -3,8 +3,8 @@ import zhTranslations from 'bpmn-js-i18n/translations/zn';
 import enTranslations from 'bpmn-js-i18n/translations/en';
 import { customTranslations } from './customTranslations';
 
-// 当前语言，默认为日语
-let currentLanguage = 'ja';
+// 当前语言，默认与 sidebar 保持一致为英文
+let currentLanguage = 'en';
 
 // 语言映射(合并原生和自定义翻译)
 const translations = {

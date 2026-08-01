@@ -1,7 +1,7 @@
 import * as vscode from 'vscode';
 import { Disposable, disposeAll } from './dispose';
 import { getNonce } from './util';
-import type { CustomPropertiesConfig } from './extension.js';
+import type { CustomPropertiesConfig, PropertyDefinition } from './extension.js';
 
 /**
  * Define the type of edits used in paw draw files.
@@ -318,9 +318,22 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
 
         const tabs = [ ...opened, ...changed ];
         const active = tabs.find(tab => tab.isActive);
-        const uri = (active?.input as vscode.TabInputText)?.uri;
-        const webviews = Array.from(this.webviews.get(uri));
 
+        // Only restore focus if one of OUR tabs became active (user switched
+        // to the BPMN editor). Ignore tab changes where our editor was already
+        // active — this prevents stealing focus from VS Code quick-pick menus
+        // (e.g. theme selector, command palette) which can trigger spurious
+        // tab change events.
+        if (!active) return;
+
+        const uri = (active.input as vscode.TabInputText)?.uri;
+        if (!uri) return;
+
+        // Check this tab is in the OPENED set (user just switched to it)
+        const isNewlyActivated = opened.some(tab => tab.input && (tab.input as vscode.TabInputText).uri?.toString() === uri.toString());
+        if (!isNewlyActivated) return;
+
+        const webviews = Array.from(this.webviews.get(uri));
         if (!webviews.length) return;
 
         this.restoreFocusOnCanvas(webviews[0]);
@@ -539,8 +552,8 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
    */
   private reloadAndSendConfig(panel: vscode.WebviewPanel): void {
     const config = vscode.workspace.getConfiguration('bpmn-flex');
-    const commonProps = config.get<Array<{ label: string; xpath: string }>>('commonProperties');
-    const elementSpecificProps = config.get<Record<string, Array<{ label: string; xpath: string }>>>('elementSpecificProperties');
+    const commonProps = config.get<PropertyDefinition[]>('commonProperties');
+    const elementSpecificProps = config.get<Record<string, PropertyDefinition[]>>('elementSpecificProperties');
 
     this.customPropertiesConfig = {
       common: commonProps || [],
@@ -557,8 +570,8 @@ export class BpmnEditor implements vscode.CustomEditorProvider<BpmnDocument> {
    */
   public broadcastConfigRefresh(): void {
     const config = vscode.workspace.getConfiguration('bpmn-flex');
-    const commonProps = config.get<Array<{ label: string; xpath: string }>>('commonProperties');
-    const elementSpecificProps = config.get<Record<string, Array<{ label: string; xpath: string }>>>('elementSpecificProperties');
+    const commonProps = config.get<PropertyDefinition[]>('commonProperties');
+    const elementSpecificProps = config.get<Record<string, PropertyDefinition[]>>('elementSpecificProperties');
 
     this.customPropertiesConfig = {
       common: commonProps || [],

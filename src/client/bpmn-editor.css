@@ -14,6 +14,132 @@ body {
   background: var(--vscode-editor-background, #fff);
 }
 
+/* ══════════════════════════════════════════════════════
+   bpmn-js / diagram-js Dark Theme via CSS Variable Override
+
+   diagram-js exposes all colors as CSS custom properties under
+   .djs-parent (canvas, palette, context-pad, popups) and
+   .bjs-container (breadcrumbs). We map them to VS Code theme
+   tokens so the entire editor UI follows the active theme.
+   This is the recommended theming approach per diagram-js docs.
+   ══════════════════════════════════════════════════════ */
+
+.djs-parent {
+  /* ── Base color tokens ── */
+  --color-white:           var(--vscode-editor-background, #fff);
+  --color-black:           var(--vscode-editor-foreground, #000);
+  --color-black-opacity-10: var(--vscode-editor-foreground, hsla(0, 0%, 0%, 10%));
+  --color-black-opacity-30: var(--vscode-editor-foreground, hsla(0, 0%, 0%, 30%));
+
+  /* ── Grey scale (light → dark in dark theme) ── */
+  --color-grey-225-10-15:  var(--vscode-foreground, hsl(225, 10%, 15%));
+  --color-grey-225-10-35:  var(--vscode-foreground, hsl(225, 10%, 35%));
+  --color-grey-225-10-55:  var(--vscode-descriptionForeground, hsl(225, 10%, 55%));
+  --color-grey-225-10-75:  var(--vscode-sideBar-border, hsl(225, 10%, 75%));
+  --color-grey-225-10-80:  var(--vscode-panel-border, hsl(225, 10%, 80%));
+  --color-grey-225-10-85:  var(--vscode-sideBar-border, hsl(225, 10%, 85%));
+  --color-grey-225-10-90:  var(--vscode-list-inactiveSelectionBackground, hsl(225, 10%, 90%));
+  --color-grey-225-10-95:  var(--vscode-list-hoverBackground, hsl(225, 10%, 95%));
+  --color-grey-225-10-97:  var(--vscode-sideBar-background, hsl(225, 10%, 97%));
+
+  /* ── Accent blue (follow VS Code focus color) ── */
+  --color-blue-205-100-45:           var(--vscode-focusBorder, hsl(205, 100%, 45%));
+  --color-blue-205-100-45-opacity-30: hsla(205, 100%, 45%, 30%);
+  --color-blue-205-100-50:           var(--vscode-focusBorder, hsl(205, 100%, 50%));
+  --color-blue-205-100-50-opacity-15: hsla(205, 100%, 50%, 15%);
+  --color-blue-205-100-70:           var(--vscode-textLink-foreground, hsl(205, 100%, 75%));
+  --color-blue-205-100-95:           var(--vscode-list-activeSelectionBackground, hsla(205, 100%, 95%, 1));
+
+  /* ── Semantic tokens ── */
+  --canvas-fill-color:                        var(--vscode-editor-background, #fff);
+  --bendpoint-fill-color:                     var(--vscode-focusBorder, hsl(205, 100%, 45%));
+  --bendpoint-stroke-color:                   var(--vscode-editor-background, #fff);
+  --context-pad-entry-background-color:       var(--vscode-input-background, #fff);
+  --context-pad-entry-hover-background-color: var(--vscode-list-hoverBackground, hsl(225, 10%, 95%));
+  --element-dragger-color:                    var(--vscode-focusBorder, hsl(205, 100%, 50%));
+  --element-hover-outline-fill-color:         var(--vscode-focusBorder, hsl(205, 100%, 45%));
+  --element-selected-outline-stroke-color:    var(--vscode-focusBorder, hsl(205, 100%, 50%));
+  --element-selected-outline-secondary-stroke-color: var(--vscode-textLink-foreground, hsl(205, 100%, 70%));
+  --lasso-fill-color:                         hsla(205, 100%, 50%, 15%);
+  --lasso-stroke-color:                       var(--vscode-focusBorder, hsl(205, 100%, 50%));
+
+  /* ── Palette (left toolbar) ── */
+  --palette-entry-color:                  var(--vscode-sideBar-foreground, hsl(225, 10%, 15%));
+  --palette-entry-hover-color:            var(--vscode-focusBorder, hsl(205, 100%, 45%));
+  --palette-entry-selected-color:         var(--vscode-focusBorder, hsl(205, 100%, 50%));
+  --palette-separator-color:              var(--vscode-sideBar-border, hsl(225, 10%, 75%));
+  --palette-toggle-hover-background-color: var(--vscode-list-hoverBackground, hsl(225, 10%, 55%));
+  --palette-background-color:             var(--vscode-sideBar-background, hsl(225, 10%, 97%));
+  --palette-border-color:                 var(--vscode-sideBar-border, hsl(225, 10%, 75%));
+
+  /* ── Popups / Context-Pad ── */
+  --popup-background-color:                var(--vscode-dropdown-background, #fff);
+  --popup-border-color:                    var(--vscode-dropdown-border, transparent);
+  --popup-shadow-color:                    hsla(0, 0%, 0%, 30%);
+  --popup-description-color:              var(--vscode-descriptionForeground, hsl(225, 10%, 55%));
+  --popup-disabled-color:                 var(--vscode-descriptionForeground, hsl(225, 10%, 55%));
+  --popup-no-results-color:               var(--vscode-descriptionForeground, hsl(225, 10%, 55%));
+  --popup-entry-title-color:              var(--vscode-descriptionForeground, hsl(225, 10%, 55%));
+  --popup-entry-hover-color:              var(--vscode-list-hoverBackground, hsl(225, 10%, 95%));
+  --popup-search-border-color:            var(--vscode-input-border, hsl(225, 10%, 75%));
+  --popup-search-focus-border-color:      var(--vscode-focusBorder, hsl(205, 100%, 50%));
+  --popup-search-focus-background-color:  var(--vscode-input-background, hsl(205, 100%, 95%));
+  --popup-header-entry-selected-color:    var(--vscode-focusBorder, hsl(205, 100%, 50%));
+  --popup-header-group-divider-color:     var(--vscode-sideBar-border, hsl(225, 10%, 75%));
+
+  /* ── Resizer ── */
+  --resizer-fill-color:   var(--vscode-focusBorder, hsl(205, 100%, 45%));
+  --resizer-stroke-color: var(--vscode-editor-background, #fff);
+
+  /* ── Search ── */
+  --search-container-background-color:     var(--vscode-dropdown-background, #fff);
+  --search-shadow-color:                   hsla(0, 0%, 0%, 30%);
+  --search-input-border-color:             var(--vscode-input-border, hsl(225, 10%, 75%));
+  --search-input-focus-border-color:       var(--vscode-focusBorder, hsl(205, 100%, 50%));
+  --search-input-focus-background-color:   var(--vscode-input-background, hsl(205, 100%, 95%));
+  --search-result-hover-background-color:  var(--vscode-list-hoverBackground, hsl(225, 10%, 95%));
+  --search-result-secondary-color:         var(--vscode-descriptionForeground, hsl(225, 10%, 55%));
+  --search-preselected-background-color:   hsla(205, 100%, 50%, 15%);
+
+  /* ── Snap / Space-Tool / Shape states ── */
+  --snap-line-stroke-color:                hsla(205, 100%, 45%, 30%);
+  --space-tool-crosshair-stroke-color:     var(--vscode-editor-foreground, #000);
+  --shape-attach-allowed-stroke-color:     var(--vscode-focusBorder, hsl(205, 100%, 50%));
+  --shape-connect-allowed-fill-color:      var(--vscode-sideBar-background, hsl(225, 10%, 97%));
+  --shape-drop-allowed-fill-color:         var(--vscode-sideBar-background, hsl(225, 10%, 97%));
+  --shape-drop-not-allowed-fill-color:     hsl(360, 100%, 97%);
+  --shape-resize-preview-stroke-color:     var(--vscode-focusBorder, hsl(205, 100%, 50%));
+
+  /* ── Tooltip errors ── */
+  --tooltip-error-background-color:  hsl(360, 100%, 97%);
+  --tooltip-error-border-color:      hsl(360, 100%, 45%);
+  --tooltip-error-color:             hsl(360, 100%, 45%);
+}
+
+.bjs-container {
+  /* ── bpmn-js specific ── */
+  --breadcrumbs-item-color: var(--vscode-textLink-foreground, hsl(205, 100%, 50%));
+  --breadcrumbs-arrow-color: var(--vscode-editor-foreground, #000);
+  --drilldown-fill-color:    var(--vscode-editor-background, #fff);
+  --drilldown-background-color: var(--vscode-focusBorder, hsl(205, 100%, 50%));
+
+  /* Inherit base colors for bpmn-js child components */
+  --color-white:           var(--vscode-editor-background, #fff);
+  --color-black:           var(--vscode-editor-foreground, #000);
+  --color-grey-225-10-15:  var(--vscode-foreground, hsl(225, 10%, 15%));
+  --color-grey-225-10-35:  var(--vscode-foreground, hsl(225, 10%, 35%));
+  --color-grey-225-10-55:  var(--vscode-descriptionForeground, hsl(225, 10%, 55%));
+  --color-grey-225-10-75:  var(--vscode-sideBar-border, hsl(225, 10%, 75%));
+  --color-grey-225-10-80:  var(--vscode-panel-border, hsl(225, 10%, 80%));
+  --color-grey-225-10-85:  var(--vscode-sideBar-border, hsl(225, 10%, 85%));
+  --color-grey-225-10-90:  var(--vscode-list-inactiveSelectionBackground, hsl(225, 10%, 90%));
+  --color-grey-225-10-95:  var(--vscode-list-hoverBackground, hsl(225, 10%, 95%));
+  --color-grey-225-10-97:  var(--vscode-sideBar-background, hsl(225, 10%, 97%));
+  --color-blue-205-100-45: var(--vscode-focusBorder, hsl(205, 100%, 45%));
+  --color-blue-205-100-50: var(--vscode-focusBorder, hsl(205, 100%, 50%));
+  --color-blue-205-100-95: var(--vscode-list-activeSelectionBackground, hsl(205, 100%, 95%));
+}
+
 /* COLOR PICKER */
 
 .djs-popup.color-picker .entry {
@@ -26,12 +152,44 @@ body {
 }
 
 /* ══════════════════════════════════════════════════════
-   Root Element Highlight (canvas markers)
+   Diagram Element Dark Theme Override
+
+   These CSS rules force all BPMN diagram elements to follow the
+   active VS Code theme — dark canvas + light strokes + light text.
+   !important is needed because bpmn-js reads explicit colors from
+   BPMN DI data, which would otherwise override theme defaults.
    ══════════════════════════════════════════════════════ */
 
-/* Collaboration highlight: all pools get a dashed blue border */
+/* ── Shapes: light stroke, transparent fill ── */
+.djs-shape .djs-visual :not(text):not(tspan) {
+  stroke: var(--vscode-editor-foreground, #000) !important;
+  fill: none !important;
+}
+
+/* ── Connections: light stroke, no fill ── */
+.djs-connection .djs-visual :not(text):not(tspan) {
+  stroke: var(--vscode-editor-foreground, #000) !important;
+}
+
+/* ── Arrowheads / markers on connections ── */
+.djs-connection marker :not(text):not(tspan) {
+  fill: var(--vscode-editor-foreground, #000) !important;
+  stroke: var(--vscode-editor-foreground, #000) !important;
+}
+
+/* ── All text: labels, annotations, connection names ── */
+.djs-visual text,
+.djs-visual tspan,
+.djs-label text,
+.djs-label tspan {
+  fill: var(--vscode-editor-foreground, #000) !important;
+}
+
+/* ══════════════════════════════════════════════════════
+   Root Element Highlight (canvas markers)
+   ══════════════════════════════════════════════════════ */
 .djs-element.root-hl-collaboration > .djs-outline {
-  stroke: #007acc !important;
+  stroke: var(--vscode-charts-blue, #007acc) !important;
   stroke-width: 2.5px !important;
   stroke-dasharray: 8 4 !important;
   filter: drop-shadow(0 0 4px rgba(0, 122, 204, 0.35));
@@ -39,7 +197,7 @@ body {
 
 /* Process→Pool highlight: the associated pool gets a solid accent border */
 .djs-element.root-hl-process-pool > .djs-outline {
-  stroke: #ff8c00 !important;
+  stroke: var(--vscode-charts-orange, #ff8c00) !important;
   stroke-width: 3px !important;
   filter: drop-shadow(0 0 6px rgba(255, 140, 0, 0.45));
 }

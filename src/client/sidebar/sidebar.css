@@ -535,10 +535,66 @@ body.sidebar-resizing {
   line-height: 1.5;
 }
 
+/* ── Property groups (collapsible sections) ────────── */
+
+.prop-group-section {
+  margin-bottom: 4px;
+}
+
+.prop-group-section + .prop-group-section {
+  border-top: 1px solid var(--sb-border);
+}
+
+.prop-group-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 0 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: background-color 0.1s;
+  border-radius: 3px;
+}
+
+.prop-group-header:hover {
+  background: var(--sb-hover);
+}
+
+.prop-group-title {
+  font-size: 10px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--desc-fg);
+}
+
+.prop-group-toggle {
+  font-size: 10px;
+  color: var(--desc-fg);
+  transition: transform 0.2s ease;
+}
+
+.prop-group-section.collapsed .prop-group-toggle {
+  transform: rotate(-90deg);
+}
+
+.prop-group-section.collapsed .prop-group-body {
+  display: none;
+}
+
+.prop-group-body {
+  padding: 0;
+}
+
 /* ── Individual property rows ─────────────────────── */
 
 .prop-row {
   padding: 5px 0;
+}
+
+.prop-group-body .prop-row + .prop-row {
+  border-top: 1px solid var(--sb-border);
+  border-color: color-mix(in srgb, var(--sb-border) 50%, transparent);
 }
 
 .prop-row + .prop-row {
@@ -554,6 +610,23 @@ body.sidebar-resizing {
   font-weight: 500;
   color: var(--desc-fg);
   margin-bottom: 4px;
+}
+
+/* Description tooltip icon */
+.prop-label-tip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 14px;
+  height: 14px;
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--desc-fg);
+  background: var(--badge-bg);
+  border-radius: 50%;
+  cursor: help;
+  flex-shrink: 0;
+  line-height: 1;
 }
 
 .prop-error-badge {
@@ -582,6 +655,16 @@ body.sidebar-resizing {
 textarea.prop-input {
   resize: vertical;
   min-height: 60px;
+}
+
+.prop-input-code {
+  font-family: var(--vscode-editor-font-family, 'Consolas', 'Courier New', monospace);
+  font-size: 11px;
+  line-height: 1.5;
+  tab-size: 2;
+  white-space: pre;
+  overflow-wrap: normal;
+  overflow-x: auto;
 }
 
 select.prop-input {

@@ -8,7 +8,7 @@ import './bpmn-editor.css';
 import './sidebar/sidebar.css';
 
 import Sidebar from './sidebar/sidebar.js';
-import { extractProperties, updateProperty } from './customPropsExtractor.js';
+import { extractProperties, extractPropertiesXPath, updateProperty, updatePropertyXPath, _yamlParse, _yamlStringify } from './customPropsExtractor.js';
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 
 import BpmnColorPickerModule from 'bpmn-js-color-picker';
@@ -89,31 +89,72 @@ sidebarInstance.onLanguageChange(async function(lang) {
   _uiLang = lang;
   setLanguage(lang);
 
-  // Save and rebuild modeler to fully refresh UI
+  // Save state before rebuild
   var xml;
+  var viewbox;
+  var selectedIds = [];
+  var selectedRootId = null;
+
   try {
     var result = await modeler.saveXML({ format: true });
     xml = result.xml;
+
+    var canvas = modeler.get('canvas');
+    viewbox = canvas.viewbox();
+
+    var selection = modeler.get('selection');
+    selectedIds = selection.get().map(function(el) { return el.id; });
+
+    var selectedRoot = sidebarInstance.getSelectedRootElement();
+    selectedRootId = selectedRoot ? selectedRoot.id : null;
   } catch (_e) {
-    xml = '';
+    /* state capture is best-effort */
   }
 
+  // Destroy and recreate modeler — required to fully rebuild bpmn-js UI
+  // chrome (palette, context-pad, popup-menu) with the new translations.
   modeler.destroy();
 
-  var newModeler = new BpmnModeler({
+  modeler = new BpmnModeler({
     container: '#canvas',
+    defaultFillColor: _themeColors.fill,
+    defaultStrokeColor: _themeColors.stroke,
+    defaultLabelColor: _themeColors.label,
     additionalModules: [
       BpmnColorPickerModule,
       customTranslateModule
     ]
   });
 
+  setupModelerListeners(modeler);
+
   if (xml) {
-    await newModeler.importXML(xml);
+    await modeler.importXML(xml);
   }
 
-  modeler = newModeler;
-  setupModelerListeners(modeler);
+  // Restore viewport
+  if (viewbox) {
+    try {
+      modeler.get('canvas').viewbox(viewbox);
+    } catch (_e) { /* ignore */ }
+  }
+
+  // Restore canvas selection
+  if (selectedIds.length > 0) {
+    try {
+      var elementRegistry = modeler.get('elementRegistry');
+      var elements = selectedIds.map(function(id) {
+        return elementRegistry.get(id);
+      }).filter(Boolean);
+      if (elements.length > 0) {
+        modeler.get('selection').select(elements);
+      }
+    } catch (_e) { /* ignore */ }
+  }
+
+  // Rebuild root elements tree
+  var rootEls = extractRootElements(modeler);
+  sidebarInstance.setRootElements(rootEls, selectedRootId);
 });
 
 // Track current UI language (kept in sync with sidebar)
@@ -137,8 +178,28 @@ const customTranslateModule = {
   translate: [ 'value', customTranslate ]
 };
 
+/**
+ * Read theme-appropriate colors from VS Code CSS variables on body.
+ * Returns resolved RGB values suitable for SVG fill/stroke attributes.
+ */
+function _readThemeColors() {
+  var style = getComputedStyle(document.body);
+  var fg = style.getPropertyValue('--vscode-editor-foreground').trim() || '#000000';
+
+  return {
+    fill: 'none',
+    stroke: fg,
+    label: fg
+  };
+}
+
+var _themeColors = _readThemeColors();
+
 let modeler = new BpmnModeler({
   container: '#canvas',
+  defaultFillColor: _themeColors.fill,
+  defaultStrokeColor: _themeColors.stroke,
+  defaultLabelColor: _themeColors.label,
   additionalModules: [
     BpmnColorPickerModule,
     customTranslateModule
@@ -240,13 +301,85 @@ function extractRootElements(bpmnModeler) {
 }
 
 /**
+ * Display properties for a canvas element, merging moddle-engine and
+ * XPath-engine property definitions. XPath results are fetched
+ * asynchronously and merged in after the initial render.
+ *
+ * @param {Object} element - The bpmn-js element
+ * @param {Object} bpmnModeler - The bpmn-js modeler instance
+ */
+async function _displayPropertiesForElement(element, bpmnModeler) {
+
+  // Phase 1: extract moddle-engine properties (fast, synchronous)
+  var moddleProps = extractProperties(element, customPropertiesConfig);
+  var allProps = moddleProps || [];
+
+  // Check if there are XPath-engine properties for this element
+  var hasXPath = _hasXPathProperties(element, customPropertiesConfig);
+
+  // Phase 2: if XPath properties exist, fetch them asynchronously
+  if (hasXPath) {
+    try {
+      var xpathProps = await extractPropertiesXPath(bpmnModeler, element, customPropertiesConfig);
+      if (xpathProps && xpathProps.length > 0) {
+        allProps = allProps.concat(xpathProps);
+      }
+    } catch (e) {
+      console.warn('XPath extraction failed, showing moddle-only results:', e);
+    }
+  }
+
+  // Render
+  if (allProps.length > 0) {
+    sidebarInstance.updateCustomProperties(allProps, _createUpdateHandler(element, bpmnModeler));
+  } else {
+    var elementId = String(element.id).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    var elementType = String(element.type).replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    sidebarInstance.updateCustomProperties(
+      '<p><b>' + _t('sidebar.info.id') + ':</b> ' + elementId + '</p>' +
+      '<p><b>' + _t('sidebar.info.type') + ':</b> ' + elementType + '</p>' +
+      '<p>' + _t('sidebar.info.noConfig') + '</p>'
+    );
+  }
+}
+
+/**
+ * Check if any property definitions for this element use the XPath engine.
+ */
+function _hasXPathProperties(element, config) {
+  if (!config) return false;
+  var defs = [];
+  if (config.common) defs = defs.concat(config.common);
+  if (config.elementSpecific && config.elementSpecific[element.type]) {
+    defs = defs.concat(config.elementSpecific[element.type]);
+  }
+  return defs.some(function(pd) { return pd.engine === 'xpath'; });
+}
+
+/**
+ * Create an update handler that routes to the correct engine
+ * (moddle-based or XPath-based) based on the property definition.
+ */
+function _createUpdateHandler(element, bpmnModeler) {
+  return function(propDef, newValue) {
+    if (propDef.engine === 'xpath') {
+      updatePropertyXPath(bpmnModeler, element, propDef, newValue);
+    } else {
+      var modeling = bpmnModeler.get('modeling');
+      var moddle = bpmnModeler.get('moddle');
+      updateProperty(element, propDef, newValue, modeling, moddle);
+    }
+  };
+}
+
+/**
  * Show custom properties for a root element (non-visual BPMN element).
  * Creates a wrapper so extractProperties/updateProperty can work.
  *
  * @param {Object} rootEl - {id, type, name, moddleElement}
  * @param {Object} bpmnModeler - The bpmn-js modeler instance
  */
-function showRootElementProperties(rootEl, bpmnModeler) {
+async function showRootElementProperties(rootEl, bpmnModeler) {
   if (!rootEl || !rootEl.moddleElement) return;
 
   // For Collaboration: clear canvas selection and show dashed borders on all pools.
@@ -268,17 +401,31 @@ function showRootElementProperties(rootEl, bpmnModeler) {
     _isRootElement: true
   };
 
-  var props = extractProperties(wrapper, customPropertiesConfig);
+  // Phase 1: extract moddle-engine properties
+  var moddleProps = extractProperties(wrapper, customPropertiesConfig);
+  var allProps = moddleProps || [];
 
-  if (props && props.length > 0) {
-    sidebarInstance.updateCustomProperties(props, function(propDef, newValue) {
-      var modeling = bpmnModeler.get('modeling');
-      var moddle = bpmnModeler.get('moddle');
+  // Phase 2: if XPath properties exist, fetch them asynchronously
+  if (_hasXPathProperties(wrapper, customPropertiesConfig)) {
+    try {
+      var xpathProps = await extractPropertiesXPath(bpmnModeler, wrapper, customPropertiesConfig);
+      if (xpathProps && xpathProps.length > 0) {
+        allProps = allProps.concat(xpathProps);
+      }
+    } catch (e) {
+      console.warn('XPath extraction failed for root element, showing moddle-only results:', e);
+    }
+  }
 
-      // For root elements, we cannot use modeling.updateProperties directly
-      // because there's no visual shape in the element registry.
-      // Instead, use updateModdleProperties with any visual element as context.
-      updateRootProperty(bpmnModeler, wrapper, propDef, newValue, modeling, moddle);
+  if (allProps.length > 0) {
+    sidebarInstance.updateCustomProperties(allProps, function(propDef, newValue) {
+      if (propDef.engine === 'xpath') {
+        updatePropertyXPath(bpmnModeler, wrapper, propDef, newValue);
+      } else {
+        var modeling = bpmnModeler.get('modeling');
+        var moddle = bpmnModeler.get('moddle');
+        updateRootProperty(bpmnModeler, wrapper, propDef, newValue, modeling, moddle);
+      }
     });
   } else {
     var elementType = String(rootEl.type).replace(/</g, '&lt;').replace(/>/g, '&gt;');
@@ -306,16 +453,19 @@ function showRootElementProperties(rootEl, bpmnModeler) {
  * @param {Object} moddle
  */
 function updateRootProperty(bpmnModeler, wrapper, propDef, newValue, modeling, _moddle) {
-  var pathParts = propDef.xpath.split('/');
+  var pathStr = propDef.path || propDef.xpath || '';
+  var pathParts = pathStr.split('/');
   var bo = wrapper.businessObject;
 
   function getPropName(part) {
-    return part.replace('bpmn:', '');
+
+    // Strip @ prefix for attributes
+    if (part.startsWith('@')) return part.substring(1);
+    return part;
   }
 
   // For simple properties directly on the root element (like 'name')
   // or nested properties, we need a visual context element.
-  // We use the first available visual element, or the canvas root if no elements exist.
   var elementRegistry = bpmnModeler.get('elementRegistry');
   var allElements = elementRegistry.getAll();
   var contextElement = allElements.length > 0 ? allElements[0] : bpmnModeler.get('canvas').getRootElement();
@@ -328,20 +478,36 @@ function updateRootProperty(bpmnModeler, wrapper, propDef, newValue, modeling, _
   // Traverse to find the target moddle element
   var currentBo = bo;
   var targetPropName = '';
+  var _isAttribute = false;
 
   for (var i = 0; i < pathParts.length; i++) {
-    var part = getPropName(pathParts[i]);
+    var seg = pathParts[i];
+    if (!seg) continue;
 
-    if (i === pathParts.length - 1) {
-      targetPropName = part;
-    } else {
-      if (!currentBo || currentBo[part] === undefined) {
-        console.warn('Cannot update root property: path "' + part + '" missing');
-        return;
+    if (seg.startsWith('@')) {
+      _isAttribute = true;
+      targetPropName = seg.substring(1);
+
+      // Look up attribute in current object or $attrs
+      if (currentBo.$attrs && currentBo.$attrs[targetPropName] !== undefined) {
+        currentBo = currentBo.$attrs[targetPropName];
+      } else if (currentBo[targetPropName] !== undefined) {
+        currentBo = currentBo[targetPropName];
       }
-      currentBo = currentBo[part];
-      if (Array.isArray(currentBo)) {
-        currentBo = currentBo[0];
+    } else {
+      _isAttribute = false;
+      var part = getPropName(seg);
+      if (i === pathParts.length - 1) {
+        targetPropName = part;
+      } else {
+        if (!currentBo || currentBo[part] === undefined) {
+          console.warn('Cannot update root property: path "' + part + '" missing');
+          return;
+        }
+        currentBo = currentBo[part];
+        if (Array.isArray(currentBo)) {
+          currentBo = currentBo[0];
+        }
       }
     }
   }
@@ -350,69 +516,81 @@ function updateRootProperty(bpmnModeler, wrapper, propDef, newValue, modeling, _
   var moddleElementToUpdate;
   var propertiesToSet;
 
-  if ([ 'attribute', 'date', 'number', 'boolean' ].indexOf(propDef.type) !== -1) {
-    if (pathParts.length === 1) {
+  var source = propDef.source || 'attribute';
+  var control = propDef.control || 'text';
 
-      // Direct property on the root element itself
+  if (source === 'text') {
+
+    // Text source: update .text on the target
+    moddleElementToUpdate = (pathParts.length === 1) ? bo : currentBo;
+    propertiesToSet = { text: newValue };
+
+  } else if (source === 'embedded') {
+
+    // Embedded: parse, set field, serialize
+    moddleElementToUpdate = currentBo;
+    var embedded = {};
+    var rawText = (currentBo && currentBo.text) || '';
+    try {
+      embedded = JSON.parse(rawText);
+    } catch (_e) {
+      try {
+
+        // Try YAML
+        embedded = _yamlParse(rawText) || {};
+      } catch (_e2) {
+        console.warn('Failed to parse embedded content');
+      }
+    }
+
+    if (propDef.field) {
+      setDeep(embedded, propDef.field, _coerce(newValue, control));
+    }
+    var format = propDef.format || 'json';
+    if (format === 'yaml') {
+      propertiesToSet = { text: _yamlStringify(embedded) };
+    } else {
+      propertiesToSet = { text: JSON.stringify(embedded, null, 2) };
+    }
+
+  } else {
+
+    // Attribute source
+    if (pathParts.length === 1) {
       moddleElementToUpdate = bo;
     } else {
-
-      // Nested property - update the parent moddle element
       moddleElementToUpdate = currentBo;
     }
 
-    var updateValue = newValue;
-    if (propDef.type === 'number') {
-      var num = Number(newValue);
-      if (isNaN(num)) {
-        console.warn('Invalid number: ' + newValue);
-        return;
-      }
-      updateValue = num;
-    } else if (propDef.type === 'boolean') {
-      updateValue = (newValue === 'true' || newValue === '1' || newValue === true);
-    }
-
+    var updateValue = _coerce(newValue, control);
     propertiesToSet = {};
-    propertiesToSet[targetPropName] = updateValue;
 
-  } else if (propDef.type === 'elementText') {
-    moddleElementToUpdate = currentBo;
-    propertiesToSet = { text: newValue };
-
-  } else if (propDef.type === 'json') {
-    moddleElementToUpdate = currentBo;
-    var json = {};
-    try {
-      json = JSON.parse(currentBo.text || '{}');
-    } catch (_e) {
-      console.warn('Invalid JSON in root element, resetting');
-    }
-
-    if (propDef.jsonPath) {
-      var valueToStore = newValue;
-      if (propDef.inputType === 'number') {
-        var parsedNum = Number(newValue);
-        if (isNaN(parsedNum)) {
-          console.warn('Invalid number for JSON: ' + newValue);
-          return;
-        }
-        valueToStore = parsedNum;
-      } else if (propDef.inputType === 'boolean') {
-        valueToStore = (newValue === 'true' || newValue === '1' || newValue === true);
-      } else if (propDef.inputType === 'date') {
-        if (!/^\d{4}-\d{2}-\d{2}$/.test(newValue) && newValue !== '') {
-          console.warn('Invalid date: ' + newValue);
-          return;
-        }
-      }
-      setDeep(json, propDef.jsonPath, valueToStore);
-    }
-    propertiesToSet = { text: JSON.stringify(json, null, 2) };
+    // Strip namespace prefix for the property key
+    var writeKey = targetPropName;
+    var colonIdx = writeKey.indexOf(':');
+    if (colonIdx !== -1) writeKey = writeKey.substring(colonIdx + 1);
+    propertiesToSet[writeKey] = updateValue;
   }
 
   if (moddleElementToUpdate && propertiesToSet) {
     modeling.updateModdleProperties(contextElement, moddleElementToUpdate, propertiesToSet);
+  }
+}
+
+function _coerce(newValue, control) {
+  switch (control) {
+  case 'number': {
+    var num = Number(newValue);
+    if (isNaN(num)) {
+      console.warn('Invalid number: ' + newValue);
+      return newValue;
+    }
+    return num;
+  }
+  case 'boolean':
+    return (newValue === 'true' || newValue === '1' || newValue === true);
+  default:
+    return newValue;
   }
 }
 
@@ -575,26 +753,10 @@ function setupModelerListeners(bpmnModeler) {
       sidebarInstance.clearRootElementSelection();
 
       const selectedElement = newSelection[0];
-      const props = extractProperties(selectedElement, customPropertiesConfig);
 
-      if (props && props.length > 0) {
-        sidebarInstance.updateCustomProperties(props, function(propDef, newValue) {
+      // Display properties (moddle engine + XPath engine merged)
+      _displayPropertiesForElement(selectedElement, bpmnModeler);
 
-          // Handle update
-          const modeling = bpmnModeler.get('modeling');
-          const moddle = bpmnModeler.get('moddle');
-          updateProperty(selectedElement, propDef, newValue, modeling, moddle);
-        });
-      } else {
-
-        // Display basic info and a message if no custom props or error
-        const elementId = String(selectedElement.id).replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        const elementType = String(selectedElement.type).replace(/</g, '&lt;').replace(/>/g, '&gt;');
-        sidebarInstance.updateCustomProperties(
-          '<p><b>' + _t('sidebar.info.id') + ':</b> ' + elementId + '</p>' +
-        '<p><b>' + _t('sidebar.info.type') + ':</b> ' + elementType + '</p>' +
-        '<p>' + _t('sidebar.info.noConfig') + '</p>');
-      }
     } else if (!newSelection || newSelection.length === 0) {
 
       // Deselection: only show placeholder if no root element is currently selected

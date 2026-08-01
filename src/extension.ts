@@ -2,21 +2,42 @@ import * as vscode from 'vscode';
 
 import { BpmnEditor } from './bpmn-editor';
 
-// Define a basic interface for the custom properties configuration
-export interface CustomPropertiesConfig {
-  common?: Array<{ label: string; xpath: string }>;
-  elementSpecific?: Record<string, Array<{ label: string; xpath: string }>>;
+/**
+ * Full property definition as defined in package.json configuration schema.
+ * See README for detailed documentation of each field.
+ */
+export interface PropertyDefinition {
+  label: string;
+  path: string;
+  engine?: 'moddle' | 'xpath';
+  source: 'attribute' | 'text' | 'embedded';
+  control: 'text' | 'textarea' | 'number' | 'boolean' | 'date' | 'select' | 'code';
+  format?: 'json' | 'yaml';
+  field?: string;
+  options?: Array<{ label: string; value: string }>;
+  min?: number;
+  max?: number;
+  step?: number;
+  pattern?: string;
+  defaultValue?: string;
+  placeholder?: string;
+  description?: string;
+  group?: string;
+  order?: number;
+  autoCreate?: boolean;
+}
 
-  // Allow other properties if necessary, or make it stricter
-  [key: string]: unknown; // Changed 'any' to 'unknown'
+export interface CustomPropertiesConfig {
+  common?: PropertyDefinition[];
+  elementSpecific?: Record<string, PropertyDefinition[]>;
 }
 let customPropertiesConfig: CustomPropertiesConfig = {}; // To store the parsed config
 
 async function loadCustomPropertiesConfig(_context: vscode.ExtensionContext) {
   try {
     const config = vscode.workspace.getConfiguration('bpmn-flex');
-    const commonProps = config.get<Array<{ label: string; xpath: string }>>('commonProperties');
-    const elementSpecificProps = config.get<Record<string, Array<{ label: string; xpath: string }>>>('elementSpecificProperties');
+    const commonProps = config.get<PropertyDefinition[]>('commonProperties');
+    const elementSpecificProps = config.get<Record<string, PropertyDefinition[]>>('elementSpecificProperties');
 
     if (commonProps) {
       customPropertiesConfig.common = commonProps;
