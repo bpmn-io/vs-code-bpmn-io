@@ -108,8 +108,10 @@ sidebarInstance.onLanguageChange(async function(lang) {
     var selectedRoot = sidebarInstance.getSelectedRootElement();
     selectedRootId = selectedRoot ? selectedRoot.id : null;
   } catch (_e) {
+
     /* state capture is best-effort */
   }
+
 
   // Destroy and recreate modeler — required to fully rebuild bpmn-js UI
   // chrome (palette, context-pad, popup-menu) with the new translations.
