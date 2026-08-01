@@ -942,6 +942,7 @@ function _updateAttributeOrText(element, bo, propDef, newValue, modeling, moddle
   if (propName.startsWith('@')) propName = propName.substring(1);
 
   if (source === 'text') {
+
     // Strip namespace prefix for child element creation (bpmn:documentation → documentation)
     var colonIdx = propName.indexOf(':');
     if (colonIdx !== -1) propName = propName.substring(colonIdx + 1);
