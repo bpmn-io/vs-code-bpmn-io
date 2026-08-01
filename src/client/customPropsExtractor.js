@@ -937,15 +937,14 @@ function _updateAttributeOrText(element, bo, propDef, newValue, modeling, moddle
     return;
   }
 
-  // Determine property name (strip namespace for writing to moddle)
+  // Determine property name (strip namespace for writing to moddle only for text source)
   var propName = lastKey;
   if (propName.startsWith('@')) propName = propName.substring(1);
 
-  // Strip namespace prefix for writing
-  var colonIdx = propName.indexOf(':');
-  if (colonIdx !== -1) propName = propName.substring(colonIdx + 1);
-
   if (source === 'text') {
+    // Strip namespace prefix for child element creation (bpmn:documentation → documentation)
+    var colonIdx = propName.indexOf(':');
+    if (colonIdx !== -1) propName = propName.substring(colonIdx + 1);
 
     // Text source: update .text on the target child element
     if (current && current.text !== undefined) {
