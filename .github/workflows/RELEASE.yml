@@ -1,6 +1,26 @@
-name: release
+name: Release
 
 on:
+  # Primary: trigger manually from Actions tab — handles everything automatically
+  workflow_dispatch:
+    inputs:
+      bump:
+        description: 'Version bump type'
+        required: true
+        type: choice
+        default: 'patch'
+        options:
+          - patch
+          - minor
+          - major
+          - none (use current version)
+      prerelease:
+        description: 'Mark as pre-release'
+        required: false
+        type: boolean
+        default: false
+
+  # Fallback: when a v* tag is pushed manually, validate and release
   push:
     tags:
       - 'v*'
@@ -9,21 +29,93 @@ jobs:
   release:
     runs-on: ubuntu-latest
     permissions:
-      contents: write # to create release (softprops/action-gh-release)
+      contents: write  # needed for git push + creating releases
 
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Use Node.js
+        with:
+          fetch-depth: 0  # full history for changelog / tag operations
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: 'npm'
+
+      # ── workflow_dispatch: bump version ──────────────────────────
+      - name: Bump version
+        if: github.event_name == 'workflow_dispatch' && inputs.bump != 'none (use current version)'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          npm version ${{ inputs.bump }} --no-git-tag-version
+
+      # ── Read resolved version ────────────────────────────────────
+      - name: Get version
+        id: version
+        run: |
+          VERSION=$(node -p "require('./package.json').version")
+          echo "version=${VERSION}" >> $GITHUB_OUTPUT
+          echo "Resolved version: ${VERSION}"
+
+      # ── tag push: validate version consistency ───────────────────
+      - name: Validate version ↔ tag consistency
+        if: github.event_name == 'push'
+        run: |
+          TAG_VERSION="${GITHUB_REF#refs/tags/v}"
+          PKG_VERSION="${{ steps.version.outputs.version }}"
+
+          if [ "${TAG_VERSION}" != "${PKG_VERSION}" ]; then
+            echo "::error::Version mismatch!"
+            echo "  Tag:       v${TAG_VERSION}"
+            echo "  package.json: $PKG_VERSION"
+            echo ""
+            echo "Fix: either update package.json to ${TAG_VERSION} or re-tag with v${PKG_VERSION}."
+            exit 1
+          fi
+          echo "✅ Version consistency OK: v${TAG_VERSION}"
+
+      # ── workflow_dispatch: commit bump + push tag ─────────────────
+      - name: Commit version bump
+        if: github.event_name == 'workflow_dispatch' && inputs.bump != 'none (use current version)'
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          git add package.json package-lock.json
+          git commit -m "chore: bump version to v${VERSION}"
+          git push origin HEAD:main
+
+      - name: Create and push tag
+        if: github.event_name == 'workflow_dispatch'
+        run: |
+          VERSION="${{ steps.version.outputs.version }}"
+          git tag -a "v${VERSION}" -m "Release v${VERSION}"
+          git push origin "v${VERSION}"
+
+      # ── Build ────────────────────────────────────────────────────
       - name: Install dependencies
         run: npm ci
-      - name: Package Extension
+
+      - name: Extract changelog
+        id: changelog
+        run: |
+          NOTES=$(node scripts/extract-changelog.js ${{ steps.version.outputs.version }})
+          {
+            echo 'notes<<CHANGELOG_EOF'
+            echo "${NOTES}"
+            echo 'CHANGELOG_EOF'
+          } >> $GITHUB_OUTPUT
+
+      - name: Package extension
         run: npx @vscode/vsce package
-      - name: Upload Release Asset
-        uses: softprops/action-gh-release@v1
+
+      # ── Create GitHub Release ────────────────────────────────────
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
         with:
+          tag_name: v${{ steps.version.outputs.version }}
+          name: v${{ steps.version.outputs.version }}
+          body: ${{ steps.changelog.outputs.notes }}
           files: '*.vsix'
+          draft: false
+          prerelease: ${{ github.event_name == 'workflow_dispatch' && inputs.prerelease || false }}

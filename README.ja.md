@@ -1,5 +1,7 @@
 # BPMN.flex Editor
 
+[English](README.md) | [中文](README.zh-CN.md) | [日本語](README.ja.md)
+
 [VS Code](https://code.visualstudio.com/) で BPMN ダイアグラムを表示・編集できます。
 
 ![VSCode BPMN Editor のスクリーンショット](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot.png)
@@ -12,7 +14,6 @@
 * 空の `.bpmn` ファイルから新規作成
 * 国際化対応（English, 中文, 日本語）
 * **カスタムプロパティパネル** — VS Code 設定で独自の編集可能フィールドを定義
-* **ダークテーマ対応** — VS Code ダークテーマに完全対応。図面領域、パレット、コンテキストメニューすべてが美しく表示
 * **デュアルエンジンプロパティ解決** — Moddle オブジェクトツリーとネイティブ XPath の2つのクエリエンジンをサポート
 * **YAML/JSON 埋め込みコンテンツ編集** — 拡張要素内の構造化された YAML/JSON 設定を編集
 * **グループ折りたたみパネル** — プロパティをグループごとに折りたたみ表示、ソートやツールチップにも対応
@@ -335,6 +336,81 @@ npm run test
 
 # すべてのスクリプトを実行（lint + test）
 npm run all
+```
+
+## CI / CD
+
+### CI パイプライン（`CI.yml`）
+
+すべてのプッシュと PR で **macOS**、**Ubuntu**、**Windows** の3環境で実行されます：
+
+| ステップ | 説明 |
+|------|-------------|
+| 依存関係インストール | `npm install`（キャッシュあり） |
+| Lint + テスト | `npm run all`（ESLint + Mocha テスト） |
+| UI スクリーンショット | Linux のみ：EN/ZH/JA + サイドバー状態のスクリーンショットを取得し artifacts としてアップロード |
+| PR コメント | Linux のみ：PR にスクリーンショットサマリーを自動投稿 |
+| パッケージ確認 | `npx @vscode/vsce ls` でパッケージングを検証 |
+
+### リリースパイプライン（`release.yml`）
+
+リリースパイプラインは **VSIX バージョン**と **Git タグ**の間に厳密な関係を強制します：
+
+```
+package.json version = "0.20.0"    ← 唯一のバージョンソース
+                     │
+                     ▼
+            Tag = "v0.20.0"         ← 必ず一致、リリースごとに検証
+                     │
+                     ▼
+        VSIX = vs-code-bpmn-flex-0.20.0.vsix
+```
+
+#### リリース手順
+
+**推奨方法** — GitHub Actions UI から実行（CLI 不要）：
+
+```
+1. CHANGELOG.md にリリースノートを追加
+2. GitHub → Actions → Release → "Run workflow" に移動
+3. バンプタイプを選択: patch / minor / major / none
+4. "Run workflow" をクリック
+```
+
+| バンプ選択 | 変更前 | 変更後 | 作成されるタグ |
+|-------------|----------------------|---------------------|-------------|
+| `patch` | 0.20.0 | **0.20.1** | `v0.20.1` |
+| `minor` | 0.20.0 | **0.21.0** | `v0.21.0` |
+| `major` | 0.20.0 | **1.0.0** | `v1.0.0` |
+| `none` | 0.20.0 | 0.20.0（変更なし） | `v0.20.0` |
+
+以下の処理がすべて**自動的に**実行されます：
+
+1. `package.json` のバージョン更新（patch/minor/major）
+2. バージョン更新を `main` ブランチにコミット
+3. `v{version}` タグを作成してプッシュ
+4. `CHANGELOG.md` からリリースノートを抽出
+5. `.vsix` パッケージをビルド
+6. GitHub Release を作成し VSIX を添付
+
+ワークフローフォームで **pre-release** にチェックを入れると、プレリリースとしてマークすることもできます。
+
+#### 代替方法：手動タグプッシュ
+
+手動で `v*` タグをプッシュした場合（例: `git tag v0.20.1 && git push origin v0.20.1`）、パイプラインは次の処理を行います：
+
+- タグと `package.json` バージョンの**一致を検証**（不一致の場合は明確なエラーを表示）
+- `.vsix` をビルドして GitHub Release を作成
+
+これにより、タグの作成方法に関わらず、VSIX とリリースが常に同期されます。
+
+### ヘルパースクリプト
+
+```bash
+npm run changelog 0.20.0     # CHANGELOG.md から指定バージョンのリリースノートを抽出
+npm run version:patch         # ローカルでパッチバージョンを更新
+npm run version:minor         # ローカルでマイナーバージョンを更新
+npm run version:major         # ローカルでメジャーバージョンを更新
 ```
 
 ## ライセンス

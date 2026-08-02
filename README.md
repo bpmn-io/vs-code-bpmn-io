@@ -1,5 +1,7 @@
 # BPMN.flex Editor
 
+[English](README.md) | [中文](README.zh-CN.md) | [日本語](README.ja.md)
+
 View and edit BPMN diagrams in [VS Code](https://code.visualstudio.com/).
 
 ![VSCode BPMN Editor in use](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot.png)
@@ -12,7 +14,6 @@ View and edit BPMN diagrams in [VS Code](https://code.visualstudio.com/).
 * Create from empty `.bpmn` files
 * Internationalization support (English, 中文, 日本語)
 * **Custom properties panel** — define your own editable fields in VS Code settings
-* **Dark theme support** — fully adapts to VS Code dark theme, including diagram canvas, palette, and context menus
 * **Dual-engine property resolution** — supports both Moddle object tree navigation and native XPath queries
 * **YAML/JSON embedded content editing** — edit structured YAML or JSON configs within extension elements
 * **Grouped collapsible panels** — properties organized into collapsible groups with sorting and tooltips
@@ -335,6 +336,81 @@ npm run test
 
 # execute all scripts
 npm run all
+```
+
+## CI / CD
+
+### CI Pipeline (`CI.yml`)
+
+Runs on every push and pull request across **macOS**, **Ubuntu**, and **Windows**:
+
+| Step | Description |
+|------|-------------|
+| Install deps | `npm install` with cache |
+| Lint + Test | `npm run all` (ESLint + Mocha tests) |
+| UI Screenshots | Linux only: captures screenshots in EN/ZH/JA + sidebar states, uploaded as artifacts |
+| PR Comment | Linux only: auto-posts screenshot summary on PRs |
+| Dry-run package | `npx @vscode/vsce ls` to verify packaging |
+
+### Release Pipeline (`release.yml`)
+
+The release workflow enforces a strict relationship between the **VSIX version** and the **Git tag**:
+
+```
+package.json version = "0.20.0"    ← single source of truth
+                     │
+                     ▼
+            Tag = "v0.20.0"         ← MUST match, validated on every release
+                     │
+                     ▼
+        VSIX = vs-code-bpmn-flex-0.20.0.vsix
+```
+
+#### How to Release
+
+**Primary path** — trigger from the GitHub Actions UI (no CLI needed):
+
+```
+1. Update CHANGELOG.md with release notes
+2. Go to GitHub → Actions → Release → "Run workflow"
+3. Choose bump type: patch / minor / major / none
+4. Click "Run workflow"
+```
+
+| Bump choice | `package.json` before | `package.json` after | Tag created |
+|-------------|----------------------|---------------------|-------------|
+| `patch` | 0.20.0 | **0.20.1** | `v0.20.1` |
+| `minor` | 0.20.0 | **0.21.0** | `v0.21.0` |
+| `major` | 0.20.0 | **1.0.0** | `v1.0.0` |
+| `none` | 0.20.0 | 0.20.0 (unchanged) | `v0.20.0` |
+
+All of the following happen **automatically**:
+
+1. Bump `package.json` (patch/minor/major)
+2. Commit the version bump to `main`
+3. Create and push a `v{version}` tag
+4. Extract the release notes from `CHANGELOG.md`
+5. Build the `.vsix` package
+6. Create a GitHub Release with the VSIX attached
+
+You can also mark a release as **pre-release** by checking the checkbox in the workflow form.
+
+#### Fallback: Manual Tag Push
+
+If you manually push a `v*` tag (e.g., `git tag v0.20.1 && git push origin v0.20.1`), the workflow will still:
+
+- **Validate** that the tag matches `package.json` version (fails with a clear error if not)
+- Build the `.vsix` and create the GitHub Release
+
+This ensures the VSIX and the release are always in sync, regardless of how the tag was created.
+
+### Helper Scripts
+
+```bash
+npm run changelog 0.20.0     # Extract release notes for a specific version from CHANGELOG.md
+npm run version:patch         # Bump version locally (patch)
+npm run version:minor         # Bump version locally (minor)
+npm run version:major         # Bump version locally (major)
 ```
 
 ## License

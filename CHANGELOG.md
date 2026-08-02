@@ -19,13 +19,6 @@ The custom properties system has been completely redesigned with a new, more pow
 - **YAML embedded content** — custom YAML subset parser/serializer (scalars, mappings, sequences, comments)
 - **Error handling** — validation errors shown in sidebar, graceful degradation on parse failures
 
-### 🌓 Dark Theme Support
-
-- Full dark theme adaptation using VS Code CSS custom properties
-- 50+ diagram-js color tokens overridden for canvas, palette, context pad, popup menus, and resizer
-- Default fill/stroke/label colors passed to BpmnModeler constructor
-- CSS shape fill + label color safety net ensures readability after theme switch
-
 ### 🌐 Internationalization
 
 - Expanded Chinese (zh-CN) and Japanese (ja) translations for UI labels

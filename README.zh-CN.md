@@ -1,5 +1,7 @@
 # BPMN.flex Editor
 
+[English](README.md) | [中文](README.zh-CN.md) | [日本語](README.ja.md)
+
 在 [VS Code](https://code.visualstudio.com/) 中查看和编辑 BPMN 流程图。
 
 ![VSCode BPMN Editor 截图](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot.png)
@@ -12,7 +14,6 @@
 * 从空白 `.bpmn` 文件创建新图
 * 国际化支持（English, 中文, 日本語）
 * **自定义属性面板** — 在 VS Code 设置中定义自己的可编辑字段
-* **暗色主题适配** — 全面适配 VS Code 暗色主题，绘图区、调色板、右键菜单均完美呈现
 * **双引擎属性解析** — 支持 Moddle 对象树导航和原生 XPath 两种属性查询引擎
 * **YAML/JSON 嵌入式内容编辑** — 在扩展元素中编辑结构化的 YAML 或 JSON 配置
 * **分组折叠面板** — 属性按分组折叠显示，支持排序和提示说明
@@ -335,6 +336,81 @@ npm run test
 
 # 运行所有脚本（lint + test）
 npm run all
+```
+
+## CI / CD
+
+### CI 流水线（`CI.yml`）
+
+每次推送和 PR 都会在 **macOS**、**Ubuntu**、**Windows** 三平台运行：
+
+| 步骤 | 说明 |
+|------|-------------|
+| 安装依赖 | `npm install`（带缓存） |
+| Lint + 测试 | `npm run all`（ESLint + Mocha 测试） |
+| UI 截图 | 仅 Linux：截取 EN/ZH/JA + 侧边栏状态的截图，作为 artifacts 上传 |
+| PR 评论 | 仅 Linux：在 PR 中自动发布截图摘要 |
+| 试打包 | `npx @vscode/vsce ls` 验证打包 |
+
+### 发布流水线（`release.yml`）
+
+发布流水线强制 **VSIX 版本**与 **Git 标签**之间保持一致：
+
+```
+package.json version = "0.20.0"    ← 唯一版本源
+                     │
+                     ▼
+            Tag = "v0.20.0"         ← 必须匹配，每次发布都会校验
+                     │
+                     ▼
+        VSIX = vs-code-bpmn-flex-0.20.0.vsix
+```
+
+#### 发布步骤
+
+**推荐方式** — 从 GitHub Actions 界面触发（无需命令行）：
+
+```
+1. 更新 CHANGELOG.md 添加发布说明
+2. 前往 GitHub → Actions → Release → "Run workflow"
+3. 选择版本升级类型：patch / minor / major / none
+4. 点击 "Run workflow"
+```
+
+| 升级选择 | 升级前 | 升级后 | 创建的标签 |
+|-------------|----------------------|---------------------|-------------|
+| `patch` | 0.20.0 | **0.20.1** | `v0.20.1` |
+| `minor` | 0.20.0 | **0.21.0** | `v0.21.0` |
+| `major` | 0.20.0 | **1.0.0** | `v1.0.0` |
+| `none` | 0.20.0 | 0.20.0（不变） | `v0.20.0` |
+
+以下步骤全部**自动完成**：
+
+1. 更新 `package.json` 版本号（patch/minor/major）
+2. 将版本更新提交到 `main` 分支
+3. 创建并推送 `v{version}` 标签
+4. 从 `CHANGELOG.md` 中提取发布说明
+5. 构建 `.vsix` 包
+6. 创建 GitHub Release 并附带 VSIX 文件
+
+你也可以在工作流表单中勾选 **pre-release** 来标记为预发布版本。
+
+#### 备选方式：手动推送标签
+
+如果你手动推送了一个 `v*` 标签（如 `git tag v0.20.1 && git push origin v0.20.1`），流水线仍然会：
+
+- **校验**标签与 `package.json` 版本是否匹配（不匹配时给出明确错误）
+- 构建 `.vsix` 并创建 GitHub Release
+
+这确保了无论通过何种方式创建标签，VSIX 和 Release 始终保持同步。
+
+### 辅助脚本
+
+```bash
+npm run changelog 0.20.0     # 从 CHANGELOG.md 提取指定版本的发布说明
+npm run version:patch         # 本地升级补丁版本
+npm run version:minor         # 本地升级次版本
+npm run version:major         # 本地升级主版本
 ```
 
 ## 许可证

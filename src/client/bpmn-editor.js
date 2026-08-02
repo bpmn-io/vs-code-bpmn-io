@@ -119,9 +119,6 @@ sidebarInstance.onLanguageChange(async function(lang) {
 
   modeler = new BpmnModeler({
     container: '#canvas',
-    defaultFillColor: _themeColors.fill,
-    defaultStrokeColor: _themeColors.stroke,
-    defaultLabelColor: _themeColors.label,
     additionalModules: [
       BpmnColorPickerModule,
       customTranslateModule
@@ -180,28 +177,8 @@ const customTranslateModule = {
   translate: [ 'value', customTranslate ]
 };
 
-/**
- * Read theme-appropriate colors from VS Code CSS variables on body.
- * Returns resolved RGB values suitable for SVG fill/stroke attributes.
- */
-function _readThemeColors() {
-  var style = getComputedStyle(document.body);
-  var fg = style.getPropertyValue('--vscode-editor-foreground').trim() || '#000000';
-
-  return {
-    fill: 'none',
-    stroke: fg,
-    label: fg
-  };
-}
-
-var _themeColors = _readThemeColors();
-
 let modeler = new BpmnModeler({
   container: '#canvas',
-  defaultFillColor: _themeColors.fill,
-  defaultStrokeColor: _themeColors.stroke,
-  defaultLabelColor: _themeColors.label,
   additionalModules: [
     BpmnColorPickerModule,
     customTranslateModule
