@@ -4,7 +4,12 @@
 
 View and edit BPMN diagrams in [VS Code](https://code.visualstudio.com/).
 
-![VSCode BPMN Editor in use](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot.png)
+- Editor and sidebar
+![VSCode BPMN Editor screenshot 1](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot.png)
+- Extension settings
+![VSCode BPMN Editor screenshot 2](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot1.png)
+- Editor sidebar custom properties (view BPMN-related properties of the extension)
+![VSCode BPMN Editor screenshot 3](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot2.png)
 
 ## Features
 

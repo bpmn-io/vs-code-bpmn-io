@@ -4,7 +4,12 @@
 
 在 [VS Code](https://code.visualstudio.com/) 中查看和编辑 BPMN 流程图。
 
-![VSCode BPMN Editor 截图](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot.png)
+- 编辑器和侧边栏
+![VSCode BPMN Editor 截图1](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot.png)
+- 扩展设置
+![VSCode BPMN Editor 截图2](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot1.png)
+- 编辑器侧边栏自定义属性（查看扩展bpmn的相关属性）
+![VSCode BPMN Editor 截图3](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot2.png)
 
 ## 功能特性
 

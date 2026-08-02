@@ -4,7 +4,12 @@
 
 [VS Code](https://code.visualstudio.com/) で BPMN ダイアグラムを表示・編集できます。
 
-![VSCode BPMN Editor のスクリーンショット](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot.png)
+- エディターとサイドバー
+![VSCode BPMN Editor スクリーンショット1](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot.png)
+- 拡張機能の設定
+![VSCode BPMN Editor スクリーンショット2](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot1.png)
+- エディターのサイドバーカスタムプロパティ（拡張機能の BPMN 関連プロパティを表示）
+![VSCode BPMN Editor スクリーンショット3](https://raw.githubusercontent.com/yougikou/vs-code-bpmn-flex/main/docs/screenshot2.png)
 
 ## 機能
 
