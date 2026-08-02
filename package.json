@@ -3,7 +3,7 @@
   "displayName": "BPMN.flex Editor",
   "description": "Edit BPMN 2.0 files, powered by bpmn.io tools. Add more custom features",
   "license": "MIT",
-  "version": "0.20.0",
+  "version": "1.0.0",
   "publisher": "gikoyo",
   "repository": {
     "type": "git",
@@ -287,7 +287,6 @@
     "puppeteer": "^24.35.0",
     "rollup": "^4.53.3",
     "rollup-plugin-css-only": "^4.5.5",
-
     "shx": "^0.3.4",
     "sinon": "^22.0.0",
     "sinon-chai": "^4.0.0",
