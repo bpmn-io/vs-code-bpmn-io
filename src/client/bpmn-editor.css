@@ -29,3 +29,25 @@ body {
   grid: auto-flow / 1fr 1fr 1fr;
 }
 
+/* MINIMAP */
+
+.djs-minimap:not(.open) {
+  border: none;
+}
+
+.djs-minimap .toggle:before {
+  content: "🔍";
+}
+
+.djs-minimap .toggle:hover {
+  cursor: pointer;
+}
+
+.djs-minimap:not(.open) .toggle {
+  transform: translateX(6px);
+}
+
+.djs-minimap.open .toggle {
+  padding: 10px;
+  transform: translate(7px, -1px);
+}
