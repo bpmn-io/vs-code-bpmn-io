@@ -136,6 +136,7 @@
   "dependencies": {
     "@vscode/codicons": "^0.0.35",
     "bpmn-js": "^18.31.0",
-    "bpmn-js-color-picker": "^0.7.2"
+    "bpmn-js-color-picker": "^0.7.2",
+    "diagram-js-minimap": "^5.5.0"
   }
 }

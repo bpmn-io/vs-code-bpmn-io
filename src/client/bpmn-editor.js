@@ -3,12 +3,14 @@
 import 'bpmn-js/dist/assets/bpmn-font/css/bpmn-embedded.css';
 import 'bpmn-js/dist/assets/diagram-js.css';
 import 'bpmn-js/dist/assets/bpmn-js.css';
+import 'diagram-js-minimap/assets/diagram-js-minimap.css';
 
 import './bpmn-editor.css';
 
 import BpmnModeler from 'bpmn-js/lib/Modeler';
 
 import BpmnColorPickerModule from 'bpmn-js-color-picker';
+import minimapModule from 'diagram-js-minimap';
 
 import { handleMacOsKeyboard } from './utils/macos-keyboard';
 
@@ -22,8 +24,12 @@ handleMacOsKeyboard();
 const modeler = new BpmnModeler({
   container: '#canvas',
   additionalModules: [
-    BpmnColorPickerModule
-  ]
+    BpmnColorPickerModule,
+    minimapModule
+  ],
+  minimap: {
+    open: false
+  }
 });
 
 modeler.on('import.done', event => {
