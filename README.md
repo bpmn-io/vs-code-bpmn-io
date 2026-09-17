@@ -13,6 +13,7 @@ View and edit BPMN diagrams in [VSCode](https://code.visualstudio.com/). Powered
 * Save changes to your local file
 * Undo/redo and other keyboard shortcuts
 * Create from empty `.bpmn` files
+* Navigate diagrams with a minimap
 
 
 ## Installation
