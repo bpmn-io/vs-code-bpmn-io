@@ -6,6 +6,31 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## 0.22.3 (2026-10-02)
+
+## What's Changed
+* chore: update actions/checkout action to v5 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/202
+* chore: update actions/setup-node action to v5 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/205
+* chore: update actions/setup-node action to v6 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/207
+* chore: update dependency node to v24 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/211
+* chore: update dependency @rollup/plugin-commonjs to v29 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/212
+* chore: update dependency glob to v13 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/215
+* chore: update actions/checkout action to v6 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/216
+* chore: update test dependencies (major) by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/168
+* chore: update dependency npm-run-all2 to v9 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/225
+* chore: update dependency @vscode/test-electron to v3 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/227
+* chore: update actions/checkout action to v7 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/230
+* chore: update actions/setup-node action to v7 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/233
+* chore: update test dependencies to v22 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/224
+* chore: update dependency mocha to v12 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/239
+* ci: update google-github-actions/release-please-action action to v4 by @renovate[bot] in https://github.com/bpmn-io/vs-code-bpmn-io/pull/244
+* Align release-please tags with existing releases by @barmac with @Copilot in https://github.com/bpmn-io/vs-code-bpmn-io/pull/245
+
+## New Contributors
+* @barmac with @Copilot made their first contribution in https://github.com/bpmn-io/vs-code-bpmn-io/pull/245
+
+**Full Changelog**: https://github.com/bpmn-io/vs-code-bpmn-io/compare/v0.22.2...v0.22.3
+
 ## 0.22.2 (2025-07-04)
 
 ## What's Changed
