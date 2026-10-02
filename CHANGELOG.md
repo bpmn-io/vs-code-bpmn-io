@@ -6,6 +6,14 @@ All notable changes to the [bpmn.io vs-code extension](https://github.com/bpmn-i
 
 ___Note:__ Yet to be released changes appear here._
 
+## [0.22.3](https://github.com/bpmn-io/vs-code-bpmn-io/compare/v0.22.2...v0.22.3) (2026-10-02)
+
+
+### Dependency Updates
+
+* update to bpmn-js-color-picker@0.7.2 ([ae68068](https://github.com/bpmn-io/vs-code-bpmn-io/commit/ae680684fa9b53a398bba9e0f9a46740bb99010b))
+* update to bpmn-js@18.31.0 ([7f1291b](https://github.com/bpmn-io/vs-code-bpmn-io/commit/7f1291b2be5031e77ecd2fd4c6b6b2d661b851f2))
+
 ## 0.22.2 (2025-07-04)
 
 ## What's Changed
