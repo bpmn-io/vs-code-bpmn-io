@@ -28,8 +28,12 @@ const BROKEN_TEST_FILE = vscode.Uri.file(
 describe('extension', function() {
   this.timeout(5000);
 
-  before(() => {
+  before(async () => {
     vscode.window.showInformationMessage('Start all tests.');
+
+    // ensure extension (and its test commands) are registered
+    // before the first test runs; opening a file does not wait for it
+    await vscode.extensions.getExtension('bpmn-io.vs-code-bpmn-io')!.activate();
   });
 
 
