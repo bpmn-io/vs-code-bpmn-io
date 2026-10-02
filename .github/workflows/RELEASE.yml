@@ -17,10 +17,8 @@ jobs:
         id: release
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          release-type: node
-          pull-request-title-pattern: 'chore: release v${version}'
-          changelog-types: '[{"type":"feat","section":"Features","hidden":false},{"type":"fix","section":"Bug Fixes","hidden":false},{"type":"deps","section":"Dependency Updates","hidden":false}]'
-          changelog-notes-type: github
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
 
   publish:
     needs: release-please
@@ -40,4 +38,3 @@ jobs:
       - run: npx @vscode/vsce publish
         env:
           VSCE_PAT: ${{ secrets.MARKETPLACE_TOKEN }}
-
