@@ -16,9 +16,19 @@
       "type": "deps",
       "section": "Dependency Updates",
       "hidden": false
+    },
+    {
+      "type": "chore",
+      "section": "Chores",
+      "hidden": true
+    },
+    {
+      "type": "ci",
+      "section": "CI",
+      "hidden": true
     }
   ],
-  "changelog-type": "github",
+  "changelog-type": "default",
   "include-component-in-tag": false,
   "packages": {
     ".": {}
