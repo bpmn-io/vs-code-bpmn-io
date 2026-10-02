@@ -19,6 +19,7 @@
     }
   ],
   "changelog-type": "github",
+  "include-component-in-tag": false,
   "packages": {
     ".": {}
   }
